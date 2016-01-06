@@ -1,3 +1,5 @@
+An attempt to build a javascript version of FootballForEnglish that will run on local file system and does not need a server. All view changes and manipulation will be via jquery. The initial html will be brought up as a file and not a s a host:port.
+
 Americas Cup of English is a game for non-english speaking persons to learn and compete in learning english.
 Ball advances every time possessing team answers correctly a question about english 
 and opposing team answers incorrectly.
@@ -21,5 +23,3 @@ The track at the bottom of the screen shows green or red for each question answe
 This version of the game is standalone and does not require a server. It is written in javascript only. The questions are fetched from an array of items in a javascript function.
 
 The important part of this game is not to win but to have fun learning english.
-
-
