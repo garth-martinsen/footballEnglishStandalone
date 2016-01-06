@@ -261,7 +261,7 @@ var fixTd=function( num, rw, row){
    $('#extras').val('');
 }
 var coinFlip = function(){
-return Math.floor((Math.random() * 3)-1 ); //will be one of:{-1,0,1} if zero, tries again.
+return Math.floor((Math.random() * 3)-1 ); //will be one of:{-1,0,1} if zero, tries again.Hence, either a -1 or +1 emerges to determine starting possession
 }
 var updateClock = function(num){
   $('#falta').val(num);
