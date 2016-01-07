@@ -23,6 +23,7 @@
    #answer_A {color: white;}
    #timer30 { position: relative; top: 25px; height: 50px; background-color: lightgreen; }
    #seconds {width: 1.5em; margin-top: .4em; font-size: large;}
+   #stopTimer {position:relative; left:25px; top: -4px;}
    #answer {position: relative; left: 3px; top: 25px; height: 200px; width: 98%; background-color: lightgreen; }
    #showAnswer { position: relative; left: 3px; top: 36px; height: 50px; background-color: lightgreen; padding-top: 10px;}
    #showResponse { position: relative; top: -15px;height: 30px; }
@@ -72,6 +73,13 @@
     </div>
     <div id="timer30">
        Timer: <input type="text" id="seconds" value=''+30 readonly>
+       <audio id= "beep" >
+           <source src="../public/sounds/beep-07.wav" type="audio/wav">
+       </audio>
+       <audio id= "homer" >
+           <source id="homer" src="../public/sounds/homer.wav" type="audio/wav">
+       </audio>
+       <input type="button" id="stopTimer" value="Clear"></input>
     </div>
     <div id="answer">
       <textArea id="answer_A" name="answerA" class= "q_a" rows="10" cols="15"><%=answerA %> </textArea>
@@ -144,7 +152,9 @@ var count=100;
 var ballDirection = 0; //will be random later.
 var ballLocation = 2;
 var isVisible = 0; // hide answer is default.
-
+var beep = document.getElementById("beep"); 
+var homer = document.getElementById("homer"); 
+var stop = false;
 $(document).ready( function () {
 //alert('JQuery is loaded and ready.');
 $('#falta').val(count);
@@ -154,9 +164,15 @@ while(ballDirection === 0){
  }
  setDirectionIndicators(ballDirection); 
  updateClock(count);
+
  $('#showResponse').click(function(){
   isVisible=isVisible^1;
   $('#answer_A').css('color', answerColor[isVisible]);
+});
+
+ $('#stopTimer').click(function(){
+  stop=true;
+  $('#seconds').val(0);
 });
 
 $('#saveGrade').click(function (){
@@ -214,11 +230,13 @@ $('#quest').click(function(){
   if(num > 1 ){
     question = items[num].q;
     answer   = items[num].a;
+    startTimer();
   } else {
     count--;
     updateClock(count);
     question = items[count].q;
     answer   = items[count].a;
+    startTimer();
 }
   $('#question_A').text(question);
   $('#answer_A').css('color', '#FFFFFF');
@@ -274,25 +292,34 @@ jQuery.fn.extend({
     }
 });
 
+var startTimer = function(){
+   $('#seconds').val(30);
+   var endTimeMS= new Date().getTime() + 30000;
+   var timeinterval = setInterval(function(){
+//need to see if I can shut down the timer by a command.
+      var t = clockTick(endTimeMS);
+      $('#seconds').val(t);
+      if(stop) {
+        clearInterval(timeinterval); 
+        stop=false;
+        $('#seconds').val(0);
+      }
+      if(t<=0){
+       clearInterval(timeinterval);
+       beep.play();
+       setTimeout(function(){ homer.play();}, 500);
+      }
+    },1000);
+}
+
+var clockTick = function(etms){
+  var nowMS = new Date().getTime();
+  var tMS = etms - nowMS;
+  var seconds = Math.floor(tMS/1000);
+  return seconds;
+}
 
 var items = [
-{"a":"The weather is cloudy.","count":26,"q":"When you cannot see the sun, but you can see trees and houses, you would say that the weather is ______.","set":1,"type":"Relaciones Familiar"},
-{"a":"The weather is sunny.","count":24,"q":"When the sky is clear, you would say that the weather is _______.","set":1,"type":"Tiempo"},
-{"a":"The weather is windy.","count":23,"q":"When the trees are moving to and fro, you would say that the weather is ________.","set":1,"type":"Tiempo"},
-{"a":"The weather is cold.","count":25,"q":"When the temperature is low, you would say that the weather is ______","set":1,"type":"Tiempo"},
-{"a":"plate","count":14,"q":"For dinner, you are having steaks, each person's steak will be on their _______.","set":1,"type":"Cocina"},
-{"a":"The weather is Foggy.","count":27,"q":"When you cannot see the houses and trees around you, the weather is _________.","set":1,"type":"Tiempo"},
-{"a":"cup or glass","count":16,"q":"At dinner, you would drink from your _________.","set":1,"type":"Cocina"},
-{"a":"Spoon","count":29,"q":"At dinner, you would eat your soup with a __________.","set":1,"type":"Cocina"},
-{"a":"Fork","count":75,"q":"At dinner, you would eat steak with a ________.","set":1,"type":"Cocina"},
-{"a":"Knife","count":53,"q":"At dinner, you would cut your steak with a _______.","set":1,"type":"Cocina"},
-{"a":"Nephew","count":46,"q":"Two men marry sisters. Each family has a boy and a girl. To the men, the son of the other family would be a  __________.?","set":1,"type":"Relaciones Familiar"},
-{"a":"Table","count":28,"q":"At dinner, families sit around a ____________?","set":1,"type":"Cocina"},
-{"a":"Eggs","count":81,"q":"At breakfast, one can eat what the chickens give. You could have scrambled _______.","set":1,"type":"Cocina"},
-{"a":"Cheese","count":91,"q":"What solid product of Milk can be grated and put on spagetthi?","set":1,"type":"Cocina"},
-{"a":"Milk","count":49,"q":"At Breakfast, you may drink something which we get from cows:  _________ .","set":1,"type":"Cocina"},
-{"a":"Pie","count":38,"q":"A baked dessert which may contain fruits is called a ______  ( tarta)","set":1,"type":"Cocina"},
-{"a":"Cake","count":93,"q":"On your birthday, you may have a birthday _______ with candles.","set":1,"type":"Cocina"},
 {"a":"Mother","count":48,"q":"In a family, the female that has the children is called __________.","set":1,"type":"Relaciones Familiar"},
 {"a":"Father","count":77,"q":"In a family, the adult male is called _________.","set":1,"type":"Relaciones Familiar"},
 {"a":"Uncle","count":17,"q":"Two men marry sisters. Each family has a boy and a girl. The children would call the other man their ______. ","set":1,"type":"Relaciones Familiar"},
@@ -307,6 +334,23 @@ var items = [
 {"a":"Niece","count":44,"q":"Two men marry sisters. Each family has a boy and a girl. The man from the first family would call the girl from the other family his ______.","set":1,"type":"Relaciones Familiar"},
 {"a":"Grandson","count":57,"q":"The son of my son( or daughter) is my _______________.","set":1,"type":"Relaciones Familiar"},
 {"a":"Granddaughter","count":60,"q":"The daughter of my son (or daughter) is my ____________.","set":1,"type":"Relaciones Familiar"},
+{"a":"The weather is cloudy.","count":26,"q":"When you cannot see the sun, but you can see trees and houses, you would say that the weather is ______.","set":1,"type":"Relaciones Familiar"},
+{"a":"The weather is sunny.","count":24,"q":"When the sky is clear, you would say that the weather is _______.","set":1,"type":"Tiempo"},
+{"a":"The weather is windy.","count":23,"q":"When the trees are moving to and fro, you would say that the weather is ________.","set":1,"type":"Tiempo"},
+{"a":"The weather is cold.","count":25,"q":"When the temperature is low, you would say that the weather is ______","set":1,"type":"Tiempo"},
+{"a":"plate","count":14,"q":"For dinner, you are having steaks, each person's steak will be on their _______.","set":1,"type":"Cocina"},
+{"a":"The weather is Foggy.","count":27,"q":"When you cannot see the houses and trees around you, the weather is _________.","set":1,"type":"Tiempo"},
+{"a":"cup or glass","count":16,"q":"At dinner, you would drink from your _________.","set":1,"type":"Cocina"},
+{"a":"Spoon","count":29,"q":"At dinner, you would eat your soup with a __________.","set":1,"type":"Cocina"},
+{"a":"Fork","count":75,"q":"At dinner, you would eat steak with a ________.","set":1,"type":"Cocina"},
+{"a":"Knife","count":53,"q":"At dinner, you would cut your steak with a _______.","set":1,"type":"Cocina"},
+{"a":"Table","count":28,"q":"At dinner, families sit around a ____________?","set":1,"type":"Cocina"},
+{"a":"Eggs","count":81,"q":"At breakfast, one can eat what the chickens give. You could have scrambled _______.","set":1,"type":"Cocina"},
+{"a":"Cheese","count":91,"q":"What solid product of Milk can be grated and put on spagetthi?","set":1,"type":"Cocina"},
+{"a":"Milk","count":49,"q":"At Breakfast, you may drink something which we get from cows:  _________ .","set":1,"type":"Cocina"},
+{"a":"Pie","count":38,"q":"A baked dessert which may contain fruits is called a ______  ( tarta)","set":1,"type":"Cocina"},
+{"a":"Cake","count":93,"q":"On your birthday, you may have a birthday _______ with candles.","set":1,"type":"Cocina"},
+{"a":"Nephew","count":46,"q":"Two men marry sisters. Each family has a boy and a girl. To the men, the son of the other family would be a  __________.?","set":1,"type":"Relaciones Familiar"},
 {"a":"Go up","count":62,"q":"How would you tell someone to move higher?","set":1,"type":"Direcciones."},
 {"a":"Go Forward","count":68,"q":"How would you tell someone to advance?","set":1,"type":"Direcciones."},
 {"a":"Go Backward","count":71,"q":"How would you tell someone to regress?","set":1,"type":"Direcciones."},
@@ -397,7 +441,7 @@ var items = [
 {"a":"I have ","count":20,"q":"How do you say 'yo tengo' or 'eu tenho' in english?","type":"Phrases"},
 {"a":"telephone","count":20,"q":"To communicate over long distances we usually use the _______.","type":"Phrases"},
 {"a":"mouth","count":20,"q":"What is the _____boca ___  in english?","type":"Phrases"},
-{"a":"brown","count":20,"q":"The color of cofee is ________?","type":"Colors"},
+{"a":"brown","count":20,"q":"The color of coffee is ________?","type":"Colors"},
 {"a":"black","count":20,"q":"The darkest color is ______?","type":"Colors"},
 {"a":"red","count":20,"q":"The color of blood is _______?","type":"Colors"},
 {"a":"green","count":20,"q":"The color of grass is______?","type":"Colors"},
