@@ -69,7 +69,7 @@
     <div id="question">
       <input  type='submit' class = "button" id="quest" value="Question" formaction='/question' formmethod="post" formenctype="application/x-www-form-urlencoded" />
       </br>
-       <textArea id="question_A" name="questionA" class= "q_a" font-size="x-large" rows="10" cols="15" ><%=questionA %> </textArea>
+       <textArea id="question_A" name="questionA" class= "q_a" font-size="x-large" rows="10" cols="15" readonly ><%=questionA %> </textArea>
     </div>
     <div id="timer30">
        Timer: <input type="text" id="seconds" value=''+30 readonly>
@@ -82,7 +82,7 @@
        <input type="button" id="stopTimer" value="Clear"></input>
     </div>
     <div id="answer">
-      <textArea id="answer_A" name="answerA" class= "q_a" rows="10" cols="15"><%=answerA %> </textArea>
+      <textArea id="answer_A" name="answerA" class= "q_a" rows="10" cols="15" readonly><%=answerA %> </textArea>
     </div>
     <div id="showAnswer">
        <button id="showResponse" class="button" >Show Answer</button>
@@ -233,15 +233,16 @@ $('#quest').click(function(){
     startTimer();
   } else {
     count--;
-    if(count < 1 ){alert ('Clock is expired. Use Pink questions in the track. Penalty Kicks.');}
+    if(count < 0 ){alert ('Clock is expired. Use Pink questions in the track. Penalty Kicks.');}
     updateClock(count);
     question = items[count].q;
     answer   = items[count].a;
     startTimer();
 }
+ //Set the question and answer, then hide the answer by turning it white on a white background.
   $('#question_A').text(question);
-  $('#answer_A').css('color', '#FFFFFF');
   $('#answer_A').text(answer);
+  $('#answer_A').css('color', '#FFFFFF');
 });
 }); //end document.ready
 var setDirectionIndicators=function(bdir){
