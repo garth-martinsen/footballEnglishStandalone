@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
 <head>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
@@ -13,6 +12,7 @@
 
  #leftSideBar { width: 300px; height: 700px; background-color: lightgreen;}
    #clock { position: relative; top: 0px; left: 0px; height: 60px; width: 100%;font-size:xx-large; background-color: lightgreen; }
+   #configure {position: relative; top: -26px; left: 210px; } 
    #falta { font-size: inherit; width: 70px; text-align: center;    margin-left: 10px; }
    #scores {width: 65%; height: 123px; position: relative; top: 8px; left: 0px; background-color: lightgreen; } 
      .scoreInput{width: 30px; font-size: large; position: relative; top: -24px; left: 5px; margin: 2px; margin-left: 10px; text-align:center;}
@@ -42,16 +42,49 @@
     #g1 { position: absolute; left: -35px; top: 263px; width: 30px; height: 90px; z-index: 3; }
     #g2{position: absolute; left: 1078px; top: 266px; width: 30px; height: 90px; z-index: 3;}
      .goal {width:30px; height:90px; }
-    #goalBarDiv { position: absolute; left: 618px;; top: 359px; z-index: 0; width: 30px; height:30px; z-index:2; }
-    #leftGoalBar {  position: relative; top: 0px; left: -613px; height: 65px; width: 110px; z-index: 0; -webkit-transform: rotate(-90deg); }
-    #rightGoalBar { position: relative; top: -70px; left: 536px; height: 65px; width: 110px; z-index: 0; -webkit-transform: rotate(90deg); }
+    #leftGoalBarDiv  { position: absolute; left: 4px;    top: 365px; width: 110px; height: 65px; z-index: 2; -webkit-transform: rotate(-90deg)}
+    #rightGoalBarDiv { position: absolute; left: 1164px; top: 358px; width: 110px; height: 65px; z-index: 2; -webkit-transform: rotate( 90deg)}
 
- #trackDiv { position: absolute; left: 0px; top: 755px; width: 1600px; height: 66px; background-color:cyan; }
+ #trackDiv { position: absolute; left: 0px; top: 773px; width: 1600px; height: 66px; background-color:cyan; }
      #track {  position: relative; left:   1px; top: 1px; }
      #X { position: relative; top: -53px; left: 256px; }
        .right {background-color:lightgreen;}
        .wrong {background-color:pink;}
        .possessing {background-color:yellow;}
+a.selected {
+  background-color:#1F75CC;
+  color:white;
+  z-index:100;
+}
+
+.messagepop {
+  background-color:#FFFFFF;
+  border:1px solid #999999;
+  cursor:default;
+  display:none;
+  margin-top: 15px;
+  position:absolute;
+  text-align:left;
+  width:394px;
+  z-index:50;
+  padding: 25px 25px 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 3px;
+  padding-left: 15px;
+  text-indent: -15px;
+}
+
+.messagepop p, .messagepop.div {
+  border-bottom: 1px solid #EFEFEF;
+  margin: 8px 0;
+  padding-bottom: 8px;
+}
+  #config { position: absolute; left: 399px; z-index: 5; top: 32px; }
+  #panel {position: absolute; top: -3px; left: 300px; width: 300px; height:50px; border-size:2px; }
+  #gameSize {width:20px;}
 
 </style>
 </head>
@@ -59,12 +92,14 @@
 <body>
 <div id="game">
   <div id="leftSideBar">
-    <div id="clock">Clock:<input type="text" id="falta" name="remaining"  value ='900' width= 50px readonly >  </div>
+    <div id="clock">
+       Clock:<input type="text" id="falta" name="remaining"  value ='900' width= 50px readonly >  </div>
+    <div id="config">
+       <a href='/doConfig' id="doConfig">Configure</a>
+    </div>
     <div id="scores">
-      <img class="scoreBar" src="../public/images/ArgentinaScoreBar.png">
-      <input type="text" id="leftScore" name="leftScore" class="scoreInput" readonly="true" value="0" >
-      <img class="scoreBar" src="../public/images/BrasilScoreBar.png"> 
-      <input type="text"  name="rightScore" id="rightScore" class="scoreInput" readonly="true" value="0" >        
+      <div id="scoreBarLeftDiv"> </div>
+      <div id="scoreBarRightDiv"> </div>
     </div>
     <div id="question">
       <input  type='submit' class = "button" id="quest" value="Question" formaction='/question' formmethod="post" formenctype="application/x-www-form-urlencoded" />
@@ -89,8 +124,8 @@
     </div>
     <div id="grade">
        <select id="team" name="team" autofocus>
-           <option id="leftCountry"  value="0">Argentina</option>
-           <option id="rightCountry" value="1">Brasil</option>
+           <option id="leftCountry"  value="0"> </option>
+           <option id="rightCountry" value="1"> </option>
        </select>
 
        <select id="mode" name="mode" >
@@ -115,8 +150,8 @@
     </div>
 
     <div id="field">
-       <img class="" id="leftArrow" src="../public/images/ArrowLeftA.png">
-       <img class="" id="rightArrow" src="../public/images/ArrowRightB.png">
+      <div id="leftArrowDiv"> </div>
+      <div id="rightArrowDiv"> </div>
        <img class="fld" id="quarterfieldA" src="../public/images/quarterFieldA.png">
        <img class="fld" id="midfield" src="../public/images/midField.png">
        <img class="fld" id="quarterfieldD" src="../public/images/quarterFieldD.png">
@@ -125,26 +160,71 @@
        <img id="g2" class:"goal" src="../public/images/soccerGoal.png">
     </div>
 
-    <div id="goalBarDiv">
-       <img id= "leftGoalBar" class="goalBar" src="../public/images/ArgentinaScoreBar.png">
-       <img id= "rightGoalBar" class="goalBar" src="../public/images/BrasilScoreBar.png">
+    <div id="leftGoalBarDiv"> </div>
+    <div id="rightGoalBarDiv"> </div>
     </div>
 
   </div>
 
   <div id="trackDiv">
       <table id="track" border="1px">
-        <tr id="leftTeamq">
-          <td id="leftTeamName" class= "trackName" >Argentina</td>
-        </tr>
-        <tr id="rightTeamq">
-          <td id="rightTeamName" class= "trackName" >Brazil</td>
-        </tr>
+        <tr id="leftTeamq"> </tr>
+        <tr id="rightTeamq"> </tr>
       </table>
   </div>
+
+  <div id="panel" class="messagepop pop">
+   <form method="post" id="new_message" action="/messages">
+     Left: <select id="teamLeft" focus>
+       <option value=0>Argentina</option>
+        <option value=1>Brasil</option>
+        <option value=2>Chile</option>
+        <option value=3>Mexico</option>
+       </select>
+       Right:<select id="teamRight">
+        <option value=0>Argentina</option>
+        <option value=1>Brasil</option>
+        <option value=2>Chile</option>
+        <option value=3>Mexico</option>
+       </select>
+       GameSize:<input type="text" id="gameSize" value=100 ></input>
+       <input type="submit" class="close" value="Accept"></input>
+  </div>
+ </form>
+</div>
+
 </div>
 
 <script>
+function deselect(e) {
+  $('.pop').slideFadeToggle(function() {
+    e.removeClass('selected');
+  });
+}
+
+$(function() {
+  $('#doConfig').on('click', function() {
+    if($(this).hasClass('selected')) {
+      deselect($(this));
+    } else {
+      $(this).addClass('selected');
+      $('.pop').slideFadeToggle();
+    }
+    return false;
+  });
+  $('.close').on('click', function() {
+    deselect($('#doConfig'));
+   console.log('Closed the popup: ' + $('#teamLeft').val() +' -> ' + $('#teamRight').val() + ' -> ' + $('#gameSize').val());
+   configure(Number($('#teamLeft').val()), Number($('#teamRight').val()), Number($('#gameSize').val()));
+    return false;
+  });
+});
+
+$.fn.slideFadeToggle = function(easing, callback) {
+  return this.animate({ opacity: 'toggle', height: 'toggle' }, 'fast', easing, callback);
+};
+
+
 var ballPositions = ['-30px', '200px', '515px', '830px', '1080px'];
 var ans= ["right", "wrong"];
 var answerColor = ['#FFFFFF','#000000'];
@@ -159,11 +239,11 @@ $(document).ready( function () {
 //alert('JQuery is loaded and ready.');
 $('#falta').val(count);
 $('#X').disable(true);
-while(ballDirection === 0){
-   ballDirection = coinFlip();
- }
- setDirectionIndicators(ballDirection); 
- updateClock(count);
+
+$('#configButton').click(function(){
+  //alert('Clicked Config Button.');
+  
+});
 
  $('#showResponse').click(function(){
   isVisible=isVisible^1;
@@ -218,6 +298,7 @@ $('#adv').click(function(){ //advance the ball in the current direction.
   }
 });
 
+//Unopposed Goal Kick to put the ball in play.
 $('#X').click(function(){
  var tm = $('#team').val();
   showGoaleeKick(Number(tm));
@@ -321,6 +402,63 @@ var clockTick = function(etms){
   return seconds;
 }
 
+var configure=function(lt,rt,sz){
+  console.log('Configuring Game with: ' + lt + ', ' + rt + ', ' + sz);
+  $("#scoreBarLeftDiv").html(scoreBars[lt] +  '<input type="text" id="leftScore"  name="leftScore"  class="scoreInput" readonly="true" value="0">'); 
+  $("#scoreBarRightDiv").html(scoreBars[rt] + '<input type="text" id="rightScore" name="rightScore" class="scoreInput" readonly="true" value="0">'); 
+  $("#leftGoalBarDiv").html(  goalBars[lt]); 
+  $("#rightGoalBarDiv").html( goalBars[rt]); 
+  $("#leftArrowDiv").html(leftArrows[lt]); 
+  $("#rightArrowDiv").html( rightArrows[rt]); 
+  var leftTd ='<td id="leftTeamName" class= "trackName" >' + countries[lt] + '</td>';
+  var rightTd='<td id="rightTeamName" class= "trackName" >' + countries[rt] +'</td>';
+  $('#leftTeamq').html(leftTd);
+  $('#rightTeamq').html(rightTd);
+//select teams in tracking.
+  $('#leftCountry').html(countries[lt]);
+  $('#rightCountry').html(countries[rt]);
+ // Random draw to decide who has possession at start of game. 
+  while(ballDirection === 0){
+   ballDirection = coinFlip();
+ }
+ setDirectionIndicators(ballDirection); 
+ updateClock(sz);
+}
+
+// Data for the app.
+
+  var leftArrows= [
+                   '<img id="leftArrow" src="../public/images/ArrowLeftA.png">'
+                 , '<img id="leftArrow" src="../public/images/ArrowLeftB.png">'
+                 , '<img id="leftArrow" src="../public/images/ArrowLeftC.png">'
+                 , '<img id="leftArrow" src="../public/images/ArrowLeftM.png">'
+                  ];
+
+  var rightArrows= [
+                    '<img id="rightArrow" src="../public/images/ArrowRightA.png">'
+                  , '<img id="rightArrow" src="../public/images/ArrowRightB.png">'
+                  , '<img id="rightArrow" src="../public/images/ArrowRightC.png">'
+                  , '<img id="rightArrow" src="../public/images/ArrowRightM.png">'
+                   ];
+
+  var countries = ["Argentina", "Brasil", "Chile", "Mexico"];
+
+  var scoreBars =[
+                  '<img class="scoreBar" src="../public/images/ArgentinaScoreBar.png">'
+                 , '<img class="scoreBar" src="../public/images/BrasilScoreBar.png">'
+                 , '<img class="scoreBar" src="../public/images/ChileScoreBar.png">'
+                 , '<img class="scoreBar" src="../public/images/MexicoScoreBar.png">'
+                 ];
+
+ var goalBars =[
+                '<img class="goalBar" src="../public/images/ArgentinaScoreBar.png">'
+               , '<img class="goalBar" src="../public/images/BrasilScoreBar.png">'
+               , '<img class="goalBar" src="../public/images/ChileScoreBar.png">'
+               , '<img class="goalBar" src="../public/images/MexicoScoreBar.png">'
+               ];
+
+
+
 var items = [
 {"a":"The weather is cloudy.","count":26,"q":"When you cannot see the sun, but you can see trees and houses, you would say that the weather is ______.","set":1,"type":"Relaciones Familiar"},
 {"a":"The weather is sunny.","count":24,"q":"When the sky is clear, you would say that the weather is _______.","set":1,"type":"Tiempo"},
@@ -410,7 +548,7 @@ var items = [
 {"a":"Three plus five equals eight","count":20,"q":"Give the problem and solution in english: 3+5=? ?","set":1,"type":"Numbers"},
 {"a":"Monday","count":20,"q":"What is the first weekday in english?","type":"Days of the Week"},
 {"a":"Tuesday","count":20,"q":"What is the second weekday in english?","type":"Days of the Week"},
-{"a":"Wednesday","count":20,"q":"What is the third in english?","type":"Days of the Week"},
+{"a":"Wednesday","count":20,"q":"What is the third weekday in english?","type":"Days of the Week"},
 {"a":"Thursday","count":20,"q":"What is the fourth weekday in english?","type":"Days of the Week"},
 {"a":"Friday","count":20,"q":"What is the fifth weekday in english?","type":"Days of the Week"},
 {"a":"Saturday","count":20,"q":"What is the first day of the weekend in english?","type":"Days of the Week"},
