@@ -90,6 +90,8 @@ label {
 </head>
 
 <body>
+<input type="hidden" id="leftTeam" name="leftTeam" value="-1"></input>
+<input type="hidden" id="rightTeam" name="rightTeam" value="-2"></input>
 <div id="game">
   <div id="leftSideBar">
     <div id="clock">
@@ -124,8 +126,6 @@ label {
     </div>
     <div id="grade">
        <select id="team" name="team" autofocus>
-           <option id="leftCountry"  value="0"> </option>
-           <option id="rightCountry" value="1"> </option>
        </select>
 
        <select id="mode" name="mode" >
@@ -202,6 +202,7 @@ function deselect(e) {
   });
 }
 
+//Popup to get configuration: leftTeam, rightTeam, gameSize
 $(function() {
   $('#doConfig').on('click', function() {
     if($(this).hasClass('selected')) {
@@ -224,7 +225,7 @@ $.fn.slideFadeToggle = function(easing, callback) {
   return this.animate({ opacity: 'toggle', height: 'toggle' }, 'fast', easing, callback);
 };
 
-
+var teams =[];
 var ballPositions = ['-30px', '200px', '515px', '830px', '1080px'];
 var ans= ["right", "wrong"];
 var answerColor = ['#FFFFFF','#000000'];
@@ -256,11 +257,11 @@ $('#configButton').click(function(){
 });
 
 $('#saveGrade').click(function (){
-  var tm = $('#team').val();
+  var ndx = teams.indexOf(Number($('#team').val())); 
   var rightWrong = $('#rightWrong').val();
   var ltt =  $('#leftTeamq'); 
   var rtt =  $('#rightTeamq'); 
-  var row = (tm<1)? ltt : rtt;
+  var row = (ndx<1)? ltt : rtt;
   var num =$('#extras').val();
 
   if(num > 0 ){
@@ -268,7 +269,9 @@ $('#saveGrade').click(function (){
   }else{
     createTd(count, rightWrong, row);
  }
-   $('#team').val(tm^1);
+ //set the dropdown to the other team.
+    ndx=(ndx +1)%2;
+   $('#team').val(teams[ndx]); 
 });
 
 $('#dir').click(function(){
@@ -300,23 +303,25 @@ $('#adv').click(function(){ //advance the ball in the current direction.
 
 //Unopposed Goal Kick to put the ball in play.
 $('#X').click(function(){
- var tm = $('#team').val();
-  showGoaleeKick(Number(tm));
-  $('#team').val(tm^1);
+ var ndx = teams.indexOf($('#team').val()); // ndx will be a zero or a one.
+  showGoaleeKick(Number(ndx));
+  $('#team').val((ndx +1)%2); //select the other team.
 });
 $('#quest').click(function(){
+  var tm = Number($('#team').val());
   var num = Number($('#extras').val());
 //  alert('Extras number is: ' + num );
   var question, answer;
   if(num > 1 ){
-    question = items[num].q;
+    question =  (tm === 1)?items[num].qp : items[num].qs;
     answer   = items[num].a;
     startTimer();
   } else {
+
     count--;
     if(count < 0 ){alert ('Clock is expired. Use Pink questions in the track. Penalty Kicks.');}
     updateClock(count);
-    question = items[count].q;
+    question =  (tm === 1)?items[count].qp : items[count].qs;
     answer   = items[count].a;
     startTimer();
 }
@@ -334,11 +339,12 @@ var setDirectionIndicators=function(bdir){
      $('#mode').val(0);
      $('#leftTeamName').addClass('possessing');
      $('#rightTeamName').removeClass('possessing');
+     $('#team').val(1);
   } else {
      $('#mode').val(0);
      $('#leftTeamName').removeClass('possessing');
      $('#rightTeamName').addClass('possessing');
-     $('#team').val(1);
+     $('#team').val(0);
   }
 }
 
@@ -403,6 +409,7 @@ var clockTick = function(etms){
 }
 
 var configure=function(lt,rt,sz){
+  teams = [lt,rt];
   console.log('Configuring Game with: ' + lt + ', ' + rt + ', ' + sz);
   $("#scoreBarLeftDiv").html(scoreBars[lt] +  '<input type="text" id="leftScore"  name="leftScore"  class="scoreInput" readonly="true" value="0">'); 
   $("#scoreBarRightDiv").html(scoreBars[rt] + '<input type="text" id="rightScore" name="rightScore" class="scoreInput" readonly="true" value="0">'); 
@@ -410,13 +417,15 @@ var configure=function(lt,rt,sz){
   $("#rightGoalBarDiv").html( goalBars[rt]); 
   $("#leftArrowDiv").html(leftArrows[lt]); 
   $("#rightArrowDiv").html( rightArrows[rt]); 
-  var leftTd ='<td id="leftTeamName" class= "trackName" >' + countries[lt] + '</td>';
+  var leftTd ='<td id="leftTeamName"  class= "trackName" >' + countries[lt] + '</td>';
   var rightTd='<td id="rightTeamName" class= "trackName" >' + countries[rt] +'</td>';
   $('#leftTeamq').html(leftTd);
   $('#rightTeamq').html(rightTd);
 //select teams in tracking.
-  $('#leftCountry').html(countries[lt]);
-  $('#rightCountry').html(countries[rt]);
+  var leftOption  = '<option value=' + lt + '>' + countries[lt] + '</option>';
+  var rightOption = '<option value=' + rt + '>' + countries[rt] + '</option>';
+  $('#team').html(leftOption + rightOption);
+
  // Random draw to decide who has possession at start of game. 
   while(ballDirection === 0){
    ballDirection = coinFlip();
@@ -460,133 +469,133 @@ var configure=function(lt,rt,sz){
 
 
 var items = [
-{"a":"The weather is cloudy.","count":26,"q":"When you cannot see the sun, but you can see trees and houses, you would say that the weather is ______.","set":1,"type":"Relaciones Familiar"},
-{"a":"The weather is sunny.","count":24,"q":"When the sky is clear, you would say that the weather is _______.","set":1,"type":"Tiempo"},
-{"a":"The weather is windy.","count":23,"q":"When the trees are moving to and fro, you would say that the weather is ________.","set":1,"type":"Tiempo"},
-{"a":"The weather is cold.","count":25,"q":"When the temperature is low, you would say that the weather is ______","set":1,"type":"Tiempo"},
-{"a":"plate","count":14,"q":"For dinner, you are having steaks, each person's steak will be on their _______.","set":1,"type":"Cocina"},
-{"a":"The weather is Foggy.","count":27,"q":"When you cannot see the houses and trees around you, the weather is _________.","set":1,"type":"Tiempo"},
-{"a":"cup or glass","count":16,"q":"At dinner, you would drink from your _________.","set":1,"type":"Cocina"},
-{"a":"Spoon","count":29,"q":"At dinner, you would eat your soup with a __________.","set":1,"type":"Cocina"},
-{"a":"Fork","count":75,"q":"At dinner, you would eat steak with a ________.","set":1,"type":"Cocina"},
-{"a":"Knife","count":53,"q":"At dinner, you would cut your steak with a _______.","set":1,"type":"Cocina"},
-{"a":"Table","count":28,"q":"At dinner, families sit around a ____________?","set":1,"type":"Cocina"},
-{"a":"Eggs","count":81,"q":"At breakfast, one can eat what the chickens give. You could have scrambled _______.","set":1,"type":"Cocina"},
-{"a":"Cheese","count":91,"q":"What solid product of Milk can be grated and put on spagetthi?","set":1,"type":"Cocina"},
-{"a":"Milk","count":49,"q":"At Breakfast, you may drink something which we get from cows:  _________ .","set":1,"type":"Cocina"},
-{"a":"Pie","count":38,"q":"A baked dessert which may contain fruits is called a ______  ( tarta)","set":1,"type":"Cocina"},
-{"a":"Cake","count":93,"q":"On your birthday, you may have a birthday _______ with candles.","set":1,"type":"Cocina"},
-{"a":"Nephew","count":46,"q":"Two men marry sisters. Each family has a boy and a girl. To the men, the son of the other family would be a  __________.?","set":1,"type":"Relaciones Familiar"},
-{"a":"Go up","count":62,"q":"How would you tell someone to move higher?","set":1,"type":"Direcciones."},
-{"a":"Go Forward","count":68,"q":"How would you tell someone to advance?","set":1,"type":"Direcciones."},
-{"a":"Go Back or Backward","count":71,"q":"How would you tell someone to regress?","set":1,"type":"Direcciones."},
-{"a":"Go Right","count":65,"q":"How would you tell someone to move to the derecha?","set":1,"type":"Direcciones."},
-{"a":"Go Left","count":67,"q":"How would you tell someone to move to the esquierda?","set":1,"type":"Direcciones."},
-{"a":"Go Down","count":70,"q":"How would you tell someone to move lower?","set":1,"type":"Direcciones."},
-{"a":"Go North","count":66,"q":"How would you tell someone to move away from the South Pole?","set":1,"type":"Direcciones."},
-{"a":"Go South.","count":64,"q":"How would you tell someone to move away from the North Pole?","set":1,"type":"Direcciones."},
-{"a":"Go East.","count":69,"q":"How would you tell someone to move toward the sunrise?","set":1,"type":"Direcciones."},
-{"a":"Go West.","count":63,"q":"How would you tell someone to move toward the sunset?","set":1,"type":"Direcciones."},
-{"a":"Cold","count":87,"q":"What is the opposite of: Hot ?","set":1,"type":"Opposites"},
-{"a":"Clean","count":89,"q":"What is the opposite of: Dirty ?","set":1,"type":"Opposites"},
-{"a":"Left or Wrong","count":51,"q":"What is the opposite of: Right ?","set":1,"type":"Opposites"},
-{"a":"Sad","count":36,"q":"What is the opposite of: Happy ?","set":1,"type":"Opposites"},
-{"a":"Large","count":52,"q":"What is the opposite of: Small ?","set":1,"type":"Opposites"},
-{"a":"Awake","count":98,"q":"What is the opposite of: Asleep?","set":1,"type":"Opposites"},
-{"a":"Slow","count":31,"q":"What is the opposite of: Fast ?","set":1,"type":"Opposites"},
-{"a":"Girl","count":72,"q":"What is the opposite of: Boy ?","set":1,"type":"Opposites"},
-{"a":"There","count":22,"q":"What is the opposite of: Here ?","set":1,"type":"Opposites"},
-{"a":"Deep","count":83,"q":"What is the opposite of: Shallow ?","set":1,"type":"Opposites"},
-{"a":"Sour or Bitter","count":30,"q":"What is the opposite of: Sweet ?","set":1,"type":"Opposites"},
-{"a":"Off","count":42,"q":"What is the opposite of: On ?","set":1,"type":"Opposites"},
-{"a":"Evil or Bad","count":80,"q":"What is the opposite of: Good ?","set":1,"type":"Opposites"},
-{"a":"Full","count":73,"q":"What is the opposite of: Empty ?","set":1,"type":"Opposites"},
-{"a":"Far","count":78,"q":"What is the opposite of: Near ?","set":1,"type":"Opposites"},
-{"a":"Out","count":39,"q":"What is the opposite of: In ?","set":1,"type":"Opposites"},
-{"a":"Closed","count":88,"q":"What is the opposite of: Open ?","set":1,"type":"Opposites"},
-{"a":"Healthy, Well","count":55,"q":"What is the opposite of: Sick ?","set":1,"type":"Opposites"},
-{"a":"Cow Calf or Bull","count":84,"q":"What animal makes the sound Moo?","set":1,"type":"Animals"},
-{"a":"Horse","count":54,"q":"A Gaucho rides on a _________.","set":1,"type":"Animals"},
-{"a":"Goat","count":61,"q":"What animal has a beard?","set":1,"type":"Animals"},
-{"a":"Sheep","count":34,"q":"What animal gives us wool?", "set":1,"type":"Animals"},
-{"a":"Bull","count":94,"q":"What animal mates with the cow?","set":1,"type":"Animals"},
-{"a":"Calf","count":92,"q":"What is the offspring of the Cow and Bull?","set":1,"type":"Animals"},
-{"a":"Pig","count":37,"q":"What animal gives us bacon and Ham? (Chancho, Porco)","set":1,"type":"Animals"},
-{"a":"Chicken","count":90,"q":"What animal gives us the most eggs for cooking?","set":1,"type":"Animals"},
-{"a":"Arm","count":100,"q":"What part of the body allows us to carry groceries?","set":1,"type":"Body"},
-{"a":"Body","count":96,"q":"What do we call the entire (Corpo, Cuerpo)?","set":1,"type":"Body"},
-{"a":"Leg","count":50,"q":"What body part allows us to run?","set":1,"type":"Body"},
-{"a":"Finger","count":76,"q":"What body part allows us to type or play musical instruments?","set":1,"type":"Body"},
-{"a":"Toe","count":19,"q":"What body part extends from the foot?","set":1,"type":"Body"},
-{"a":"Head","count":56,"q":"What body part contains our brain?","set":1,"type":"Body"},
-{"a":"Shoulder","count":33,"q":"The upper arm is connected to the _________.","set":1,"type":"Body"},
-{"a":"Back","count":97,"q":"The body part which is opposite of front is __________?","set":1,"type":"Body"},
-{"a":"Eye","count":79,"q":"This body part allows us to see. _________","set":1,"type":"Body"},
-{"a":"Ear","count":82,"q":"This body part allows us to hear._________","set":1,"type":"Body"},
-{"a":"Nose","count":43,"q":"This body part allows us to smell._______","set":1,"type":"Body"},
-{"a":"Mouth","count":47,"q":"The body part which allows us to speak, and eat._______","set":1,"type":"Body"},
-{"a":"Mother","count":48,"q":"In a family, the female that has the children is called __________.","set":1,"type":"Relaciones Familiar"},
-{"a":"Father","count":77,"q":"In a family, the adult male is called _________.","set":1,"type":"Relaciones Familiar"},
-{"a":"Uncle","count":17,"q":"Two men marry sisters. Each family has a boy and a girl. The children would call the other man their ______. ","set":1,"type":"Relaciones Familiar"},
-{"a":"Aunt","count":99,"q":"Two men marry sisters. Each family has a boy and a girl. The children would call the other woman their ______.","set":1,"type":"Relaciones Familiar"},
-{"a":"Brother","count":95,"q":"A family has a boy and a girl.The girl would call the boy her __________. ","set":1,"type":"Relaciones Familiar"},
-{"a":"Sister","count":32,"q":"A family has a boy and a girl.The boy would call the girl his __________.","set":1,"type":"Relaciones Familiar"},
-{"a":"Cousin","count":86,"q":"Two men marry sisters. Each family has a boy and a girl. The girl in one family would call the girl of the other family her _________.","set":1,"type":"Relaciones Familiar"},
-{"a":"Cousin","count":85,"q":"Two men marry sisters. Each family has a boy and a girl. The boy in one family would call the boy of the other family his _________.","set":1,"type":"Relaciones Familiar"},
-{"a":"Grandmother","count":58,"q":"The mother of my mother ( or father)  is my ____________.","set":1,"type":"Relaciones Familiar"},
-{"a":"Grandfather","count":59,"q":"The father of my father (or mother) is my ____________.","set":1,"type":"Relaciones Familiar"},
-{"a":"Nephew","count":45,"q":"Two men marry sisters. Each family has a boy and a girl. The man from the first family would call the son from the second family his ______.","set":1,"type":"Relaciones Familiar"},
-{"a":"Niece","count":44,"q":"Two men marry sisters. Each family has a boy and a girl. The man from the first family would call the girl from the other family his ______.","set":1,"type":"Relaciones Familiar"},
-{"a":"Grandson","count":57,"q":"The son of my son( or daughter) is my _______________.","set":1,"type":"Relaciones Familiar"},
-{"a":"Granddaughter","count":60,"q":"The daughter of my son (or daughter) is my ____________.","set":1,"type":"Relaciones Familiar"},
-{"a":"One plus three equals four","count":40,"q":"Give the problem and solution in english: 1+3=? ?","set":1,"type":"Numbers"},
-{"a":"Seven minus three equals four","count":35,"q":"Give the problem and solution in english: 7-3=? ?","set":1,"type":"Numbers"},
-{"a":"Three plus Seven equals ten","count":21,"q":"Give the problem and solution in english: 3+7=? ?","set":1,"type":"Numbers"},
-{"a":"Two minus one equals one","count":18,"q":"Give the problem and solution in english: 2-1=? ?","set":1,"type":"Numbers"},
-{"a":"One plus one equals two","count":41,"q":"Give the problem and solution in english: 1+1=? ?","set":1,"type":"Numbers"},
-{"a":"Four plus five equals nine","count":74,"q":"Give the problem and solution in english: 4+5=? ?","set":1,"type":"Numbers"},
-{"a":"Three plus five equals eight","count":20,"q":"Give the problem and solution in english: 3+5=? ?","set":1,"type":"Numbers"},
-{"a":"Monday","count":20,"q":"What is the first weekday in english?","type":"Days of the Week"},
-{"a":"Tuesday","count":20,"q":"What is the second weekday in english?","type":"Days of the Week"},
-{"a":"Wednesday","count":20,"q":"What is the third weekday in english?","type":"Days of the Week"},
-{"a":"Thursday","count":20,"q":"What is the fourth weekday in english?","type":"Days of the Week"},
-{"a":"Friday","count":20,"q":"What is the fifth weekday in english?","type":"Days of the Week"},
-{"a":"Saturday","count":20,"q":"What is the first day of the weekend in english?","type":"Days of the Week"},
-{"a":"Sunday","count":20,"q":"What is the second day of the weekend in english?","type":"Days of the Week"},
-{"a":"January","count":20,"q":"What is the first month(Enero) of the year in english?","type":"Months of the Year"},
-{"a":"July","count":20,"q":"What is the seventh month (Julio) of the year in english?","type":"Months of the Year"},
-{"a":"August","count":20,"q":"What is the eighth month (Ago) of the year in english?","type":"Months of the Year"},
-{"a":"October","count":20,"q":"What is the tenth month (Oct) of the year in english?","type":"Months of the Year"},
-{"a":"November","count":20,"q":"What is the eleventh month (Nov) of the year  in english?","type":"Months of the Year"},
-{"a":"December","count":20,"q":"What is the twelvth month (Dic) of the year in english?","type":"Months of the Year"},
-{"a":"April","count":20,"q":" What is the fourth month (Abr) of the year in english?","type":"Months of the Year"},
-{"a":"May","count":20,"q":"What is the fifth month (Mai) of the year in english?","type":"Months of the Year"},
-{"a":"June","count":20,"q":"What is the sixth month (Jun) of the year in english?","type":"Months of the Year"},
-{"a":"Happy Birthday","count":20,"q":"What do you say on a persons date of birth?","type":"Phrases"},
-{"a":"I am ","count":20,"q":"How do you say 'Yo soy' or 'Eu sou'  in english?","type":"Phrases"},
-{"a":"I have ","count":20,"q":"How do you say 'yo tengo' or 'eu tenho' in english?","type":"Phrases"},
-{"a":"telephone","count":20,"q":"To communicate over long distances we usually use the _______.","type":"Phrases"},
-{"a":"mouth","count":20,"q":"What is the _____boca ___  in english?","type":"Phrases"},
-{"a":"brown","count":20,"q":"The color of coffee is ________?","type":"Colors"},
-{"a":"black","count":20,"q":"The darkest color is ______?","type":"Colors"},
-{"a":"red","count":20,"q":"The color of blood is _______?","type":"Colors"},
-{"a":"green","count":20,"q":"The color of grass is______?","type":"Colors"},
-{"a":"Present","count":20,"q":"What tense?): The pencil is on the desk.(past, present,future","set":1,"type":"Tense"},
-{"a":"Past","count":20,"q":"What tense? I ate my sandwich( past,  present,  future)","set":1,"type":"Tense"},
-{"a":"Past","count":20,"q":"What tense?: We had a fun party! (past, present,future","type":"Tense"},
-{"a":"Future","count":20,"q":"What tense?: We will do it later!(past, present,future) ","type":"Tense"},
-{"a":"Present","count":20,"q":"What tense? He is outside. (past, present,future): ","type":"Tense"},
-{"a":"is","count":20,"q":"Fill in Blank: Jim  ___ hungry.(am, is, are) ","type":"Verb Conjugation"},
-{"a":"are","count":20,"q":"Fill in Blank(am, is, are): Bill and Patty  ___ lost.","type":"Verb Conjugation"},
-{"a":"are","count":20,"q":"Fill in Blank(am, is, are): We  ___ at home.","type":"Verb Conjugation"},
-{"a":" is singing","count":20,"q":"Fill in Blank(am running, is singing, are eating): Billy ___ .","type":"Verb Conjugation"},
-{"a":" am not going","count":20,"q":"Fill in Blank: I ______(a. am not going b. is grateful c. are asking her)","type":"Verb Conjugation"},
-{"a":"Jim","count":20,"q":"Fill in Blank: What is  ______ doing? (a. Jim b. her c. they)","type":"Verb Conjugation"},
-{"a":"they","count":20,"q":"Fill in Blank): What are ____ bringing?(a. he b. they c. Tim)","type":"Verb Conjugation"},
-{"a":"its","count":20,"q":"Fill in Blank:  My dog lost _______________ collar.(a. its b. she c. him)","type":"Verb Conjugation"},
-{"a":"us","count":20,"q":"Fill in Blank: The horses belong to _____________ .(a. she b. he c. us) ","type":"Verb Conjugation"},
-{"a":"orange","count":20,"q":"The color of an orange is _____?","type":"Colors"},
-{"a":"blue","count":20,"q":"The color of the sky is _____?","type":"Colors"},
+{"a":"The weather is cloudy.","count":26,"q":"When you cannot see the sun, but you can see trees and houses, you would say that the weather is ______.",ps:"Spanish: Cuando no puede ver el sol, pero puede ver arborls e casas, digeria 'the weather is ____. ", "qp":"Portuguese: Quando pode ver casas e arvoles, pero not pode ver el sol, dizeria 'The weather is ______.", "set":1,"type":"Weather"},
+{"a":"The weather is sunny.","count":24,"q":"When the sky is clear, you would say that the weather is _______.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Tiempo"},
+{"a":"The weather is windy.","count":23,"q":"When the trees are moving to and fro, you would say that the weather is ________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Tiempo"},
+{"a":"The weather is cold.","count":25,"q":"When the temperature is low, you would say that the weather is ______",qs:"Spanish",qp:"Portuguese","set":1,"type":"Tiempo"},
+{"a":"plate","count":14,"q":"For dinner, you are having steaks, each person's steak will be on their _______.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Cocina"},
+{"a":"The weather is Foggy.","count":27,"q":"When you cannot see the houses and trees around you, the weather is _________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Tiempo"},
+{"a":"cup or glass","count":16,"q":"At dinner, you would drink from your _________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Cocina"},
+{"a":"Spoon","count":29,"q":"At dinner, you would eat your soup with a __________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Cocina"},
+{"a":"Fork","count":75,"q":"At dinner, you would eat steak with a ________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Cocina"},
+{"a":"Knife","count":53,"q":"At dinner, you would cut your steak with a _______.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Cocina"},
+{"a":"Table","count":28,"q":"At dinner, families sit around a ____________?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Cocina"},
+{"a":"Eggs","count":81,"q":"At breakfast, one can eat what the chickens give. You could have scrambled _______.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Cocina"},
+{"a":"Cheese","count":91,"q":"What solid product of Milk can be grated and put on spagetthi?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Cocina"},
+{"a":"Milk","count":49,"q":"At Breakfast, you may drink something which we get from cows:  _________ .",qs:"Spanish",qp:"Portuguese","set":1,"type":"Cocina"},
+{"a":"Pie","count":38,"q":"A baked dessert which may contain fruits is called a ______  ( tarta)",qs:"Spanish",qp:"Portuguese","set":1,"type":"Cocina"},
+{"a":"Cake","count":93,"q":"On your birthday, you may have a birthday _______ with candles.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Cocina"},
+{"a":"Nephew","count":46,"q":"Two men marry sisters. Each family has a boy and a girl. To the men, the son of the other family would be a  __________.?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Go up","count":62,"q":"How would you tell someone to move higher?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Direcciones."},
+{"a":"Go Forward","count":68,"q":"How would you tell someone to advance?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Direcciones."},
+{"a":"Go Back or Backward","count":71,"q":"How would you tell someone to regress?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Direcciones."},
+{"a":"Go Right","count":65,"q":"How would you tell someone to move to the derecha?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Direcciones."},
+{"a":"Go Left","count":67,"q":"How would you tell someone to move to the esquierda?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Direcciones."},
+{"a":"Go Down","count":70,"q":"How would you tell someone to move lower?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Direcciones."},
+{"a":"Go North","count":66,"q":"How would you tell someone to move away from the South Pole?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Direcciones."},
+{"a":"Go South.","count":64,"q":"How would you tell someone to move away from the North Pole?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Direcciones."},
+{"a":"Go East.","count":69,"q":"How would you tell someone to move toward the sunrise?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Direcciones."},
+{"a":"Go West.","count":63,"q":"How would you tell someone to move toward the sunset?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Direcciones."},
+{"a":"Cold","count":87,"q":"What is the opposite of: Hot ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Clean","count":89,"q":"What is the opposite of: Dirty ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Left or Wrong","count":51,"q":"What is the opposite of: Right ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Sad","count":36,"q":"What is the opposite of: Happy ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Large","count":52,"q":"What is the opposite of: Small ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Awake","count":98,"q":"What is the opposite of: Asleep?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Slow","count":31,"q":"What is the opposite of: Fast ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Girl","count":72,"q":"What is the opposite of: Boy ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"There","count":22,"q":"What is the opposite of: Here ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Deep","count":83,"q":"What is the opposite of: Shallow ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Sour or Bitter","count":30,"q":"What is the opposite of: Sweet ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Off","count":42,"q":"What is the opposite of: On ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Evil or Bad","count":80,"q":"What is the opposite of: Good ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Full","count":73,"q":"What is the opposite of: Empty ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Far","count":78,"q":"What is the opposite of: Near ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Out","count":39,"q":"What is the opposite of: In ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Closed","count":88,"q":"What is the opposite of: Open ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Healthy, Well","count":55,"q":"What is the opposite of: Sick ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Opposites"},
+{"a":"Cow Calf or Bull","count":84,"q":"What animal makes the sound Moo?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Animals"},
+{"a":"Horse","count":54,"q":"A Gaucho rides on a _________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Animals"},
+{"a":"Goat","count":61,"q":"What animal has a beard?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Animals"},
+{"a":"Sheep","count":34,"q":"What animal gives us wool?", "set":1,qs:"Spanish",qp:"Portuguese","type":"Animals"},
+{"a":"Bull","count":94,"q":"What animal mates with the cow?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Animals"},
+{"a":"Calf","count":92,"q":"What is the offspring of the Cow and Bull?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Animals"},
+{"a":"Pig","count":37,"q":"What animal gives us bacon and Ham? (Chancho, Porco)",qs:"Spanish",qp:"Portuguese","set":1,"type":"Animals"},
+{"a":"Chicken","count":90,"q":"What animal gives us the most eggs for cooking?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Animals"},
+{"a":"Arm","count":100,"q":"What part of the body allows us to carry groceries?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Body","count":96,"q":"What do we call the entire (Corpo, Cuerpo)?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Leg","count":50,"q":"What body part allows us to run?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Finger","count":76,"q":"What body part allows us to type or play musical instruments?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Toe","count":19,"q":"What body part extends from the foot?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Head","count":56,"q":"What body part contains our brain?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Shoulder","count":33,"q":"The upper arm is connected to the _________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Back","count":97,"q":"The body part which is opposite of front is __________?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Eye","count":79,"q":"This body part allows us to see. _________",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Ear","count":82,"q":"This body part allows us to hear._________",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Nose","count":43,"q":"This body part allows us to smell._______",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Mouth","count":47,"q":"The body part which allows us to speak, and eat._______",qs:"Spanish",qp:"Portuguese","set":1,"type":"Body"},
+{"a":"Mother","count":48,"q":"In a family, the female that has the children is called __________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Father","count":77,"q":"In a family, the adult male is called _________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Uncle","count":17,"q":"Two men marry sisters. Each family has a boy and a girl. The children would call the other man their ______. ",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Aunt","count":99,"q":"Two men marry sisters. Each family has a boy and a girl. The children would call the other woman their ______.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Brother","count":95,"q":"A family has a boy and a girl.The girl would call the boy her __________. ",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Sister","count":32,"q":"A family has a boy and a girl.The boy would call the girl his __________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Cousin","count":86,"q":"Two men marry sisters. Each family has a boy and a girl. The girl in one family would call the girl of the other family her _________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Cousin","count":85,"q":"Two men marry sisters. Each family has a boy and a girl. The boy in one family would call the boy of the other family his _________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Grandmother","count":58,"q":"The mother of my mother ( or father)  is my ____________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Grandfather","count":59,"q":"The father of my father (or mother) is my ____________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Nephew","count":45,"q":"Two men marry sisters. Each family has a boy and a girl. The man from the first family would call the son from the second family his ______.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Niece","count":44,"q":"Two men marry sisters. Each family has a boy and a girl. The man from the first family would call the girl from the other family his ______.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Grandson","count":57,"q":"The son of my son( or daughter) is my _______________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"Granddaughter","count":60,"q":"The daughter of my son (or daughter) is my ____________.",qs:"Spanish",qp:"Portuguese","set":1,"type":"Relaciones Familiar"},
+{"a":"One plus three equals four","count":40,"q":"Give the problem and solution in english: 1+3=? ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Numbers"},
+{"a":"Seven minus three equals four","count":35,"q":"Give the problem and solution in english: 7-3=? ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Numbers"},
+{"a":"Three plus Seven equals ten","count":21,"q":"Give the problem and solution in english: 3+7=? ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Numbers"},
+{"a":"Two minus one equals one","count":18,"q":"Give the problem and solution in english: 2-1=? ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Numbers"},
+{"a":"One plus one equals two","count":41,"q":"Give the problem and solution in english: 1+1=? ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Numbers"},
+{"a":"Four plus five equals nine","count":74,"q":"Give the problem and solution in english: 4+5=? ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Numbers"},
+{"a":"Three plus five equals eight","count":20,"q":"Give the problem and solution in english: 3+5=? ?",qs:"Spanish",qp:"Portuguese","set":1,"type":"Numbers"},
+{"a":"Monday","count":20,"q":"What is the first weekday in english?",qs:"Spanish",qp:"Portuguese","type":"Days of the Week"},
+{"a":"Tuesday","count":20,"q":"What is the second weekday in english?",qs:"Spanish",qp:"Portuguese","type":"Days of the Week"},
+{"a":"Wednesday","count":20,"q":"What is the third weekday in english?",qs:"Spanish",qp:"Portuguese","type":"Days of the Week"},
+{"a":"Thursday","count":20,"q":"What is the fourth weekday in english?",qs:"Spanish",qp:"Portuguese","type":"Days of the Week"},
+{"a":"Friday","count":20,"q":"What is the fifth weekday in english?",qs:"Spanish",qp:"Portuguese","type":"Days of the Week"},
+{"a":"Saturday","count":20,"q":"What is the first day of the weekend in english?",qs:"Spanish",qp:"Portuguese","type":"Days of the Week"},
+{"a":"Sunday","count":20,"q":"What is the second day of the weekend in english?",qs:"Spanish",qp:"Portuguese","type":"Days of the Week"},
+{"a":"January","count":20,"q":"What is the first month(Enero) of the year in english?",qs:"Spanish",qp:"Portuguese","type":"Months of the Year"},
+{"a":"July","count":20,"q":"What is the seventh month (Julio) of the year in english?",qs:"Spanish",qp:"Portuguese","type":"Months of the Year"},
+{"a":"August","count":20,"q":"What is the eighth month (Ago) of the year in english?",qs:"Spanish",qp:"Portuguese","type":"Months of the Year"},
+{"a":"October","count":20,"q":"What is the tenth month (Oct) of the year in english?",qs:"Spanish",qp:"Portuguese","type":"Months of the Year"},
+{"a":"November","count":20,"q":"What is the eleventh month (Nov) of the year  in english?",qs:"Spanish",qp:"Portuguese","type":"Months of the Year"},
+{"a":"December","count":20,"q":"What is the twelvth month (Dic) of the year in english?",qs:"Spanish",qp:"Portuguese","type":"Months of the Year"},
+{"a":"April","count":20,"q":" What is the fourth month (Abr) of the year in english?",qs:"Spanish",qp:"Portuguese","type":"Months of the Year"},
+{"a":"May","count":20,"q":"What is the fifth month (Mai) of the year in english?",qs:"Spanish",qp:"Portuguese","type":"Months of the Year"},
+{"a":"June","count":20,"q":"What is the sixth month (Jun) of the year in english?",qs:"Spanish",qp:"Portuguese","type":"Months of the Year"},
+{"a":"Happy Birthday","count":20,"q":"What do you say on a persons date of birth?",qs:"Spanish",qp:"Portuguese","type":"Phrases"},
+{"a":"I am ","count":20,"q":"How do you say 'Yo soy' or 'Eu sou'  in english?",qs:"Spanish",qp:"Portuguese","type":"Phrases"},
+{"a":"I have ","count":20,"q":"How do you say 'yo tengo' or 'eu tenho' in english?",qs:"Spanish",qp:"Portuguese","type":"Phrases"},
+{"a":"telephone","count":20,"q":"To communicate over long distances we usually use the _______.",qs:"Spanish",qp:"Portuguese","type":"Phrases"},
+{"a":"mouth","count":20,"q":"What is the _____boca ___  in english?",qs:"Spanish",qp:"Portuguese","type":"Phrases"},
+{"a":"brown","count":20,"q":"The color of coffee is ________?",qs:"Spanish",qp:"Portuguese","type":"Colors"},
+{"a":"black","count":20,"q":"The darkest color is ______?",qs:"Spanish",qp:"Portuguese","type":"Colors"},
+{"a":"red","count":20,"q":"The color of blood is _______?",qs:"Spanish",qp:"Portuguese","type":"Colors"},
+{"a":"green","count":20,"q":"The color of grass is______?",qs:"Spanish",qp:"Portuguese","type":"Colors"},
+{"a":"Present","count":20,"q":"What tense?): The pencil is on the desk.(past, present,future",qs:"Spanish",qp:"Portuguese","set":1,"type":"Tense"},
+{"a":"Past","count":20,"q":"What tense? I ate my sandwich( past,  present,  future)",qs:"Spanish",qp:"Portuguese","set":1,"type":"Tense"},
+{"a":"Past","count":20,"q":"What tense?: We had a fun party! (past, present,future",qs:"Spanish",qp:"Portuguese","type":"Tense"},
+{"a":"Future","count":20,"q":"What tense?: We will do it later!(past, present,future) ",qs:"Spanish",qp:"Portuguese","type":"Tense"},
+{"a":"Present","count":20,"q":"What tense? He is outside. (past, present,future): ",qs:"Spanish",qp:"Portuguese","type":"Tense"},
+{"a":"is","count":20,"q":"Fill in Blank: Jim  ___ hungry.(am, is, are) ",qs:"Spanish",qp:"Portuguese","type":"Verb Conjugation"},
+{"a":"are","count":20,"q":"Fill in Blank(am, is, are): Bill and Patty  ___ lost.",qs:"Spanish",qp:"Portuguese","type":"Verb Conjugation"},
+{"a":"are","count":20,"q":"Fill in Blank(am, is, are): We  ___ at home.",qs:"Spanish",qp:"Portuguese","type":"Verb Conjugation"},
+{"a":" is singing","count":20,"q":"Fill in Blank(am running, is singing, are eating): Billy ___ .",qs:"Spanish",qp:"Portuguese","type":"Verb Conjugation"},
+{"a":" am not going","count":20,"q":"Fill in Blank: I ______(a. am not going b. is grateful c. are asking her)",qs:"Spanish",qp:"Portuguese","type":"Verb Conjugation"},
+{"a":"Jim","count":20,"q":"Fill in Blank: What is  ______ doing? (a. Jim b. her c. they)",qs:"Spanish",qp:"Portuguese","type":"Verb Conjugation"},
+{"a":"they","count":20,"q":"Fill in Blank): What are ____ bringing?(a. he b. they c. Tim)",qs:"Spanish",qp:"Portuguese","type":"Verb Conjugation"},
+{"a":"its","count":20,"q":"Fill in Blank:  My dog lost _______________ collar.(a. its b. she c. him)",qs:"Spanish",qp:"Portuguese","type":"Verb Conjugation"},
+{"a":"us","count":20,"q":"Fill in Blank: The horses belong to _____________ .(a. she b. he c. us) ",qs:"Spanish",qp:"Portuguese","type":"Verb Conjugation"},
+{"a":"orange","count":20,"q":"The color of an orange is _____?",qs:"Spanish",qp:"Portuguese","type":"Colors"},
+{"a":"blue","count":20,"q":"The color of the sky is _____?",qs:"Spanish",qp:"Portuguese","type":"Colors"},
 ];
 
 </script>
