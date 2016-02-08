@@ -1,0 +1,2 @@
+mongoexport -h mongo.dev.priv -d football  -c questions -q '{ { },{q:1} }' -o questions.json
+

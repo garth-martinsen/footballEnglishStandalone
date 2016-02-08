@@ -1,0 +1,1241 @@
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf448"
+	},
+	"a": "The weather is cloudy.",
+	"count": 26,
+	"q": "Cuando tiene  nuben y no puede ver el sol, How is the weather?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf449"
+	},
+	"a": "The weather is sunny.",
+	"count": 24,
+	"q": "Cuando tiene sol sin nuben, How is the weather?",
+	"set": 1,
+	"type": "Tiempo"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf44a"
+	},
+	"a": "The weather is windy.",
+	"count": 23,
+	"q": "Cuando tiene mucho viento, How is the weather? ",
+	"set": 1,
+	"type": "Tiempo"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf44b"
+	},
+	"a": "The weather is cold.",
+	"count": 25,
+	"q": "Cuando temperatura es bajo, How is the weather?",
+	"set": 1,
+	"type": "Tiempo"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf44c"
+	},
+	"a": "plate",
+	"count": 14,
+	"q": "En Ingles, como se llama un plato?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf44d"
+	},
+	"a": "The weather is Foggy.",
+	"count": 27,
+	"q": "Cuando tiene niebla en la faz de la tierra,  How is the weather?",
+	"set": 1,
+	"type": "Tiempo"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf44e"
+	},
+	"a": "cup",
+	"count": 16,
+	"q": "En Ingles, como se llama copa?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf44f"
+	},
+	"a": "Spoon",
+	"count": 29,
+	"q": "En Ingles, como se llama cuchara?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf450"
+	},
+	"a": "Fork",
+	"count": 75,
+	"q": "En Ingles, como se llama tenedor?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf451"
+	},
+	"a": "Knife",
+	"count": 53,
+	"q": "En Ingles, como se llama cuchillo?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf452"
+	},
+	"a": "glass",
+	"count": 15,
+	"q": "En Ingles, como se llama vaso?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf453"
+	},
+	"a": "Nephew",
+	"count": 46,
+	"q": " En Ingles, como se dice Sobrino?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf454"
+	},
+	"a": "Table",
+	"count": 28,
+	"q": "En Ingles, como se llama mesa?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf455"
+	},
+	"a": "Eggs",
+	"count": 81,
+	"q": "En Ingles, como se llaman huevos?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf456"
+	},
+	"a": "Cheese",
+	"count": 91,
+	"q": "En Ingles, como se llama queso?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf457"
+	},
+	"a": "Milk",
+	"count": 49,
+	"q": "En Ingles, como se llama leche?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf458"
+	},
+	"a": "Cake",
+	"count": 93,
+	"q": "En Ingles, como se llama pastel o torta?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf459"
+	},
+	"a": "Mother",
+	"count": 48,
+	"q": "En Ingles, como se dice Madre?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf45a"
+	},
+	"a": "Father",
+	"count": 77,
+	"q": "En Ingles, como se dice Padre?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf45b"
+	},
+	"a": "Uncle",
+	"count": 17,
+	"q": "En Ingles, como se dice Tio?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf45c"
+	},
+	"a": "Aunt",
+	"count": 99,
+	"q": " En Ingles, como se dice Tia?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf45d"
+	},
+	"a": "Brother",
+	"count": 95,
+	"q": "In a family, there is a boy and a girl. We would say that the boy is the girl's ________.",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf45e"
+	},
+	"a": "Pie",
+	"count": 38,
+	"q": "En Ingles, como se llama tarta?",
+	"set": 1,
+	"type": "Cocina"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf45f"
+	},
+	"a": "Sister",
+	"count": 32,
+	"q": "In a family, there is a boy and a girl. We would say that the girl is the boy's _______",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf460"
+	},
+	"a": "Cousin",
+	"count": 86,
+	"q": " En Ingles, como se dice Primo?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf461"
+	},
+	"a": "Cousin",
+	"count": 85,
+	"q": " En Ingles, como se dice Prima?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf462"
+	},
+	"a": "Grandmother",
+	"count": 58,
+	"q": "Relaciones Familiar. En Ingles, como se dice Abuela?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf463"
+	},
+	"a": "Grandfather",
+	"count": 59,
+	"q": "Relaciones Familiar. En Ingles, como se dice Abuelo?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf464"
+	},
+	"a": "Nephew",
+	"count": 45,
+	"q": " En Ingles, como se dice Sobrino?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf465"
+	},
+	"a": "Niece",
+	"count": 44,
+	"q": " En Ingles, como se dice Sobrina?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf466"
+	},
+	"a": "Grandson",
+	"count": 57,
+	"q": " En Ingles, como se dice Nieto?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf467"
+	},
+	"a": "Granddaughter",
+	"count": 60,
+	"q": " En Ingles, como se dice Nieta?",
+	"set": 1,
+	"type": "Relaciones Familiar"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf468"
+	},
+	"a": "Go up",
+	"count": 62,
+	"q": "Como se dice hacia arriba?",
+	"set": 1,
+	"type": "Direcciones."
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf469"
+	},
+	"a": "Go Forward",
+	"count": 68,
+	"q": "Como se dice hacia adelante?",
+	"set": 1,
+	"type": "Direcciones."
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf46a"
+	},
+	"a": "Go Backward",
+	"count": 71,
+	"q": "Como se dice hacia atraz?",
+	"set": 1,
+	"type": "Direcciones."
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf46b"
+	},
+	"a": "Go Right",
+	"count": 65,
+	"q": "Como se dice hacia derecha?",
+	"set": 1,
+	"type": "Direcciones."
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf46c"
+	},
+	"a": "Go Left",
+	"count": 67,
+	"q": "Como se dice hacia esquierda?",
+	"set": 1,
+	"type": "Direcciones."
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf46d"
+	},
+	"a": "Go Down",
+	"count": 70,
+	"q": "Como se dice hacia abajo?",
+	"set": 1,
+	"type": "Direcciones."
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf46e"
+	},
+	"a": "Go North",
+	"count": 66,
+	"q": "Como se dice hacia el norte?",
+	"set": 1,
+	"type": "Direcciones."
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf46f"
+	},
+	"a": "Go South.",
+	"count": 64,
+	"q": "Como se dice hacia el sur?",
+	"set": 1,
+	"type": "Direcciones."
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf470"
+	},
+	"a": "Go East.",
+	"count": 69,
+	"q": "Como se dice hacia el este?",
+	"set": 1,
+	"type": "Direcciones."
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf471"
+	},
+	"a": "Go West.",
+	"count": 63,
+	"q": "Como se dice hacia el oeste?",
+	"set": 1,
+	"type": "Direcciones."
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf472"
+	},
+	"a": "Cold",
+	"count": 87,
+	"q": "What is the opposite of: Hot ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf473"
+	},
+	"a": "Clean",
+	"count": 89,
+	"q": "What is the opposite of: Dirty ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf474"
+	},
+	"a": "Sad",
+	"count": 36,
+	"q": "What is the opposite of: Happy ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf475"
+	},
+	"a": "Large",
+	"count": 52,
+	"q": "What is the opposite of: Small ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf476"
+	},
+	"a": "Awake",
+	"count": 98,
+	"q": "What is the opposite of: Asleep?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf477"
+	},
+	"a": "Slow",
+	"count": 31,
+	"q": "What is the opposite of: Fast ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf478"
+	},
+	"a": "Left or Wrong",
+	"count": 51,
+	"q": "What is the opposite of: Right ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf479"
+	},
+	"a": "Girl",
+	"count": 72,
+	"q": "What is the opposite of: Boy ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf47a"
+	},
+	"a": "There",
+	"count": 22,
+	"q": "What is the opposite of: Here ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf47b"
+	},
+	"a": "Deep",
+	"count": 83,
+	"q": "What is the opposite of: Shallow ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf47c"
+	},
+	"a": "Sour",
+	"count": 30,
+	"q": "What is the opposite of: Sweet ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf47d"
+	},
+	"a": "Off",
+	"count": 42,
+	"q": "What is the opposite of: On ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf47e"
+	},
+	"a": "Evil",
+	"count": 80,
+	"q": "What is the opposite of: Good ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf47f"
+	},
+	"a": "Full",
+	"count": 73,
+	"q": "What is the opposite of: Empty ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf480"
+	},
+	"a": "Far",
+	"count": 78,
+	"q": "What is the opposite of: Near ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf481"
+	},
+	"a": "Out",
+	"count": 39,
+	"q": "What is the opposite of: In ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf482"
+	},
+	"a": "Closed",
+	"count": 88,
+	"q": "What is the opposite of: Open ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf483"
+	},
+	"a": "Healthy",
+	"count": 55,
+	"q": "What is the opposite of: Sick ?",
+	"set": 1,
+	"type": "Opuestos"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf484"
+	},
+	"a": "Cow",
+	"count": 84,
+	"q": "Como se dice Vaca ?",
+	"set": 1,
+	"type": "Animales"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf485"
+	},
+	"a": "Horse",
+	"count": 54,
+	"q": "Como se dice Caballo ?",
+	"set": 1,
+	"type": "Animales"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf486"
+	},
+	"a": "Goat",
+	"count": 61,
+	"q": "Como se dice Cabra ?",
+	"set": 1,
+	"type": "Animales"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf487"
+	},
+	"a": "Sheep",
+	"count": 34,
+	"q": "Como se dice Oveja ?",
+	"set": 1,
+	"type": "Animales"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf488"
+	},
+	"a": "Bull",
+	"count": 94,
+	"q": "Como se dice Toro ?",
+	"set": 1,
+	"type": "Animales"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf489"
+	},
+	"a": "Calf",
+	"count": 92,
+	"q": "Como se dice Ternero ?",
+	"set": 1,
+	"type": "Animales"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf48a"
+	},
+	"a": "Pig",
+	"count": 37,
+	"q": "Como se dice Chancho ?",
+	"set": 1,
+	"type": "Animales"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf48b"
+	},
+	"a": "Chicken",
+	"count": 90,
+	"q": "Como se dice Pollo o gallina ?",
+	"set": 1,
+	"type": "Animales"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf48c"
+	},
+	"a": "Arm",
+	"count": 100,
+	"q": "Como se dice Brazo en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf48d"
+	},
+	"a": "Body",
+	"count": 96,
+	"q": "Como se dice Cuerpo en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf48e"
+	},
+	"a": "Leg",
+	"count": 50,
+	"q": "Como se dice pierna en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf48f"
+	},
+	"a": "Finger",
+	"count": 76,
+	"q": "Como se dice dedo en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf490"
+	},
+	"a": "Toe",
+	"count": 19,
+	"q": "Como se dice dedo del pie en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf491"
+	},
+	"a": "Head",
+	"count": 56,
+	"q": "Como se dice cabeca en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf492"
+	},
+	"a": "Shoulder",
+	"count": 33,
+	"q": "Como se dice hombro en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf493"
+	},
+	"a": "Back",
+	"count": 97,
+	"q": "Como se dice espalda en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf494"
+	},
+	"a": "Eye",
+	"count": 79,
+	"q": "Como se dice ojo en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf495"
+	},
+	"a": "Ear",
+	"count": 82,
+	"q": "Como se dice oreja en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf496"
+	},
+	"a": "Nose",
+	"count": 43,
+	"q": "Como se dice nariz en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf497"
+	},
+	"a": "Mouth",
+	"count": 47,
+	"q": "Como se dice boca en ingles?",
+	"set": 1,
+	"type": "Body"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf498"
+	},
+	"a": "One plus three equals four",
+	"count": 40,
+	"q": "Diga problema y solución en ingles: 1+3=? ?",
+	"set": 1,
+	"type": "Numbers"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf499"
+	},
+	"a": "Seven minus three equals four",
+	"count": 35,
+	"q": "Diga problema y solución en ingles: 7-3=? ?",
+	"set": 1,
+	"type": "Numbers"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf49a"
+	},
+	"a": "Three plus Seven equals ten",
+	"count": 21,
+	"q": "Diga problema y solución en ingles: 3+7=? ?",
+	"set": 1,
+	"type": "Numbers"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf49b"
+	},
+	"a": "Two minus one equals one",
+	"count": 18,
+	"q": "Diga problema y solución en ingles: 2-1=? ?",
+	"set": 1,
+	"type": "Numbers"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf49c"
+	},
+	"a": "One plus one equals two",
+	"count": 41,
+	"q": "Diga problema y solución en ingles: 1+1=? ?",
+	"set": 1,
+	"type": "Numbers"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf49d"
+	},
+	"a": "Four plus five equals nine",
+	"count": 74,
+	"q": "Diga problema y solución en ingles: 4+5=? ?",
+	"set": 1,
+	"type": "Numbers"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf49e"
+	},
+	"a": "Three plus five equals eight",
+	"count": 20,
+	"q": "Diga problema y solución en ingles: 3+5=? ?",
+	"set": 1,
+	"type": "Numbers"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf49f"
+	},
+	"a": "Present",
+	"count": 20,
+	"q": "What tense?): The pencil is on the desk.(past, present,future",
+	"set": 1,
+	"type": "Tense"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4a0"
+	},
+	"a": "Past",
+	"count": 20,
+	"q": "What tense? I ate my sandwich( past,  present,  future)",
+	"set": 1,
+	"type": "Tense"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4a1"
+	},
+	"a": "Past",
+	"count": 20,
+	"q": "What tense?: We had a fun party! (past, present,future",
+	"type": "Tense"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4a2"
+	},
+	"a": "Future",
+	"count": 20,
+	"q": "What tense?: We will do it later!(past, present,future) ",
+	"type": "Tense"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4a3"
+	},
+	"a": "Present",
+	"count": 20,
+	"q": "What tense? He is outside. (past, present,future): ",
+	"type": "Tense"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4a4"
+	},
+	"a": "is",
+	"count": 20,
+	"q": "Fill in Blank: Jim  ___ hungry.(am, is, are) ",
+	"type": "Verb Conjugation"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4a5"
+	},
+	"a": "are",
+	"count": 20,
+	"q": "Fill in Blank(am, is, are): Bill and Patty  ___ lost.",
+	"type": "Verb Conjugation"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4a6"
+	},
+	"a": "are",
+	"count": 20,
+	"q": "Fill in Blank(am, is, are): We  ___ at home.",
+	"type": "Verb Conjugation"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4a7"
+	},
+	"a": " is singing",
+	"count": 20,
+	"q": "Fill in Blank(am running, is singing, are eating): Billy ___ .",
+	"type": "Verb Conjugation"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4a8"
+	},
+	"a": " am not going",
+	"count": 20,
+	"q": "Fill in Blank: I ______(a. am not going b. is grateful c. are asking her)",
+	"type": "Verb Conjugation"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4a9"
+	},
+	"a": "they",
+	"count": 20,
+	"q": "Fill in Blank): What are ____ bringing?(a. he b. they c. Tim)",
+	"type": "Verb Conjugation"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4aa"
+	},
+	"a": "Jim",
+	"count": 20,
+	"q": "Fill in Blank: What is  ______ doing? (a. Jim b. her c. they)",
+	"type": "Verb Conjugation"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4ab"
+	},
+	"a": "its",
+	"count": 20,
+	"q": "Fill in Blank:  My dog lost _______________ collar.(a. its b. she c. him)",
+	"type": "Verb Conjugation"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4ac"
+	},
+	"a": "us",
+	"count": 20,
+	"q": "Fill in Blank: The horses belong to _____________ .(a. she b. he c. us) ",
+	"type": "Verb Conjugation"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4ad"
+	},
+	"a": "Monday",
+	"count": 20,
+	"q": "¿Como se dice _____ lunes_____ en Inglés?",
+	"type": "Days of the Week"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4ae"
+	},
+	"a": "Wednesday",
+	"count": 20,
+	"q": "¿Como se dice ___miércoles___ en Inglés?",
+	"type": "Days of the Week"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4af"
+	},
+	"a": "Tuesday",
+	"count": 20,
+	"q": "¿Como se dice _____martes___  en Inglés?",
+	"type": "Days of the Week"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4b0"
+	},
+	"a": "Thursday",
+	"count": 20,
+	"q": "¿Como se dice _____jueves_____ en Inglés?",
+	"type": "Days of the Week"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4b1"
+	},
+	"a": "Friday",
+	"count": 20,
+	"q": "¿Como se dice _____viernes_____ en Inglés?",
+	"type": "Days of the Week"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4b2"
+	},
+	"a": "Saturday",
+	"count": 20,
+	"q": "¿Como se dice _____Sabado_____ en Inglés?",
+	"type": "Days of the Week"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4b3"
+	},
+	"a": "Sunday",
+	"count": 20,
+	"q": "¿Como se dice _____domingo_____ en Inglés?",
+	"type": "Days of the Week"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4b4"
+	},
+	"a": "January",
+	"count": 20,
+	"q": "¿Como se dice _____enero_____ en Inglés?",
+	"type": "Months of the Year"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4b5"
+	},
+	"a": "July",
+	"count": 20,
+	"q": "¿Como se dice _____julio_____ en Inglés?",
+	"type": "Months of the Year"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4b6"
+	},
+	"a": "August",
+	"count": 20,
+	"q": "¿Como se dice _____Agosto_____ en Inglés?",
+	"type": "Months of the Year"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4b7"
+	},
+	"a": "October",
+	"count": 20,
+	"q": "¿Como se dice _____Octubre_____ en Inglés?",
+	"type": "Months of the Year"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4b8"
+	},
+	"a": "November",
+	"count": 20,
+	"q": "¿Como se dice _____Noviembro___ en Inglés?",
+	"type": "Months of the Year"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4b9"
+	},
+	"a": "December",
+	"count": 20,
+	"q": "¿Como se dice _____Diciembre___ en Inglés?",
+	"type": "Months of the Year"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4ba"
+	},
+	"a": "April",
+	"count": 20,
+	"q": " ¿Como se dice _____Abril___ en Inglés?",
+	"type": "Months of the Year"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4bb"
+	},
+	"a": "May",
+	"count": 20,
+	"q": "¿Como se dice _____Maio______en Inglés?",
+	"type": "Months of the Year"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4bc"
+	},
+	"a": "June",
+	"count": 20,
+	"q": "¿Como se dice _____Junio___ en Inglés?",
+	"type": "Months of the Year"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4bd"
+	},
+	"a": "Happy Birthday",
+	"count": 20,
+	"q": "¿Como se dice _____Felic cupleanos ___ en Inglés?",
+	"type": "Phrases"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4be"
+	},
+	"a": "I am ",
+	"count": 20,
+	"q": "¿Como se dice _____Yo soy ___ en Inglés?",
+	"type": "Phrases"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4bf"
+	},
+	"a": "I have ",
+	"count": 20,
+	"q": "¿Como se dice _____tengo__ en Inglés?",
+	"type": "Phrases"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4c0"
+	},
+	"a": "telephone",
+	"count": 20,
+	"q": "¿Como se dice _____teléfono ___ en Inglés?",
+	"type": "Phrases"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4c1"
+	},
+	"a": "mouth",
+	"count": 20,
+	"q": "¿Como se dice _____boca ___ en Inglés?",
+	"type": "Phrases"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4c2"
+	},
+	"a": "brown",
+	"count": 20,
+	"q": "¿El color de cafe es ________?",
+	"type": "Colores"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4c3"
+	},
+	"a": "black",
+	"count": 20,
+	"q": "¿En Inglés, negro es ________?",
+	"type": "Colores"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4c4"
+	},
+	"a": "red",
+	"count": 20,
+	"q": "¿En Inglés, rojo es ________?",
+	"type": "Colores"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4c5"
+	},
+	"a": "green",
+	"count": 20,
+	"q": "¿El color de verde es ________?",
+	"type": "Colores"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4c6"
+	},
+	"a": "orange",
+	"count": 20,
+	"q": "¿El color de naranjada es ________?",
+	"type": "Colores"
+}
+{
+	"_id": {
+		"$oid": "565f09b422ed3e7a46baf4c7"
+	},
+	"a": "blue",
+	"count": 20,
+	"q": "¿El color de azul es ________?",
+	"type": "Colores"
+}
