@@ -6,7 +6,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
-<script src="./Encoder.js"></script> 
 
 <style>
 #game {width: 1500px; height:600px; position:relative; }
@@ -48,10 +47,10 @@
 
  #trackDiv { position: absolute; left: 0px; top: 773px; width: 1600px; height: 66px; background-color:cyan; }
      #track {  position: relative; left:   1px; top: 1px; }
-     #X { position: relative; top: -53px; left: 256px; }
        .right {background-color:lightgreen;}
        .wrong {background-color:pink;}
        .possessing {background-color:yellow;}
+       .goaleekick {text-align: center; background-color: white;}
 a.selected {
   background-color:#1F75CC;
   color:white;
@@ -126,6 +125,7 @@ label {
        <button id="showResponse" class="button" >Show Answer</button>
     </div>
     <div id="grade">
+
        <select id="team" name="team" autofocus>
        </select>
 
@@ -139,7 +139,6 @@ label {
            <option value="1" >Wrong</option>
        </select>
        <input type='submit' id="saveGrade" class="button" value="track" formaction='/updateTrack' formmethod="post" formenctype="application/x-www-form-urlencoded" />
-       <input type='submit' id="X" class="button" value="X" formaction='/updateTrack' formmethod="post" formenctype="application/x-www-form-urlencoded" />
    </div>
 </div>
   <div id="rightSide">
@@ -231,6 +230,7 @@ var ballPositions = ['-30px', '200px', '515px', '830px', '1080px'];
 var ans= ["right", "wrong"];
 var answerColor = ['#FFFFFF','#000000'];
 var count=100;
+var numTimers=0;
 var ballDirection = 0; //will be random later.
 var ballLocation = 2;
 var isVisible = 0; // hide answer is default.
@@ -240,7 +240,6 @@ var stop = false;
 $(document).ready( function () {
 //alert('JQuery is loaded and ready.');
 $('#falta').val(count);
-$('#X').disable(true);
 
 $('#configButton').click(function(){
   //alert('Clicked Config Button.');
@@ -253,7 +252,7 @@ $('#configButton').click(function(){
 });
 
  $('#stopTimer').click(function(){
-  stop=true;
+      stop=true;
   $('#seconds').val(0);
 });
 
@@ -263,16 +262,20 @@ $('#saveGrade').click(function (){
   var ltt =  $('#leftTeamq'); 
   var rtt =  $('#rightTeamq'); 
   var row = (ndx<1)? ltt : rtt;
+  var ot= (row === ltt)? rtt : ltt; //the table row for the other team .
   var num =$('#extras').val();
 
+ // if the administrator entered a number into the "extras" text field, use it to fix the response. (Color it green) else show new number. CreateTd can be a goaleekick.
   if(num > 0 ){
     fixTd(num, rightWrong,row);
   }else{
-    createTd(count, rightWrong, row);
+    createTd(count, rightWrong, row, ot);
  }
- //set the dropdown to the other team.
+ //if this is not a goaleekick, set the dropdown to the other team 
+  if(ballLocation !== 0 && ballLocation !== 4){
     ndx=(ndx +1)%2;
    $('#team').val(teams[ndx]); 
+  }
 });
 
 $('#dir').click(function(){
@@ -283,31 +286,25 @@ $('#dir').click(function(){
 $('#adv').click(function(){ //advance the ball in the current direction.
   ballLocation += ballDirection;
   $('#ball').css('left', ballPositions[ballLocation]);
+ 
   if(ballLocation === 0 && ballDirection === -1){
    console.log('Goal!!');
    $('#leftScore').val(Number($('#leftScore').val()) + 1 );
    ballDirection = -ballDirection;
    setDirectionIndicators(ballDirection);
-   $('#X').disable(false);
+    $('#team').val(teams[1]);
   }
   if(ballLocation === 4 && ballDirection === 1){
    console.log('Goal!!');
    $('#rightScore').val(Number($('#rightScore').val()) +1 );
    ballDirection = -ballDirection;
    setDirectionIndicators(ballDirection);
-   $('#X').disable(false);
+    $('#team').val(teams[0]);
   }
-  if(ballLocation != 0 && ballLocation != 4) {
-   $('#X').disable(true);
-  }
+ 
 });
 
-//Unopposed Goal Kick to put the ball in play.
-$('#X').click(function(){
- var ndx = teams.indexOf($('#team').val()); // ndx will be a zero or a one.
-  showGoaleeKick(Number(ndx));
-  $('#team').val((ndx +1)%2); //select the other team.
-});
+// get next question or question from extras
 $('#quest').click(function(){
   var tm = Number($('#team').val());
   var num = Number($('#extras').val());
@@ -335,32 +332,30 @@ $('#quest').click(function(){
 var setDirectionIndicators=function(bdir){
   $('#leftArrow').css('z-index', (bdir > 0)?  -1:  1);
   $('#rightArrow').css('z-index',(bdir < 1)?  -1:  1);
+  $('#mode').val(0); // go to advance mode always when setting direction indicators.
   if(bdir <0) {
-     $('#team').val(0);
-     $('#mode').val(0);
-     $('#leftTeamName').addClass('possessing');
      $('#rightTeamName').removeClass('possessing');
-     $('#team').val(1);
+     $('#leftTeamName').addClass('possessing');
+     $('#team').val(teams[0]);
   } else {
-     $('#mode').val(0);
      $('#leftTeamName').removeClass('possessing');
      $('#rightTeamName').addClass('possessing');
-     $('#team').val(0);
+     $('#team').val(teams[1]);
   }
 }
 
-var showGoaleeKick=function(tm){
-   var td ='<td>' + 'X' + '</td>';
-   if(tm===0){
-      $('#leftTeamq').append(td);
-   }else{
-      $('#rightTeamq').append(td);
-   }
-}
-var createTd=function(num, rw, row){
+var createTd=function(num, rw, thisTeam, otherTeam){
    updateClock(num);
    var td ='<td class="' + ans[rw] + '" id="' + num  + '" >' + num + '</td>';
-   row.append(td);
+   thisTeam.append(td);
+
+ //if this question is for a goalee kick, put centered X with white background for the other team.
+  if(ballLocation === 0 || ballLocation === 4){
+  var xid= "X" + num;
+  var xTd = '<td id=' + xid + ' class="goaleekick" >X</td>';
+    otherTeam.append(xTd);
+  }
+ 
 }
 var fixTd=function( num, rw, row){
    updateClock(num);
@@ -384,9 +379,9 @@ jQuery.fn.extend({
 
 var startTimer = function(){
    $('#seconds').val(30);
+   numTimers++;
    var endTimeMS= new Date().getTime() + 30000;
    var timeinterval = setInterval(function(){
-//need to see if I can shut down the timer by a command.
       var t = clockTick(endTimeMS);
       $('#seconds').val(t);
       if(stop) {
@@ -397,7 +392,7 @@ var startTimer = function(){
       if(t<=0){
        clearInterval(timeinterval);
        beep.play();
-       setTimeout(function(){ homer.play();}, 500);
+       setTimeout(function(){ homer.play();}, 700);
       }
     },1000);
 }
@@ -432,6 +427,7 @@ var configure=function(lt,rt,sz){
    ballDirection = coinFlip();
  }
  setDirectionIndicators(ballDirection); 
+ count = sz;
  updateClock(sz);
 }
 
