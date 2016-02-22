@@ -116,7 +116,7 @@ label {
        <audio id= "homer" >
            <source id="homer" src="../public/sounds/homer.wav" type="audio/wav">
        </audio>
-       <input type="button" id="stopTimer" value="Clear"></input>
+       <input type="button" id="stopTimer" value="Clear"></input> 
     </div>
     <div id="answer">
       <textArea id="answer_A" name="answerA" class= "q_a" rows="10" cols="15" readonly><%=answerA %> </textArea>
@@ -231,6 +231,7 @@ var ans= ["right", "wrong"];
 var answerColor = ['#FFFFFF','#000000'];
 var count=100;
 var numTimers=0;
+console.log('Initialize numTimers: ' + numTimers);
 var ballDirection = 0; //will be random later.
 var ballLocation = 2;
 var isVisible = 0; // hide answer is default.
@@ -246,13 +247,24 @@ $('#configButton').click(function(){
   
 });
 
- $('#showResponse').click(function(){
+$('#showResponse').click(function(){
   isVisible=isVisible^1;
   $('#answer_A').css('color', answerColor[isVisible]);
+  $('#rightWrong').focus(); 
+});
+
+  $('#rightWrong').change(function(){
+     $('#saveGrade').focus();
 });
 
  $('#stopTimer').click(function(){
       stop=true;
+      numTimers--;
+      if(numTimers < 1 ){
+        $('#quest').disable(false);
+        $('#stopTimer').disable(true);
+     }
+      console.log('NumTimers: ' + numTimers); 
   $('#seconds').val(0);
 });
 
@@ -380,6 +392,12 @@ jQuery.fn.extend({
 var startTimer = function(){
    $('#seconds').val(30);
    numTimers++;
+   // if numTimers > 0, enable the stopTimerButton and disable the quest button.
+   if(numTimers > 0){
+      $('#stopTimer').disable(false);
+      $('#quest').disable(true);
+   }
+   console.log('NumTimers: ' + numTimers);
    var endTimeMS= new Date().getTime() + 30000;
    var timeinterval = setInterval(function(){
       var t = clockTick(endTimeMS);
@@ -389,6 +407,7 @@ var startTimer = function(){
         stop=false;
         $('#seconds').val(0);
       }
+
       if(t<=0){
        clearInterval(timeinterval);
        beep.play();
