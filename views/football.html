@@ -9,7 +9,6 @@
 
 <style>
 #game {width: 1500px; height:600px; position:relative; }
-
  #leftSideBar { width: 300px; height: 700px; background-color: lightgreen;}
    #clock { position: relative; top: 0px; left: 0px; height: 60px; width: 100%;font-size:xx-large; background-color: lightgreen; }
    #configure {position: relative; top: -26px; left: 210px; } 
@@ -29,7 +28,6 @@
    #showResponse { position: relative; top: -15px;height: 30px; }
    #grade { position: absolute; left: 0px; top: 700px; width: 300px; height: 48px; background-color: lightgreen; padding-top: 10px; }
    #extras { position: relative; left: 210px; top: -30px;width: 30px; background-color:pink; }
-
  #rightSide { position: relative; left: 300px; top: -699px;width: 1297px; height: 757px; background-color: lightgreen;}
    #title {position:relative; left: 100px; height: 60px; width: 1200px; background-color: lightgreen;font-size: xx-large;text-align: center;}
    #buttons { position: relative; left: -4px; top: 649px; width: 214px; height: 34px; z-index: 2; background-color: lightgreen; }
@@ -44,7 +42,6 @@
      .goal {width:30px; height:90px; }
     #leftGoalBarDiv  { position: absolute; left: 4px;    top: 365px; width: 110px; height: 65px; z-index: 2; -webkit-transform: rotate(-90deg)}
     #rightGoalBarDiv { position: absolute; left: 1164px; top: 358px; width: 110px; height: 65px; z-index: 2; -webkit-transform: rotate( 90deg)}
-
  #trackDiv { position: absolute; left: 0px; top: 773px; width: 1600px; height: 66px; background-color:cyan; }
      #track {  position: relative; left:   1px; top: 1px; }
        .right {background-color:lightgreen;}
@@ -56,7 +53,6 @@ a.selected {
   color:white;
   z-index:100;
 }
-
 .messagepop {
   background-color:#FFFFFF;
   border:1px solid #999999;
@@ -69,14 +65,12 @@ a.selected {
   z-index:50;
   padding: 25px 25px 20px;
 }
-
 label {
   display: block;
   margin-bottom: 3px;
   padding-left: 15px;
   text-indent: -15px;
 }
-
 .messagepop p, .messagepop.div {
   border-bottom: 1px solid #EFEFEF;
   margin: 8px 0;
@@ -85,7 +79,6 @@ label {
   #config { position: absolute; left: 399px; z-index: 5; top: 32px; }
   #panel {position: absolute; top: -3px; left: 300px; width: 300px; height:50px; border-size:2px; }
   #gameSize {width:20px;}
-
 </style>
 </head>
 
@@ -188,6 +181,7 @@ label {
         <option value=3>Mexico</option>
        </select>
        GameSize:<input type="text" id="gameSize" value=100 ></input>
+       <input type="file" id="files" name="file" />
        <input type="submit" class="close" value="Accept"></input>
   </div>
  </form>
@@ -201,8 +195,7 @@ function deselect(e) {
     e.removeClass('selected');
   });
 }
-
-//Popup to get configuration: leftTeam, rightTeam, gameSize
+//Popup to get configuration: leftTeam, rightTeam, gameSize, question set.
 $(function() {
   $('#doConfig').on('click', function() {
     if($(this).hasClass('selected')) {
@@ -220,11 +213,10 @@ $(function() {
     return false;
   });
 });
-
 $.fn.slideFadeToggle = function(easing, callback) {
   return this.animate({ opacity: 'toggle', height: 'toggle' }, 'fast', easing, callback);
 };
-
+var items;
 var teams =[];
 var ballPositions = ['-30px', '200px', '515px', '830px', '1080px'];
 var ans= ["right", "wrong"];
@@ -241,22 +233,18 @@ var stop = false;
 $(document).ready( function () {
 //alert('JQuery is loaded and ready.');
 $('#falta').val(count);
-
 $('#configButton').click(function(){
   //alert('Clicked Config Button.');
   
 });
-
 $('#showResponse').click(function(){
   isVisible=isVisible^1;
   $('#answer_A').css('color', answerColor[isVisible]);
   $('#rightWrong').focus(); 
 });
-
   $('#rightWrong').change(function(){
      $('#saveGrade').focus();
 });
-
  $('#stopTimer').click(function(){
       stop=true;
       numTimers--;
@@ -267,7 +255,6 @@ $('#showResponse').click(function(){
       console.log('NumTimers: ' + numTimers); 
   $('#seconds').val(0);
 });
-
 $('#saveGrade').click(function (){
   var ndx = teams.indexOf(Number($('#team').val())); 
   var rightWrong = $('#rightWrong').val();
@@ -276,7 +263,6 @@ $('#saveGrade').click(function (){
   var row = (ndx<1)? ltt : rtt;
   var ot= (row === ltt)? rtt : ltt; //the table row for the other team .
   var num =$('#extras').val();
-
  // if the administrator entered a number into the "extras" text field, use it to fix the response. (Color it green) else show new number. CreateTd can be a goaleekick.
   if(num > 0 ){
     fixTd(num, rightWrong,row);
@@ -289,12 +275,10 @@ $('#saveGrade').click(function (){
    $('#team').val(teams[ndx]); 
   }
 });
-
 $('#dir').click(function(){
   ballDirection = ballDirection * -1;
   setDirectionIndicators(ballDirection);
 });
-
 $('#adv').click(function(){ //advance the ball in the current direction.
   ballLocation += ballDirection;
   $('#ball').css('left', ballPositions[ballLocation]);
@@ -315,7 +299,6 @@ $('#adv').click(function(){ //advance the ball in the current direction.
   }
  
 });
-
 // get next question or question from extras
 $('#quest').click(function(){
   var tm = Number($('#team').val());
@@ -327,7 +310,6 @@ $('#quest').click(function(){
     answer   = items[num].a;
     startTimer();
   } else {
-
     count--;
     if(count < 0 ){alert ('Clock is expired. Use Pink questions in the track. Penalty Kicks.');}
     updateClock(count);
@@ -355,12 +337,10 @@ var setDirectionIndicators=function(bdir){
      $('#team').val(teams[1]);
   }
 }
-
 var createTd=function(num, rw, thisTeam, otherTeam){
    updateClock(num);
    var td ='<td class="' + ans[rw] + '" id="' + num  + '" >' + num + '</td>';
    thisTeam.append(td);
-
  //if this question is for a goalee kick, put centered X with white background for the other team.
   if(ballLocation === 0 || ballLocation === 4){
   var xid= "X" + num;
@@ -388,7 +368,6 @@ jQuery.fn.extend({
         });
     }
 });
-
 var startTimer = function(){
    $('#seconds').val(30);
    numTimers++;
@@ -407,7 +386,6 @@ var startTimer = function(){
         stop=false;
         $('#seconds').val(0);
       }
-
       if(t<=0){
        clearInterval(timeinterval);
        beep.play();
@@ -415,15 +393,33 @@ var startTimer = function(){
       }
     },1000);
 }
-
 var clockTick = function(etms){
   var nowMS = new Date().getTime();
   var tMS = etms - nowMS;
   var seconds = Math.floor(tMS/1000);
   return seconds;
 }
+var readFile=function() {
+    console.log('Entered readFile...');
+    var files = document.getElementById('files').files;
+    if (!files.length) {
+      alert('Please select a file!');
+      return;
+    }
+    var file = files[0];
+    var reader = new FileReader();
+
+    // If we use onloadend, we need to check the readyState.
+    reader.onloadend = function(evt) {
+      if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+      items = JSON.parse(evt.target.result);
+      }
+    };
+      reader.readAsText(file, 'UTF-8');
+  }   
 
 var configure=function(lt,rt,sz){
+  readFile();
   teams = [lt,rt];
   console.log('Configuring Game with: ' + lt + ', ' + rt + ', ' + sz);
   $("#scoreBarLeftDiv").html(scoreBars[lt] +  '<input type="text" id="leftScore"  name="leftScore"  class="scoreInput" readonly="true" value="0">'); 
@@ -440,7 +436,6 @@ var configure=function(lt,rt,sz){
   var leftOption  = '<option value=' + lt + '>' + countries[lt] + '</option>';
   var rightOption = '<option value=' + rt + '>' + countries[rt] + '</option>';
   $('#team').html(leftOption + rightOption);
-
  // Random draw to decide who has possession at start of game. 
   while(ballDirection === 0){
    ballDirection = coinFlip();
@@ -449,1157 +444,32 @@ var configure=function(lt,rt,sz){
  count = sz;
  updateClock(sz);
 }
-
 // Data for the app.
-
   var leftArrows= [
                    '<img id="leftArrow" src="../public/images/ArrowLeftA.png">'
                  , '<img id="leftArrow" src="../public/images/ArrowLeftB.png">'
                  , '<img id="leftArrow" src="../public/images/ArrowLeftC.png">'
                  , '<img id="leftArrow" src="../public/images/ArrowLeftM.png">'
                   ];
-
   var rightArrows= [
                     '<img id="rightArrow" src="../public/images/ArrowRightA.png">'
                   , '<img id="rightArrow" src="../public/images/ArrowRightB.png">'
                   , '<img id="rightArrow" src="../public/images/ArrowRightC.png">'
                   , '<img id="rightArrow" src="../public/images/ArrowRightM.png">'
                    ];
-
   var countries = ["Argentina", "Brasil", "Chile", "Mexico"];
-
   var scoreBars =[
                   '<img class="scoreBar" src="../public/images/ArgentinaScoreBar.png">'
                  , '<img class="scoreBar" src="../public/images/BrasilScoreBar.png">'
                  , '<img class="scoreBar" src="../public/images/ChileScoreBar.png">'
                  , '<img class="scoreBar" src="../public/images/MexicoScoreBar.png">'
                  ];
-
  var goalBars =[
                 '<img class="goalBar" src="../public/images/ArgentinaScoreBar.png">'
                , '<img class="goalBar" src="../public/images/BrasilScoreBar.png">'
                , '<img class="goalBar" src="../public/images/ChileScoreBar.png">'
                , '<img class="goalBar" src="../public/images/MexicoScoreBar.png">'
                ];
-
-
-
-var items = [
-
-{
-	"a": "The weather is cloudy.",
-	"count": 26,
-	"q": "Cuando tiene  nuben y no puede ver el sol, How is the weather?",
-	"qs": "Cuando tiene nubes y no puede ver el sol,How is the weather?", 
-         qp: "Quando você tiver nuvens e não pode ver o sol,How is the weather?", 
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "The weather is sunny.",
-	"count": 24,
-	"q": "Cuando tiene sol sin nuben, How is the weather?",
-         qs:"Cuando no hay nubes y puede ver el sol, How is the weather?", 
-         qp: "quando você não tem nuvens e pode ver o sol, How is the weather?",
-	"set": 1,
-	"type": "Tiempo"
-},
-{
-	"a": "The weather is windy.",
-	"count": 23,
-	"q": "Cuando tiene mucho viento, How is the weather? ",
-	"qs": "Cuando tiene mucho viento, How is the weather? ",
-         qp: "quando você tem um monte de vento, How is the weather? ",
-	"set": 1,
-	"type": "Tiempo"
-},
-{
-	"a": "The weather is cold.",
-	"count": 25,
-	"q": "Cuando temperatura es bajo, How is the weather?",
-	qs: "Cuando temperatura es bajo, How is the weather?",
-        qp: "quando a temperatura é baixa, How is the weather?",
-	"set": 1,
-	"type": "Tiempo"
-},
-{
-	"a": "The weather is Foggy.",
-	"count": 27,
-	"q": "When you have mists on the ground,  How is the weather?",
-         qs: "Cuando hay niebla sobre la tierra, How is the weather?", 
-         qp: "Quando você tiver nuvens em o terra, e não pode ver o sol, How is the Weather?",
-	"set": 1,
-	"type": "Tiempo"
-},
-{
-	"a": "plate",
-	"count": 14,
-	"q": "En Inglés, como se llama un plato?",
-	"qs": "En Inglés, como se llama un plato?",
-         qp: " em inglês, como você dizer Uma placa?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "cup",
-	"count": 16,
-	"q": "En Inglés, como se llama copa?",
-        qs:"¿En Inglés, como se llama la copa?",
-        qp: " em inglês, como você dizer copa?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "Spoon",
-	"count": 2,
-	"q": "En Inglés, como se llama cuchara?",
-        qs: "¿En Inglés, como se llama cucharas?",
-        qp: " em inglês, como você dizer colher?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "Fork",
-	"count": 75,
-	"q": "En Inglés, como se llama tenedor?",
-        qs: "¿En Inglés, como se llama tenedor?",
-        qp: " em inglês, como você dizer forquilha?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "Knife",
-	"count": 53,
-	"q": "En Inglés, como se llama cuchillo?",
-        qs: "¿En Inglés, como se llama el cuchillo?",
-qp: " em inglês, como você dizer faca?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "glass",
-	"count": 15,
-	"q": "En Inglés, como se llama vaso?",
-         qs:"¿En Inglés, como se llama vaso?",
-         qp: " em inglês, como você dizer vidro para beber?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "Table",
-	"count": 28,
-	"q": "En Inglés, como se llama mesa?",
-        qs: "¿En Inglés, como se llama mesa?",
-        qp: " em inglês, como você dizer tabela?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "Eggs",
-	"count": 81,
-	"q": "En Inglés, como se llaman huevos?",
-         qs: "¿En Inglés, como se llaman huevos?",
-         qp: " em inglês, como você dizer ovos?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "Cheese",
-	"count": 133, 
-	"q": "En Inglés, como se llama queso?",
-         qs: "¿En Inglés, como se llama el queso?",
-         qp: " em inglês, como você dizer o queijo?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "Milk",
-	"count": 4, 
-	"q": "En Inglés, como se llama leche?",
-         qs: "¿En Inglés, como se la llama leche?",
-         qp: " em inglês, como você dizer leite?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "Cake",
-	"count":134,  
-	"q": "En Inglés, como se llama pastel o torta?",
-        qs: "¿En Inglés, como se llama el pastel o torta?",
-        qp: "Como se diz bolo em Inglês?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "Mother",
-	"count": 48,
-	"q": "En Inglés, como se dice Madre?",
-        qs: "¿En una  como se dados madre?",
-        qp: " em uma família,os filhos a chamada mulher mãe. Em inglês, como você dizer mãe?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Father",
-	"count": 77,
-	"q": "En Inglés, como se dice Padre?",
-         qs: "¿En una familia,  como se dados Padre?",
-         qp: " em uma família,as crianças o homem, pai de chamada. Em inglês, como você dia Pai?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Uncle",
-	"count": 17,
-	"q": "En Inglés, como se dice Tio?",
-        qs:  "Existen dos  familias. Las madres san hermanas. Los chicos llaman el otro padre Tio. En Ingles, como se dados Tio?",
-        qp: " existem duas famílias. As mães são irmãs.As crianças chamada o pai da outra família Tio. Em inglês, como você dizer tio?",
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Aunt",
-	"count":135, 
-	"q": " En Inglés, como se dice Tia?",
-         qs: "Existen dos  familias. Las madres san hermanas. Los chicos llaman el otro madre Tia. En Ingles, como se dados Tia?",
-         qp: "Existem duas famílias. As mães são irmãs.As crianças chamada a mãe da outra família Tia. Em inglês, como você dizer Tia?",
-	"set": 1,
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Brother",
-	"count":136, 
-	"q": "In a family, there are two children, a boy and a girls. The boy is the hermano of the girl. How do you say Hermano en Ingles?",
-         qs: "En una familia, hay dos niños: un chico y una chica. El chico es el hermano de la chica. ¿Cómo se dados hermano en Inglés?",
-         qp: "em uma família, existem dois filhos: um menino e uma menina. O menino é o irmão da rapariga. Como você dizer irmão em inglês?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Pie",
-	"count": 38,
-	"q": "En Inglés, como se llama tarta?",
-         qs: "¿En Inglés, como se llama tarta?",
-         qs: "En inglês, como se diz pie?",
-	"set": 1,
-	"type": "Cocina"
-},
-{
-	"a": "Sister",
-	"count": 32,
-	"q": "In a family there are two children, a boy and a girl. The girl is the hermana of the boy. How do you say hermana in ingles?", 
-         qs: "En una familia  hay dos niños: un chico y una chica. La chica es la hermana del muchacho. ¿Cómo se dados hermana en inglés?",
-         qp: "Em uma família, existem dois filhos: um menino e uma menina. A menina é a irmã do menino. Como você diz Irmã em inglês?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Cousin",
-	"count": 86,
-	"q": " En Inglés, como se dice Primo?",
-         qs: "Existen dos familias, Las madres san hermanas. Una chico en una familia es primo auna chico  de la otra familia.  En ingles, como se dados Sobrino?",
-         qp: "Existem duas famílias. As mães são irmãs. As crianças em uma familia são primos de os criancas em outra familia.Em inglês, Como você dizer primo macho?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Cousin",
-	"count": 85,
-	"q": "Existen dos familias, Las madres san hermanas. Una chica en una familia es prima auna chico de la otra familia. En Inglés, como se dice Prima?",
-	"qs": "Existen dos familias, Las madres san hermanas. Una chica en una familia es prima auna chico de la otra familia. En Inglés, como se dice Prima?",
-         qp: "Existem duas famílias. As mães são irmãs.As garotas nas famílias seriam primros fêmeas. Em inglês, como você dizer primo fêmea?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Grandmother",
-	"count": 58,
-	"q": "Relaciones Familiar. En Inglés, como se dice Abuela?",
-         qs: "Relaciones  como se dados Abuela?",
-         qp: "relações familiares. Como você dizer avó?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Grandfather",
-	"count": 5,
-	"q": "Relaciones Familiar. En Inglés, como se dice Abuelo?",
-         qs: "Relaciones  como se dados Abuelo?",
-         qp: "relações familiares. Como você dizer avô?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Nephew",
-	"count": 45,
-	"q": " En Inglés, como se dice Sobrino?",
-         qs: "Existen dos familias, Las madres san hermanas. Una chico en una familia es Sobrino de la otra madre.  En ingles, como se dados Sobrino?",
-         qp: "Existem duas famílias. As mães são irmãs.uma criança em uma família seria o sobrinho da mãe na outra família. Em inglês, como você dizer sobrinho?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Niece",
-	"count": 44,
-	"q": " En Inglés, como se dice Sobrina?",
-        qs: "Existen dos familias. Las madres san hermanas, una chica de una familia seria sobrina de la madre de la otra familia,  como se dizer sobrina en ingles?",
-        qp: "Existem duas famílias. As mães são irmãs.uma menina em uma família seria a sobrinha da mãe na outra família. Em inglês, como você dizer sobrinha em ingles?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Grandson",
-	"count": 57,
-	"q": " En Inglés, como se dice Nieto?",
-        qs:  " ¿en Inglés, como se dados Nieto?",
-        qp: " em inglês, como você dizer neto?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Granddaughter",
-	"count": 60,
-	"q": " En Inglés, como se dice Nieta?",
-        qs: " ¿en Inglés, como se dados Nieta?",
-        qp: " em inglês, como você dizer neta?",
-	"set": 1,
-	"type": "Relaciones Familiar"
-},
-{
-	"a": "Go up",
-	"count": 62,
-	"q": "Como se dice hacia arriba?",
-         qs: "¿Como se dice hacia arriba?",
-         qp: " como você dizer subir?",
-	"set": 1,
-	"type": "Direcciones."
-},
-{
-	"a": "Go Forward",
-	"count": 68,
-	"q": "Como se dice hacia adelante?",
-        qs: "¿Como se dice hacia adelante?",
-        qp: " como você dizer avançar?",
-	"set": 1,
-	"type": "Direcciones."
-},
-{
-	"a": "Go Backward",
-	"count": 71,
-	"q": "Como se dice hacia atraz?",
-        qs: "¿Como se dice hacia atrás?",
-        qp: " como você dizer voltar?",
-	"set": 1,
-	"type": "Direcciones."
-},
-{
-	"a": "Go Right",
-	"count": 65,
-	"q": "Como se dice hacia derecha?",
-         qs: "¿Como se dice hacia derecha?",
-         qp: " como você dizer vá para a direita?",
-	"set": 1,
-	"type": "Direcciones."
-},
-{
-	"a": "Go Left",
-	"count": 67,
-	"q": "Como se dice hacia esquierda?",
-        qs:"¿Como se dice hacia esquierda?",
-        qp: " como você dizer vá para a esquerda?",
-	"set": 1,
-	"type": "Direcciones."
-},
-{
-	"a": "Go Down",
-	"count": 70,
-	"q": "Como se dice hacia abajo?",
-        qs:"¿Como se dice hacia abajo?",
-        qp: " como você dizer ir para baixo?",
-	"set": 1,
-	"type": "Direcciones."
-},
-{
-	"a": "Go North",
-	"count": 66,
-	"q": "Como se dice hacia el norte?",
-        qs: "¿Como se dice hacia el norte?",
-        qp: " como você dizer vá para o norte?",
-	"set": 1,
-	"type": "Direcciones."
-},
-{
-	"a": "Go South.",
-	"count": 64,
-	"q": "Como se dice hacia el sur?",
-        qs: "¿Como se dice hacia el sur?",
-        qp: " como você dizer vá para o sul?",
-	"set": 1,
-	"type": "Direcciones."
-},
-{
-	"a": "Go East.",
-	"count": 6,
-	"q": "Como se dice hacia el este?",
-         qs: "¿Como se dice hacia el este?",
-         qp: " como você dizer vá para o oriente?",
-	"set": 1,
-	"type": "Direcciones."
-},
-{
-	"a": "Go West.",
-	"count": 63,
-	"q": "Como se dice hacia el oeste?",
-        qs: "¿Como se dice hacia el oeste?",
-        qp: " como você dizer vá para o Ocidente?",
-	"set": 1,
-	"type": "Direcciones."
-},
-{
-	"a": "Cold",
-	"count": 87,
-	"q": "What is the opposite of hot?",
-        qs: "qué es lo opuesto de caliente: ?",
-        qp: "Qual é o oposto de quente: ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Clean",
-	"count": 8,
-	"q": "What is the opposite of Dirty?",
-         qs: "qué es lo opuesto de: Dirty ?",
-         qp: "Qual é o oposto de: Sujo ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Sad",
-	"count": 36,
-	"q": "What is the opposite of Happy?",
-         qs: "qué es lo opuesto de: Feliz ?",
-         qp: "Qual é o oposto de: Feliz ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Large",
-	"count": 52,
-	"q": "What is the opposite of small?",
-         qs: "qué es lo opuesto de: Pequeño?",
-         qp: "aquilo que é o oposto das pequenas?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Awake",
-	"count":137, 
-	"q": "What is the opposite of asleep?",
-        qs: "qué es lo opuesto de: dormido?",
-        qp: "Qual é o oposto de: dormindo?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Slow",
-	"count": 31,
-	"q": "What is the opposite of Fast?",
-         qs: "qué es lo opuesto de la: rápido ?",
-         qp: "Qual é o oposto de: Fast ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Left",
-	"count": 51,
-	"q": "What is the opposite of Right?",
-         qs: "qué es lo opuesto de la: derecha ?",
-         qp: "aquilo que é o oposto do direito: ?",
-
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Girl",
-	"count": 72,
-	"q": "What is the opposite of Boy?",
-        qs: "qué es lo opuesto de: boy ?",
-        qp: "Qual é o oposto de: boy ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "There",
-	"count": 22,
-	"q": "What is the opposite of Here?",
-        qs: "qué es lo opuesto de: Aquí ?",
-        qp: "Qual é o oposto de: aqui ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Deep",
-	"count": 83,
-	"q": "What is the opposite of Shallow?",
-        qs: "qué es lo opuesto de la superficial: ?",
-        qp: "Qual é o oposto de Águas Rasas: ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Sour or Bitter",
-	"count": 30,
-	"q": "What is the opposite of Sweet?",
-         qs: "qué es lo opuesto de: Dulce ?",
-         qp: "Qual é o oposto de: Doces ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Over",
-	"count": 42,
-	"q": "What is the opposite of Under?",
-         qs: "qué es lo opuesto de Under?",
-         qp: "Qual é o oposto de Under?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Evil",
-	"count": 80,
-	"q": "What is the opposite of Good?",
-        qs: "qué es lo opuesto: Buena ?",
-        qp: "Qual é o oposto: Boa ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Full",
-	"count": 73,
-	"q": "What is the opposite of Empty?",
-         qs: "qué es lo opuesto de: Empty ?",
-         qp: "Qual é o oposto de: Vazio ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Far",
-	"count": 78,
-	"q": "What is the opposite of Near?",
-         qs: "qué es lo opuesto de: Cerca de ?",
-         qp: "Qual é o oposto de: perto de ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Out",
-	"count": 3,
-	"q": "What is the opposite of IN?",
-         qs: "qué es lo opuesto de dentro: ?",
-         qp: "Qual é o oposto de: em",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Closed",
-	"count": 88,
-	"q": "What is the opposite of Open?",
-         qs: "qué es lo opuesto de: Abierto ?",
-         qp: "Qual é o oposto de: aberto ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Healthy",
-	"count": 55,
-	"q": "What is the opposite of Sick?",
-         qs: "qué es lo opuesto de: Enfermo ?",
-         qp: "Qual é o oposto de: Doente ?",
-	"set": 1,
-	"type": "Opposites"
-},
-{
-	"a": "Cow",
-	"count": 84,
-	"q": "Como se dice Vaca ?",
-         qs: "¿Como se dice Vaca ?",
-         qp: " em inglês, como você dizer vaca ?",
-	"set": 1,
-	"type": "Animales"
-},
-{
-	"a": "Horse",
-	"count": 54,
-	"q": "Como se dice Caballo ?",
-         qs: "¿Como se dice Cabalo ?",
-         qp: " em inglês, como você dizer cavalo",
-	"set": 1,
-	"type": "Animales"
-},
-{
-	"a": "Goat",
-	"count": 61,
-	"q": "Como se dice Cabra ?",
-        qs: "¿Como se dice Cabra ?",
-        qp: " em inglês, como você dizer Cabra ?",
-	"set": 1,
-	"type": "Animales"
-},
-{
-	"a": "Sheep",
-	"count": 34,
-	"q": "Como se dice Oveja ?",
-        qs: "¿Como se dice Oveja ?",
-        qp: " em inglês, como você dizer ovinos ?",
-	"set": 1,
-	"type": "Animales"
-},
-{
-	"a": "Bull",
-	"count":145, 
-	"q": "Como se dice Toro ?",
-        qs: "¿Como se dice Toro ?",
-        qp: " em inglês, como você dizer touro ?",
-	"set": 1,
-	"type": "Animales"
-},
-{
-	"a": "Calf",
-	"count":139, 
-	"q": "Como se dice Ternero ?",
-         qs: "¿Como se dice Terneiro ?",
-         qp: " em inglês, como você dizer vitelo?",
-	"set": 1,
-	"type": "Animales"
-},
-{
-	"a": "Pig",
-	"count": 37,
-	"q": "Como se dice Chancho ?",
-         qs: "¿Como se dice Cerdo ?",
-         qp: " em inglês, como você dizer porco ?",
-	"set": 1,
-	"type": "Animales"
-},
-{
-	"a": "Chicken",
-	"count":140, 
-	"q": "Como se dice Pollo o gallina ?",
-         qs: "¿Como se dice de Pollo o gallina ?",
-         qp: " em inglês, como você dizer frango ?",
-	"set": 1,
-	"type": "Animales"
-},
-{
-	"a": "Arm",
-	"count": 100,
-	"q": "Como se dice Brazo en Inglés?",
-         qs: "¿Como se pica el brazo en español?",
-         qp: " em inglês, como você dizer braço?",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "Body",
-	"count":141, 
-	"q": "Como se dice Cuerpo en Inglés?",
-        qs: "¿Como se dice Cuerpo en español?",
-        qp: " em inglês, como você dizer corpo?",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "Leg",
-	"count": 50,
-	"q": "Como se dice pierna en Inglés?",
-         qs: "¿Como se dice pierna en español?",
-         qp: " como você dizer perna em inglês?",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "Finger",
-	"count": 76,
-	"q": "Como se dice dedo en Inglés?",
-         qs: "¿Como se dice dedo en español?",
-         qp: " como você dizer dedo?",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "Toe",
-	"count": 1,
-	"q": "Como se dice dedo del pie en Inglés?",
-        qs: "¿Como se dice dedo del pie en español?",
-        qp: " como você dizer toe em inglês?",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "Head",
-	"count": 56,
-	"q": "Como se dice cabeca en Inglés?",
-        qs: "¿Como se dice cabeza en español?",
-        qp: " como se diz em inglês cabeça?",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "Shoulder",
-	"count": 33,
-	"q": "Como se dice hombro en Inglés?",
-        qs: "¿Como se dice hombro en Inglés?",
-        qp: " como se diz em inglês? Ombro",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "Back",
-	"count":142, 
-	"q": "Como se dice espalda en Inglés?",
-        qs: "¿Como se dice espalda en español?",
-        qp: " como você dizer de volta em inglês?",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "Eye",
-	"count": 7,
-	"q": "Como se dice ojo en Inglés?",
-        qs: "¿Como se dice ojo en Inglés?",
-        qp: " como você dizer olho em inglês?",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "Ear",
-	"count": 82,
-	"q": "Como se dice oreja en Inglés?",
-        qs: "¿Como se dice oreja en español?",
-        qp: " como se diz na orelha inglês?",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "Nose",
-	"count": 43,
-	"q": "Como se dice nariz en Inglés?",
-         qs: "¿Como se dice nariz en Inglés?",
-        qp: " como você dizer nariz em inglês?",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "Mouth",
-	"count": 47,
-	"q": "Como se dice boca en Inglés?",
-	"qs": "Como se dice boca en Inglés?",
-        qp: " como você dizer boca em inglês?",
-	"set": 1,
-	"type": "Body"
-},
-{
-	"a": "One plus three equals four",
-	"count": 40,
-	"q": "Diga problema y solución en Inglés: 1+3=? ?",
-         qs: "Diga problema y solución en Inglés: 1+3=?",
-        qp: "dizer o problema e a solução da equação em inglês: 1+3=?",
-	"set": 1,
-	"type": "Numbers"
-},
-{
-	"a": "Seven minus three equals four",
-	"count": 35,
-	"q": "Diga problema y solución en Inglés: 7-3=? ?",
-        qs: "Diga problema y solución en Inglés: 7-3=?",
-        qp: "dizer o problema e a solução da equação em inglês: 7-3=?",
-	"set": 1,
-	"type": "Numbers"
-},
-{
-	"a": "Three plus Seven equals ten",
-	"count": 21,
-	"q": "Diga problema y solución en Inglés: 3+7=? ?",
-        qs: "Diga problema y solución en Inglés: 3+7=? ?",
-        qp: "dizer o problema e a solução da equação em inglês: 3+7=?",
-	"set": 1,
-	"type": "Numbers"
-},
-{
-	"a": "Two minus one equals one",
-	"count": 18,
-	"q": "Diga problema y solución en Inglés: 2-1=? ?",
-         qs: "Diga problema y solución en Inglés: 2-1=? ?",
-         qp: "dizer o problema e a solução da equação em inglês: 2-1=?",
-	"set": 1,
-	"type": "Numbers"
-},
-{
-	"a": "One plus one equals two",
-	"count": 41,
-	"q": "Diga problema y solución en Inglés: 1+1=? ?",
-         qs: "Diga problema y solución en Inglés: 1+1=? ?",
-qp: "dizer o problema e a solução da equação em inglês: 1+1=?",
-	"set": 1,
-	"type": "Numbers"
-},
-{
-	"a": "Four plus five equals nine", 
-	"count": 74,
-	"q": "Diga problema y solución en Inglés: 4+5=? ?",
-        qs: "Diga problema y solución en Inglés: 4+5=? ?",
-qp: " dizer o problema e a solução da equação em inglês: 4+5=?",
-	"set": 1,
-	"type": "Numbers"
-},
-{
-	"a": "Three plus five equals eight", 
-	"count": 20,
-	"q": "Diga problema y solución en Inglés: 3+5=? ?",
-        qs: "Diga problema y solución en Inglés: 3+5=? ?",
-qp: " dizer o problema e a solução da equação em inglês: 3+5=?",
-	"set": 1,
-	"type": "Numbers"
-},
-{
-	"a": "Present",
-	"count": 20,
-	"q": "Que tensa?): The pencil is on the desk.(past, present,future)",
-	"qs": "Que tensa?): The pencil is on the desk.(past, present,future)",
-	"qp": "Que tensa?): The pencil is on the desk.(past, present,future)",
-	"set": 1,
-	"type": "Tense"
-},
-{
-	"a": "Past",
-	"count": 20,
-	"q": "Que tensa? I ate my sandwich( past,  present,future)",  
-	"qs": "Que tensa? I ate my sandwich( past,  present, future)", 
-	"qp": "Que tensa? I ate my sandwich( past,  present, future)", 
-	"set": 1,
-	"type": "Tense"
-},
-{
-	"a": "Past",
-	"count": 20,
-	"q": "Que tensa?: We had a great party! (past, present, future)", 
-	"qs": "Que tensa?: We had great party!( past,  present,future)",
-	"qp": "Que tensa?: We had a great party! (past, present, future)", 
-	"type": "Tense"
-},
-{
-	"a": "Future",
-	"count": 20,
-	"q": "Que tensa?: We will do it later!(past, present, future)",
-	"qs": "Que tensa?: We will do it later!(past, present future)",
-	"qp": "Que tensa?: We will do it later!(past, present, future)",
-	"type": "Tense"
-},
-{
-	"a": "Present",
-	"count": 20,
-	"q":  "Que tensa? He is outside. (past, present, future)",
-	"qs": "Que tensa? He is outside. (past, present, future)",
-	"qp": "Que tensa? He is outside. (past, present, future)",
-	"type": "Tense"
-},
-{
-	"a": "is",
-	"count": 20,
-	"q": "Fill in Blank: Jim  ___ hungry.(am, is, are) ",
-	"qs": "Fill in Blank: Jim  ___ hungry.(am, is, are) ",
-	 qp: "Fill in Blank: Jim  ___ hungry.(am, is, are) ",
-	"type": "Verb Conjugation"
-},
-{
-	"a": "are",
-	"count": 20,
-	"q": "Fill in Blank(am, is, are): Bill and Patty  ___ lost.",
-	"qs": "Fill in Blank(am, is, are): Bill and Patty  ___ lost.",
-	"qp": "Fill in Blank(am, is, are): Bill and Patty  ___ lost.",
-	"type": "Verb Conjugation"
-},
-{
-	"a": "are",
-	"count": 20,
-	"q": "Fill in Blank (am, is, are): We  ___ at home.",
-	"qs": "Fill in Blank (am, is, are): We  ___ at home.",
-	"qp": "Fill in Blank (am, is, are): We  ___ at home.",
-	"type": "Verb Conjugation"
-},
-{
-	"a": " is singing",
-	"count": 20,
-	"q": "Fill in Blank: Billy ___ .(am running, is singing, are eating)",
-	"qs": "Fill in Blank: Billy ___ .(am running, is singing, are eating)",
-	qp: "Fill in Blank: Billy ___ .(am running, is singing, are eating)",
-	"type": "Verb Conjugation"
-},
-{
-	"a": " am not going",
-	"count": 20,
-	"q": "Fill in Blank: I ______(a. am not going b. is grateful c.are sad)", 
-	"qs": "Fill in Blank: I ______(a. am not going b. is grateful c.are sad)", 
-	"qp": "Fill in Blank: I ______(a. am not going b. is grateful c.are sad)", 
-	"type": "Verb Conjugation"
-},
-{
-	"a": "they",
-	"count": 20,
-	"q": "Fill in Blank): What are ____ bringing?(a. he b. they c. Tim)",
-	"qs": "Fill in Blank): What are ____ bringing?(a. he b. they c. Tim)",
-	"qp": "Fill in Blank): What are ____ bringing?(a. he b. they c. Tim)",
-	"type": "Verb Conjugation"
-},
-{
-	"a": "Jim",
-	"count": 20,
-	"q": "Fill in Blank: What is  ______ doing? (a. Jim b. her c. they)",
-	"qs": "Fill in Blank: What is  ______ doing? (a. Jim b. her c. they)",
-	"qp": "Fill in Blank: What is  ______ doing? (a. Jim b. her c. they)",
-	"type": "Verb Conjugation"
-},
-{
-	"a": "its",
-	"count": 20,
-	"q": "Fill in Blank:  My dog lost _______________ collar.(a. its b. she c. him)",
-	"qs": "Fill in Blank:  My dog lost _______________ collar.(a. its b. she c. him)",
-	"qp": "Fill in Blank:  My dog lost _______________ collar.(a. its b. she c. him)",
-	"type": "Verb Conjugation"
-},
-{
-	"a": "us",
-	"count": 20,
-	"q": "Fill in Blank: The horses belong to _____________ .(a. she b. he c. us) ",
-	"qs": "Fill in Blank: The horses belong to _____________ .(a. she b. he c. us) ",
-	"qp": "Fill in Blank: The horses belong to _____________ .(a. she b. he c. us) ",
-	"type": "Verb Conjugation"
-},
-{
-	"a": "Monday",
-	"count": 20,
-	"q": "¿Como se dice _____ lunes_____ en Inglés?",
-         qs: "¿Como se dice _____ lunes_____ en Inglés?",
-         qp: " como você dizer _____ Segunda-feira_____ em inglês?",
-	"type": "Days of the Week"
-},
-{
-	"a": "Wednesday",
-	"count": 20,
-	"q": "¿Como se dice ___ miércoles ___ en Inglés?",
-         qs: "¿Como se dice ____ miércoles ______ en Inglés?",
-         qp: " como você dizer ____Quarta-feira ______ em inglês?",
-	"type": "Days of the Week"
-},
-{
-	"a": "Tuesday",
-	"count": 20,
-	"q": "¿Como se dice _____martes ___  en Inglés?",
-         qs: "¿Como se dice ___ martes __ en Inglés?",
-         qp: " como você dizer _____ terça-feira Inglês?",
-	"type": "Days of the Week"
-},
-{
-	"a": "Thursday",
-	"count": 20,
-	"q": "¿Como se dice _____jueves_____ en Inglés?",
-         qs: "¿Como se dice _____ jueves _____ en Inglés?",
-         qp: " como você dizer _____ Quinta-feira _____ em inglês?",
-	"type": "Days of the Week"
-},
-{
-	"a": "Friday",
-	"count": 20,
-	"q": "¿Como se dice _____viernes_____ en Inglés?",
-         qs: "¿Como se dice _____ viernes _____ en Inglés?",
-         qp: " como você dizer _____ Sexta-feira _____ em inglês?",
-	"type": "Days of the Week"
-},
-{
-	"a": "Saturday",
-	"count": 20,
-	"q": "¿Como se dice _____Sabado_____ en Inglés?",
-        qs: "¿Como se dice _____ Sábado _____ en Inglés?",
-         qp: " como você dizer _____ Sábado _____ em inglês?",
-	"type": "Days of the Week"
-},
-{
-	"a": "Sunday",
-	"count": 20,
-	"q": "¿Como se dice _____domingo_____ en Inglés?",
-         qs: "¿Como se dice _____ domingo _____ en Inglés?",
-         qp: " como você dizer _____ Domingo _____ em inglês?",
-	"type": "Days of the Week"
-},
-{
-	"a": "January",
-	"count": 20,
-	"q": "¿Como se dice _____enero_____ en Inglés?",
-         qs: "¿Como se dice _____ enero _____ en Inglés?",
-         qp: " como você dizer _____ de Janeiro de _____ em inglês?",
-	"type": "Months of the Year"
-},
-{
-	"a": "July",
-	"count": 20,
-	"q": "¿Como se dice _____julio_____ en Inglés?",
-         qs: "¿Como se dice _____ julio  _____ en Inglés?",
-         qp: " como você dizer _____ de Julho _____ em inglês?",
-	"type": "Months of the Year"
-},
-{
-	"a": "August",
-	"count": 20,
-	"q": "¿Como se dice _____Agosto_____ en Inglés?",
-         qs: "¿Como se dice _____ Agosto _____ en Inglés?",
-         qp: " como você dizer _____ agosto _____ em inglês?",
-	"type": "Months of the Year"
-},
-{
-	"a": "October",
-	"count": 20,
-	"q": "¿Como se dice _____Octubre_____ en Inglés?",
-        qs: "¿Como se dice _____ Octubre _____ en Inglés?",
-        qp: " como você dizer _____ de Outubro de _____ em inglês?",
-	"type": "Months of the Year"
-},
-{
-	"a": "November",
-	"count": 20,
-	"q": "¿Como se dice _____Noviembro___ en Inglés?",
-         qs: "¿Como se dice ________ Noviembre en Inglés?",
-         qp: " como você dizer ________ de novembro em inglês?",
-	"type": "Months of the Year"
-},
-{
-	"a": "December",
-	"count": 20,
-	"q": "¿Como se dice _____Diciembre___ en Inglés?",
-         qs: "¿Como se dice ________ Diciembre en Inglés?",
-         qp: " como você dizer ________ de dezembro em inglês?",
-	"type": "Months of the Year"
-},
-{
-	"a": "April",
-	"count": 20,
-	"q": " ¿Como se dice _____Abril___ en Inglés?",
-        qs: "¿Como se dice ________ Abril en Inglés?",
-qp: " como você dizer ________ de Abril em inglês?",
-	"type": "Months of the Year"
-},
-{
-	"a": "May",
-	"count": 20,
-	"q": "¿Como se dice _____Maio______en Inglés?",
-        qs: "¿Como se dice _____ Maio ______ en Inglês?",
-        qp: " como você dizer _____ Maio ______ em inglês?",
-	"type": "Months of the Year"
-},
-{
-	"a": "June",
-	"count": 20,
-	"q": "¿Como se dice _____Junio___ en Inglés?",
-        qs: "¿Como se dice ________ Junio __ en Inglés?",
-        qp: " como você dizer ________ Junho  __ em inglês?",
-	"type": "Months of the Year"
-},
-{
-	"a": "Happy Birthday",
-	"count": 20,
-	"q": "¿Como se dice _____Felic cupleanos ___ en Inglés?",
-        qs: "¿Como se dice _____ Feliz cumpleaños ___ en Inglés?",
-qp: " como você dizer _____ Feliz Aniversário _____ em inglês?",
-	"type": "Phrases"
-},
-{
-	"a": "I am ",
-	"count": 20,
-	"q": "¿Como se dice _____Yo soy ___ en Inglés?",
-        qs: "¿Como se dice _____Yo soy ___ en Inglés?",
-        qp: " como você dizer _____Estou _____ em inglês?",
-	"type": "Phrases"
-},
-{
-	"a": "I can ",
-	"count": 20,
-	"q": "¿Como se dice _____Yo puedo ___ en Inglés?",
-        qs: "¿Como se dice _____Yo puedo ___ en Inglés?",
-        qp: " como você dizer _____ Eu posso ______ em inglês?",
-	"type": "Phrases"
-},
-{
-	"a": "I have ",
-	"count": 20,
-	"q": "¿Como se dice _____tengo__ en Inglés?",
-        qs: "¿Como se dice _____ tengo __ en Inglés?",
-        qp: " como você dizer _____ tenho __ em inglês?",
-	"type": "Phrases"
-},
-{
-	"a": "telephone",
-	"count": 20,
-	"q": "How do you say _____ telephone ___ in English?",
-        qs: "¿Como se dice _____ teléfono ___ en Inglés?",
-        qp: " como você dizer _____ telefone _____ em inglês?",
-	"type": "Phrases"
-},
-{
-	"a": "mouth",
-	"count": 20,
-	"q": "¿Como se dice _____boca ___ en Inglés?",
-        qs: "¿Como se dice _____ boca ___ en Inglés?",
-        qp: " como você dizer _____ boca _____ em inglês?",
-	"type": "Phrases"
-},
-{
-	"a": "brown",
-	"count": 20,
-	"q": "¿El color de cafe es ____ ?",
-        qs: "¿El color de cafe es ________?",
-        qp: " é a cor de café é de ________?",
-	"type": "Colores"
-},
-{
-	"a": "black",
-	"count": 20,
-	"q": "¿En Inglés, negro es ________?",
-	"qs": "¿En Inglés, negro es ________?",
-         qp: " em inglês, preto é de ________?",
-	"type": "Colores"
-},
-{
-	"a": "red",
-	"count": 20,
-	"q": "¿En Inglés, rojo es ________?",
-        qs: " rojo es ________?",
-        qp: " em inglês, vermelho é de ________?",
-	"type": "Colores"
-},
-{
-	"a": "green",
-	"count": 20,
-	"q": "¿El color de verde es ________?",
-        qs: "¿El color de verde es ________?", 
-        qp: " a cor verde é de ________?",
-	"type": "Colores"
-},
-{
-	"a": "orange",
-	"count": 20,
-	"q": "¿El color de naranjada es ________?",
-        qs: "¿El color de naranjada es ________?",
-        qp: "  é a cor de laranja é ________?",
-	"type": "Colores"
-},
-{
-	"a": "blue",
-	"count": 20,
-	"q": "¿El color de azul es ________?",
-        qs: "¿El color de azul es ________?",
-        qp: "  é a cor azul é de ________?",
-	"type": "Colores"
-}
-]
 </script>
 </body>
 
