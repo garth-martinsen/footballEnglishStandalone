@@ -95,6 +95,9 @@ label {
     <div id="scores">
       <div id="scoreBarLeftDiv"> </div>
       <div id="scoreBarRightDiv"> </div>
+ <audio id= "goal" >
+           <source src="../public/sounds/fbsaGoal.wav" type="audio/wav">
+       </audio>
     </div>
     <div id="question">
       <input  type='submit' class = "button" id="quest" value="Question" formaction='/question' formmethod="post" formenctype="application/x-www-form-urlencoded" />
@@ -229,6 +232,7 @@ var ballLocation = 2;
 var isVisible = 0; // hide answer is default.
 var beep = document.getElementById("beep"); 
 var homer = document.getElementById("homer"); 
+var goal = document.getElementById("goal"); 
 var stop = false;
 $(document).ready( function () {
 //alert('JQuery is loaded and ready.');
@@ -285,6 +289,7 @@ $('#adv').click(function(){ //advance the ball in the current direction.
  
   if(ballLocation === 0 && ballDirection === -1){
    console.log('Goal!!');
+   goal.play();
    $('#leftScore').val(Number($('#leftScore').val()) + 1 );
    ballDirection = -ballDirection;
    setDirectionIndicators(ballDirection);
@@ -292,6 +297,7 @@ $('#adv').click(function(){ //advance the ball in the current direction.
   }
   if(ballLocation === 4 && ballDirection === 1){
    console.log('Goal!!');
+   goal.play();
    $('#rightScore').val(Number($('#rightScore').val()) +1 );
    ballDirection = -ballDirection;
    setDirectionIndicators(ballDirection);
