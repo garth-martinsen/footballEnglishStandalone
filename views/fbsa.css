@@ -1,0 +1,72 @@
+#game {width: 1500px; height:600px; position:relative; }
+ #leftSideBar { width: 300px; height: 700px; background-color: lightgreen;}
+   #clock { position: relative; top: 0px; left: 0px; height: 60px; width: 100%;font-size:xx-large; background-color: lightgreen; }
+   #configure {position: relative; top: -26px; left: 210px; } 
+   #falta { font-size: inherit; width: 70px; text-align: center;    margin-left: 10px; }
+   #scores {width: 65%; height: 123px; position: relative; top: 8px; left: 0px; background-color: lightgreen; } 
+     .scoreInput{width: 30px; font-size: large; position: relative; top: -24px; left: 5px; margin: 2px; margin-left: 10px; text-align:center;}
+     .scoreBar {width:134px;}
+   #question  {position: relative; left: 3px; top: 15px; height: 300px; width: 98%; font-size: x-large; background-color: lightgreen; }
+    .q_a {position:relative;top: 5px; width:100%; height:95%; font-size:x-large;}
+   #questionA {position: relative; }  
+   #answer_A {color: white;}
+   #timer30 { position: relative; top: 25px; height: 50px; background-color: lightgreen; }
+   #seconds {width: 1.5em; margin-top: .4em; font-size: large;}
+   #stopTimer {position:relative; left:25px; top: -4px;}
+   #answer {position: relative; left: 3px; top: 25px; height: 100px; width: 98%; background-color: lightgreen; }
+   #showAnswer { position: relative; left: 3px; top: 36px; height: 50px; background-color: lightgreen; padding-top: 10px;}
+   #showResponse { position: relative; top: -15px;height: 30px; }
+   #grade { position: absolute; left: 0px; top: 700px; width: 300px; height: 48px; background-color: lightgreen; padding-top: 10px; }
+   #extras { position: relative; left: 210px; top: -30px;width: 30px; background-color:pink; }
+ #rightSide { position: relative; left: 300px; top: -699px;width: 1297px; height: 757px; background-color: lightgreen;}
+   #title {position:relative; left: 100px; height: 60px; width: 1200px; background-color: lightgreen;font-size: xx-large;text-align: center;}
+   #buttons { position: relative; left: -4px; top: 649px; width: 214px; height: 34px; z-index: 2; background-color: lightgreen; }
+     .button {margin:2px;background-color:lightgrey}
+   #field {position: absolute; left: 100px; top: 83px; width: 1175px; height: 600px; background-color: #90EE90; }
+    .fld { position: relative; top: -18px; height: 640px; margin-left: -5px; }
+    #leftArrow { position: absolute; left: 473px; z-index: 0; }
+    #rightArrow { position: absolute; top: -9px; left: 495px; z-index: 0;}
+    #ball { position: absolute; left: 520px; top: 283px; width: 30px; height: 30px; z-index:4;} 
+    #g1 { position: absolute; left: -35px; top: 263px; width: 30px; height: 90px; z-index: 3; }
+    #g2{position: absolute; left: 1078px; top: 266px; width: 30px; height: 90px; z-index: 3;}
+     .goal {width:30px; height:90px; }
+    #leftGoalBarDiv  { position: absolute; left: 4px;    top: 365px; width: 110px; height: 65px; z-index: 2; -webkit-transform: rotate(-90deg)}
+    #rightGoalBarDiv { position: absolute; left: 1164px; top: 358px; width: 110px; height: 65px; z-index: 2; -webkit-transform: rotate( 90deg)}
+ #trackDiv { position: absolute; left: 0px; top: 773px; width: 1600px; height: 66px; background-color:cyan; }
+     #track {  position: relative; left:   1px; top: 1px; }
+       .right {background-color:lightgreen;}
+       .wrong {background-color:pink;}
+       .possessing {background-color:yellow;}
+       .goaleekick {text-align: center; background-color: white;}
+//Popup
+a.selected {
+  background-color:#1F75CC;
+  color:white;
+  z-index:100;
+}
+.messagepop {
+  background-color:#FFFFFF;
+  border:1px solid #999999;
+  cursor:default;
+  display:none;
+  margin-top: 15px;
+  position:absolute;
+  text-align:left;
+  width:394px;
+  z-index:50;
+  padding: 25px 25px 20px;
+}
+label {
+  display: block;
+  margin-bottom: 3px;
+  padding-left: 15px;
+  text-indent: -15px;
+}
+.messagepop p, .messagepop.div {
+  border-bottom: 1px solid #EFEFEF;
+  margin: 8px 0;
+  padding-bottom: 8px;
+}
+  #config { position: absolute; left: 399px; z-index: 5; top: 32px; }
+  #panel {position: absolute; top: -3px; left: 300px; width: 300px; height:50px; border-size:2px; }
+  #gameSize {width:20px;}

@@ -1,0 +1,124 @@
+<!--File: football2.html -->
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script src="/Users/garth/js/jquery.js"></script> 
+        <link rel="stylesheet" href="fbsa.css">
+</head>
+
+<body>
+<input type="hidden" id="leftTeam" name="leftTeam" value="-1"></input>
+<input type="hidden" id="rightTeam" name="rightTeam" value="-2"></input>
+<div id="game">
+  <div id="leftSideBar">
+    <div id="clock">
+       Clock:<input type="text" id="falta" name="remaining"  value ='900' width= 50px readonly >  </div>
+    <div id="config">
+       <a href='/doConfig' id="doConfig">Configure</a>
+    </div>
+    <div id="scores">
+      <div id="scoreBarLeftDiv"> </div>
+      <div id="scoreBarRightDiv"> </div>
+ <audio id= "goal" >
+           <source src="../public/sounds/fbsaGoal.wav" type="audio/wav">
+       </audio>
+    </div>
+    <div id="question">
+      <input  type='submit' class = "button" id="quest" value="Question" formaction='/question' formmethod="post" formenctype="application/x-www-form-urlencoded" />
+      </br>
+       <textArea id="question_A" name="questionA" class= "q_a" font-size="x-large" rows="15" cols="15" readonly ><%=questionA %> </textArea>
+    </div>
+    <div id="timer30">
+       Timer: <input type="text" id="seconds" value=''+30 readonly>
+       <audio id= "beep" >
+           <source src="../public/sounds/beep-07.wav" type="audio/wav">
+       </audio>
+       <audio id= "homer" >
+           <source id="homer" src="../public/sounds/homer.wav" type="audio/wav">
+       </audio>
+       <input type="button" id="stopTimer" value="Clear"></input> 
+    </div>
+    <div id="answer">
+      <textArea id="answer_A" name="answerA" class= "q_a" rows="5" cols="15" readonly><%=answerA %> </textArea>
+    </div>
+    <div id="showAnswer">
+       <button id="showResponse" class="button" >Show Answer</button>
+    </div>
+    <div id="grade">
+
+       <select id="team" name="team" autofocus>
+       </select>
+
+       <select id="mode" name="mode" >
+           <option value="0" >Advance</option>
+           <option value="1" >Possess</option>
+       </select>
+
+       <select id="rightWrong" name="rightWrong" >
+           <option value="-1" >?</option>
+           <option value="0" >Right</option>
+           <option value="1" >Wrong</option>
+       </select>
+       <input type='submit' id="saveGrade" class="button" value="track" formaction='/updateTrack' formmethod="post" formenctype="application/x-www-form-urlencoded" />
+   </div>
+</div>
+  <div id="rightSide">
+    <div id="title">Americas Cup of English</div>
+    <div id='buttons'>
+     <input type="submit" class="button" id="dir" value="Possession" formaction='/possession' formmethod="post" formenctype="application/x-www-form-urlencoded"/>
+     <input type="submit" class = "button" id="adv" value="Advance" formaction='/advance' formmethod="post" formenctype="application/x-www-form-url    encoded" />
+     Extras: <input type ="text" id="extras"; background-color:pink; >
+    </div>
+
+    <div id="field">
+      <div id="leftArrowDiv"> </div>
+      <div id="rightArrowDiv"> </div>
+       <img class="fld" id="quarterfieldA" src="../public/images/quarterFieldA.png">
+       <img class="fld" id="midfield" src="../public/images/midField.png">
+       <img class="fld" id="quarterfieldD" src="../public/images/quarterFieldD.png">
+       <img  id="ball" src="../public/images/ball.png">
+       <img id="g1" class:"goal" src="../public/images/soccerGoal.png">
+       <img id="g2" class:"goal" src="../public/images/soccerGoal.png">
+    </div>
+
+    <div id="leftGoalBarDiv"> </div>
+    <div id="rightGoalBarDiv"> </div>
+    </div>
+
+  </div>
+
+  <div id="trackDiv">
+      <table id="track" border="1px">
+        <tr id="leftTeamq"> </tr>
+        <tr id="rightTeamq"> </tr>
+      </table>
+  </div>
+
+  <div id="panel" class="messagepop pop">
+   <form method="post" id="new_message" action="/messages">
+     Left: <select id="teamLeft" focus>
+       <option value=0>Argentina</option>
+        <option value=1>Brasil</option>
+        <option value=2>Chile</option>
+        <option value=3>Mexico</option>
+       </select>
+       Right:<select id="teamRight">
+        <option value=0>Argentina</option>
+        <option value=1>Brasil</option>
+        <option value=2>Chile</option>
+        <option value=3>Mexico</option>
+       </select>
+       GameSize:<input type="text" id="gameSize" value=100 ></input>
+       <input type="file" id="files" name="file" />
+       <input type="submit" class="close" value="Accept"></input>
+  </div>
+ </form>
+</div>
+</div>
+<script src="../js/fbsa.js"></script>
+</body>
+
+</html>
