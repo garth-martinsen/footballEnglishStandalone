@@ -88,37 +88,63 @@ QUnit.test("possessionMgr.construct", function( assert ) {
       assert.equal(this.possessionMgr.teamSelect.val(), 1,  "Right Team should be selected in teams dropdown." );
    });
      
-  QUnit.test("possessionMgr.changePossession", function( assert ) {
+  QUnit.test("possessionMgr.changePossession to -1", function( assert ) {
       console.log("test: possessionMgr.changePossession");
     var fixture = $("#qunit-fixture");
     fixture.append('<img  id="ball" src="../public/images/ball.png">');
     var ballImg = $('#ball');
     var ball = new Ball(2,1,ballImg,null, null, null); //ballDirection is to right.(1).
-    this.possessionMgr.displayArrow = sinon.spy();
-/*  ------ Need to understand how to use sinon.spy ----
-    this.possessionMgr.hightlightPossessor = sinon.spy();
-     var spy1 = sinon.spy(this.possessionMgr.displayArrow ); // PossessionMgr.displayArrow
-     var spy2 = sinon.spy(this.possessionMgr.highlightPossessor ); 
-     var spy3 = sinon.spy(this.possessionMgr.selectPossessor ); 
-//    console.log('Ball direction at creation : ' + ball.ballDirection);
--------  */
+    var displayArrowStub       = sinon.stub(this.possessionMgr,"displayArrow");
+    var highlightPossessorStub = sinon.stub(this.possessionMgr,"highlightPossessor");
+    var selectPossessorStub    = sinon.stub(this.possessionMgr,"selectPossessor");
+
     ball = this.possessionMgr.changePossession(ball); //method under test.   
 
  //   console.log('Ball direction after changePossession: ' + ball.ballDirection);
-    assert.equal(ball.ballDirection, -1,  "Ball direction should change to -1.");          
-    assert.ok(this.possessionMgr.displayArrow.calledOnce , "displayArrow must be called once from changePossession");
-/*  ------ Need to understand how to use sinon.spy ----
-    assert.ok(this.possessionMgr.highlightPossessor.calledOnce , "highlightPossessor must be called once from changePossession");
-    assert.ok(spy1.calledOnce , "displayArrow must be called once from changePossession");
-    assert.ok(spy2.calledOnce , "hightlightPossessor must be called once from changePossession");
-    assert.ok(spy3.calledOnce , "selectPossessor must be called once from changePossession");
---- */
+    var dir = ball.ballDirection;
+    assert.equal(ball.ballDirection, dir,           "Ball direction should change to: " + dir);          
+    assert.ok(displayArrowStub.withArgs(dir),       "displayArrow must be called from changePossession with arg: " + dir);
+    assert.ok(highlightPossessorStub.withArgs(dir), "highlightPossessor must be called from changePossession with arg: " + dir);
+    assert.ok(selectPossessorStub.withArgs(dir),    "selectPossessor must be called from changePossession with arg: " + dir);
+ });
+
+  QUnit.test("possessionMgr.changePossession to 1", function( assert ) {
+      console.log("test: possessionMgr.changePossession");
+    var fixture = $("#qunit-fixture");
+    fixture.append('<img  id="ball" src="../public/images/ball.png">');
+    var ballImg = $('#ball');
+    var ball = new Ball(2,-1,ballImg,null, null, null); //ballDirection is to right.(1).
+    var displayArrowStub       = sinon.stub(this.possessionMgr,"displayArrow");
+    var highlightPossessorStub = sinon.stub(this.possessionMgr,"highlightPossessor");
+    var selectPossessorStub    = sinon.stub(this.possessionMgr,"selectPossessor");
+
+    ball = this.possessionMgr.changePossession(ball); //method under test.   
+
+    var dir = ball.ballDirection;
+ //   console.log('Ball direction after changePossession: ' + ball.ballDirection);
+
+    assert.equal(ball.ballDirection, dir,           "Ball direction should change to: " + dir);
+    assert.ok(displayArrowStub.withArgs(dir),       "displayArrow must be called from changePossession with arg: " + dir);
+    assert.ok(highlightPossessorStub.withArgs(dir), "highlightPossessor must be called from changePossession with arg: " + dir);
+    assert.ok(selectPossessorStub.withArgs(dir),    "selectPossessor must be called from changePossession with arg: " + dir);
  });
 /* ----tests by grep -----
 test PossessionMgr.displayArrow(ballDirection){
 test PossessionMgr.highlightPossessor(ballDirection){
 test PossessionMgr.selectPossessor(ballDirection){
 test PossessionMgr.changePossession(ballDirection){
+
+//-----constructor----------------------
+ var PossessionMgr = function( al, ar, ltn, rtn, tms, teamArray) {
+    this.arrowLeft  = al;
+    this.arrowRight = ar;
+    this.leftTeamName   = $(ltn);
+    this.rightTeamName  = $(rtn);
+    this.teamSelect = $(tms);
+    this.teams = teamArray;
+    return this;
+}
+
 ----- */
 
 
