@@ -1,9 +1,9 @@
 //-----constructor----------------------
-var Ball = function(loc, dir, ballImg, ancr, lsb, rsb ) {
+var Ball = function(loc, dir, ballImg, ancr, lsd, rsd ) {
  this.ballImage        = $(ballImg); // $('#ball'); 
  this.announcer        = $(ancr);  //$('#goal');
- this.leftScoreDisplay = $(lsb);  // $('#leftScore'); //readOnly text input to display the number of goals for this team.
- this.rightScoreDisplay= $(rsb);  //$('#rightScore'); //readOnly text input to display the number of goals for this team.
+ this.leftScoreDisplay = $(lsd);  // $('#leftScore'); //readOnly text input to display the number of goals for this team.
+ this.rightScoreDisplay= $(rsd);  //$('#rightScore'); //readOnly text input to display the number of goals for this team.
  this.ballLocation     = loc;  //starting location is at midfield.
  this.ballDirection    = dir;  //until coinflip, then one of: {-1,1}.
  this.leftGoalPosition = 0;

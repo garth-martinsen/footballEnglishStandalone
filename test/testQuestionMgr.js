@@ -33,20 +33,33 @@ QUnit.module( "module QuestionMgr", {
     fixture.append('<button id="showResponse" class="button" >Show Answer</button>');
     fixture.append('<textArea id="question_A" name="questionA" class= "q_a" font-size="x-large" rows="10" cols="15" readonly ><%=questionA %> </textArea>');
     fixture.append('<textArea id="answer_A" name="answerA" class= "q_a" rows="10" cols="15" readonly><%=answerA %> </textArea>');
-      
+    fixture.append( '<select id="team" > <option value="0" >Brasil</option> <option value="1" >Chile</option> </select>');
+//-------Timer fixtures ----
+    fixture.append('<input type="text" id="seconds" value=""+30 readonly>');
+    fixture.append('<input type="button" id="stopTimer" value="Clear"></input>');
+    fixture.append('<audio id= "beep" > <source src="../public/sounds/beep-07.wav" type="audio/wav"> </audio>');
+    fixture.append('<audio id= "homer" > <source id="homer" src="../public/sounds/homer.wav" type="audio/wav"> </audio>');
 
+   var bp = $('#beep');
+   var hmr = $('#homer');
+   var secDisplay = $('#seconds');
+   var stopTmr = $('#stopTimer');
+   dur =3; //3 seconds for testing. 30 secs for prod.
+
+    var qTimer = new QTimer( bp, hmr, secDisplay, stopTmr,dur ); 
     var gc       = $('#falta')[0]; 
     var xtras    = $('#extras')[0]; 
     var qb       = $('#quest')[0]; 
     var ab       = $('#showResponse')[0]; 
     var cb       = $('#stopTimer')[0]; 
     var qd       = $('#question_A')[0]; 
-    var ad       = $('answer_A')[0]; 
-    var gs       = 3; 
-    var tmr      = null; // Future object, not ready yet.
+    var ad       = $('#answer_A')[0]; 
+    var tms      = $('#team')[0]; 
+    var lt       = 1; //Brasil
+    var rt       = 2; //Chile
+    var gs       = 3; //game size
 
-//                                     qset, gc , gmsz, xtras, tmr, qb, ab, cb, qd, ad)
-    this.questionMgr = new QuestionMgr(qset, gc, gs, xtras, tmr, qb, ab, cb, qd, ad );
+    this.questionMgr = new QuestionMgr(qset, gc, gs, xtras, qTimer, qb, ab, cb, qd, ad, tms, lt, rt );
   },
   afterEach: function() {
     this.questionMgr = null;
@@ -62,7 +75,10 @@ QUnit.module( "module QuestionMgr", {
      assert.ok(this.questionMgr.questionButton,          "Next Question button exists.");
      assert.ok(this.questionMgr.answerButton,            "Show Answer  button exists.");
      assert.ok(this.questionMgr.clearButton,             "Clear timer button exists.");
-     assert.equal(this.questionMgr.timer,null,           "30 second Question Timer DOES NOT  exist yet.");
+     assert.ok(this.questionMgr.teamSelect,              "Team Select exists");
+     assert.equal(this.questionMgr.teams[0], 1,         "Team array[0] is correct." );
+     assert.equal(this.questionMgr.teams[1], 2,         "Team array[1] is correct." );
+     assert.ok(this.questionMgr.timer,                  "30 second Question Timer exists.");
 });
 
   QUnit.test("questionMgr.initialize", function( assert ) {
@@ -72,18 +88,65 @@ QUnit.module( "module QuestionMgr", {
      assert.equal('', this.questionMgr.extras.value,               "Extra questions input shows empty.");
 });
 
+  QUnit.test("questionMgr.decrementClock", function( assert ) {
+     // initial clock value is 3.
+     this.questionMgr.decrementClock();
+
+     assert.equal(2, this.questionMgr.remainingCount, "Remaining questions should be 2");              
+
+});
+
+  QUnit.test("questionMgr.updateClock", function( assert ) {
+     this.questionMgr.updateClock(2);
+     assert.equal(2, this.questionMgr.gameClock.value, "The game clock should display  2");              
+
+});
+
+  QUnit.test("questionMgr.nextQuestion", function( assert ) {
+     this.questionMgr.remainingCount=2;
+     // next question will be item[2];
+     var nq = this.questionMgr.nextQuestion();
+     assert.equal( nq,this.questionMgr.questionSet[2], "Returned item should equal questionSet[2].");              
+});
+
+  QUnit.test("questionMgr.displayItem", function( assert ) {
+     var item = this.questionMgr.questionSet[2];
+     this.questionMgr.teams=[1,2];
+     var selected = this.questionMgr.teamSelect.value=0;
+
+     this.questionMgr.displayItem(item);
+
+     assert.equal(this.questionMgr.questionDisplay.text() ,this.questionMgr.questionSet[2].qp, "Displayed question should be in Portuguese.");              
+     assert.equal( this.questionMgr.answerDisplay.css('color'), "rgb(255, 255, 255)", "The Answer text color should be white so it is invisible");
+});
+
+  QUnit.test("questionMgr.revealAnswer", function( assert ) {
+     var item = this.questionMgr.questionSet[2];
+     
+     this.questionMgr.revealAnswer(item);
+
+     assert.equal(this.questionMgr.answerDisplay.css('color'), "rgb(0, 0, 0)" , "The Answer text color should be black, so it is visible.");
+});
+
+  QUnit.test("questionMgr.clearTimer30", function( assert ) {
+     
+     this.questionMgr.clearTimer30();
+
+     assert.ok(this.questionMgr.timer.stop,  "The embeded timer must be set to stop=true.");
+});
+
 /* ---- REFERENCE: tests by grep and object under test -----
 
 QuestionMgr.prototype.initialize      = function()
-QuestionMgr.prototype.displayNextItem = function(item )
-QuestionMgr.prototype.revealAnswer    = function(item )
 QuestionMgr.prototype.decrementClock  = function()
-QuestionMgr.prototype.nextQuestion    = function( )
 QuestionMgr.prototype.updateClock     = function( )
+QuestionMgr.prototype.nextQuestion    = function( )
+QuestionMgr.prototype.displayItem     = function(item )
+QuestionMgr.prototype.revealAnswer    = function(item )
 QuestionMgr.prototype.clearTimer30    = function( )
 
 // ===constructor===
-var QuestionMgr = function(qset, gc , gmsz, xtras, tmr, qb, ab, cb, qd, ad){
+var QuestionMgr = function(qset, gc , gmsz, xtras, tmr, qb, ab, cb, qd, ad, tms, tmArray){
  this.questionSet     = qset;   //array of questions used to play the game. Read from file during game.configuration.
  this.gameClock       = gc;     //readOnly text input, Decrementing Counter for each question tracked. Used to get next question.
  this.extras          = xtras;  //text input to revisit questions. Its value trumps gameClock for index of next question/answer.

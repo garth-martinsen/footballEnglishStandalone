@@ -94,6 +94,7 @@ QUnit.test("possessionMgr.construct", function( assert ) {
     fixture.append('<img  id="ball" src="../public/images/ball.png">');
     var ballImg = $('#ball');
     var ball = new Ball(2,1,ballImg,null, null, null); //ballDirection is to right.(1).
+    var newDir =-1* ball.ballDirection;
     var displayArrowStub       = sinon.stub(this.possessionMgr,"displayArrow");
     var highlightPossessorStub = sinon.stub(this.possessionMgr,"highlightPossessor");
     var selectPossessorStub    = sinon.stub(this.possessionMgr,"selectPossessor");
@@ -101,11 +102,10 @@ QUnit.test("possessionMgr.construct", function( assert ) {
     ball = this.possessionMgr.changePossession(ball); //method under test.   
 
  //   console.log('Ball direction after changePossession: ' + ball.ballDirection);
-    var dir = ball.ballDirection;
-    assert.equal(ball.ballDirection, dir,           "Ball direction should change to: " + dir);          
-    assert.ok(displayArrowStub.withArgs(dir),       "displayArrow must be called from changePossession with arg: " + dir);
-    assert.ok(highlightPossessorStub.withArgs(dir), "highlightPossessor must be called from changePossession with arg: " + dir);
-    assert.ok(selectPossessorStub.withArgs(dir),    "selectPossessor must be called from changePossession with arg: " + dir);
+    assert.equal(ball.ballDirection, newDir,           "Ball direction should change to: " + newDir);          
+    assert.ok(displayArrowStub.withArgs(newDir),       "displayArrow must be called from changePossession with arg: " + newDir);
+    assert.ok(highlightPossessorStub.withArgs(newDir), "highlightPossessor must be called from changePossession with arg: " + newDir);
+    assert.ok(selectPossessorStub.withArgs(newDir),    "selectPossessor must be called from changePossession with arg: " + newDir);
  });
 
   QUnit.test("possessionMgr.changePossession to 1", function( assert ) {
@@ -114,19 +114,19 @@ QUnit.test("possessionMgr.construct", function( assert ) {
     fixture.append('<img  id="ball" src="../public/images/ball.png">');
     var ballImg = $('#ball');
     var ball = new Ball(2,-1,ballImg,null, null, null); //ballDirection is to right.(1).
+    var newDir =-1* ball.ballDirection;
     var displayArrowStub       = sinon.stub(this.possessionMgr,"displayArrow");
     var highlightPossessorStub = sinon.stub(this.possessionMgr,"highlightPossessor");
     var selectPossessorStub    = sinon.stub(this.possessionMgr,"selectPossessor");
 
     ball = this.possessionMgr.changePossession(ball); //method under test.   
 
-    var dir = ball.ballDirection;
  //   console.log('Ball direction after changePossession: ' + ball.ballDirection);
 
-    assert.equal(ball.ballDirection, dir,           "Ball direction should change to: " + dir);
-    assert.ok(displayArrowStub.withArgs(dir),       "displayArrow must be called from changePossession with arg: " + dir);
-    assert.ok(highlightPossessorStub.withArgs(dir), "highlightPossessor must be called from changePossession with arg: " + dir);
-    assert.ok(selectPossessorStub.withArgs(dir),    "selectPossessor must be called from changePossession with arg: " + dir);
+    assert.equal(ball.ballDirection, newDir,           "Ball direction should change to: " + newDir);
+    assert.ok(displayArrowStub.withArgs(newDir),       "displayArrow must be called from changePossession with arg: " + newDir);
+    assert.ok(highlightPossessorStub.withArgs(newDir), "highlightPossessor must be called from changePossession with arg: " + newDir);
+    assert.ok(selectPossessorStub.withArgs(newDir),    "selectPossessor must be called from changePossession with arg: " + newDir);
  });
 /* ----tests by grep -----
 test PossessionMgr.displayArrow(ballDirection){
