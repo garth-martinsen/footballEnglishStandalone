@@ -1,30 +1,30 @@
 QUnit.module( "module QuestionMgr", {
   beforeEach: function() {
-    var qset       =[{
+    var qset       = new Map;
+     qset.set(1, {
 	"a": "Monday",
 	"count": 20,
 	"q": "¿Como se dice _____ lunes_____ en Inglés?",
         "qs": "¿Como se dice _____ lunes_____ en Inglés?",
         "qp": " como você dizer _____ Segunda-feira_____ em inglês?",
 	"type": "Days of the Week"
-},
-{
+});
+qset.set(2, {
 	"a": "Wednesday",
 	"count": 20,
 	"q": "¿Como se dice ___ miércoles ___ en Inglés?",
         "qs": "¿Como se dice ____ miércoles ______ en Inglés?",
         "qp": " como você dizer ____Quarta-feira ______ em inglês?",
 	"type": "Days of the Week"
-},
-{
+});
+qset.set(3, {
 	"a": "Tuesday",
 	"count": 20,
 	"q": "¿Como se dice _____martes ___  en Inglés?",
         "qs": "¿Como se dice ___ martes __ en Inglés?",
         "qp": " como você dizer _____ terça-feira Inglês?",
 	"type": "Days of the Week"
-},
-]; 
+});
     var fixture = $("#qunit-fixture");
     fixture.append('<input type="text" id="falta" width= "50px" readonly >900</input>');
     fixture.append('<input type ="text" id="extras"; background-color:pink; >');
@@ -37,16 +37,25 @@ QUnit.module( "module QuestionMgr", {
 //-------Timer fixtures ----
     fixture.append('<input type="text" id="seconds" value=""+30 readonly>');
     fixture.append('<input type="button" id="stopTimer" value="Clear"></input>');
-    fixture.append('<audio id= "beep" > <source src="../public/sounds/beep-07.wav" type="audio/wav"> </audio>');
-    fixture.append('<audio id= "homer" > <source id="homer" src="../public/sounds/homer.wav" type="audio/wav"> </audio>');
+    fixture.append('<audio id= "beep" > <source src="../../public/sounds/beep-07.wav" type="audio/wav"> </audio>');
+    fixture.append('<audio id= "homer" > <source id="homer" src="../../public/sounds/homer.wav" type="audio/wav"> </audio>');
 
    var bp = $('#beep');
    var hmr = $('#homer');
    var secDisplay = $('#seconds');
    var stopTmr = $('#stopTimer');
    dur =3; //3 seconds for testing. 30 secs for prod.
+   var config= {
+            teams: [1,2]  //Brasil against Chile.
+          , gameSize: 3
+          , timerDuration : 30
+          , ballDirection : -1
+          , ballLocation : 2  //midfield
+          , questionSet: qset 
+          , created: new Date().toString().slice(-45).substring(4,24).trim() , 
+}
 
-    var qTimer = new QTimer( bp, hmr, secDisplay, stopTmr,dur ); 
+    var qTimer = new QTimer( config ); 
     var gc       = $('#falta')[0]; 
     var xtras    = $('#extras')[0]; 
     var qb       = $('#quest')[0]; 
@@ -59,7 +68,7 @@ QUnit.module( "module QuestionMgr", {
     var rt       = 2; //Chile
     var gs       = 3; //game size
 
-    this.questionMgr = new QuestionMgr(qset, gc, gs, xtras, qTimer, qb, ab, cb, qd, ad, tms, lt, rt );
+    this.questionMgr = new QuestionMgr(config );
   },
   afterEach: function() {
     this.questionMgr = null;
@@ -68,14 +77,13 @@ QUnit.module( "module QuestionMgr", {
 
   QUnit.test("questionMgr.construct", function( assert ) {
      assert.ok(this.questionMgr,                         "QuestionMgr Exists");
-     assert.equal(3, this.questionMgr.gameSize,          "Game size should be 3.");
-     assert.equal(3, this.questionMgr.remainingCount,    "RemainingCount should be 3.");
-     assert.ok(this.questionMgr.gameClock,               "ReadOnly clock display exists.");
-     assert.ok(this.questionMgr.extras,                  "Extra questions input exists.");
-     assert.ok(this.questionMgr.questionButton,          "Next Question button exists.");
-     assert.ok(this.questionMgr.answerButton,            "Show Answer  button exists.");
-     assert.ok(this.questionMgr.clearButton,             "Clear timer button exists.");
-     assert.ok(this.questionMgr.teamSelect,              "Team Select exists");
+     assert.equal(this.questionMgr.remainingCount, 3,          "Game size should be 3.");
+     assert.ok($('#falta'),                              "ReadOnly clock display exists.");
+     assert.ok($('#extras'),                             "Extra questions input exists.");
+     assert.ok($('#quest'),                              "Next Question button exists.");
+     assert.ok($('#showResponse'),                       "Show Answer  button exists.");
+     assert.ok($('#stopTimer'),                          "Clear timer button exists.");
+     assert.ok($('#team'),                              "Team Select exists");
      assert.equal(this.questionMgr.teams[0], 1,         "Team array[0] is correct." );
      assert.equal(this.questionMgr.teams[1], 2,         "Team array[1] is correct." );
      assert.ok(this.questionMgr.timer,                  "30 second Question Timer exists.");
@@ -84,8 +92,8 @@ QUnit.module( "module QuestionMgr", {
   QUnit.test("questionMgr.initialize", function( assert ) {
      this.questionMgr.initialize();
 
-     assert.equal(3, this.questionMgr.gameClock.value,               "ReadOnly clock shows 3 more questions.");
-     assert.equal('', this.questionMgr.extras.value,               "Extra questions input shows empty.");
+     assert.equal( $('#falta').val(),3,               "ReadOnly clock shows 3 more questions.");
+     assert.equal($('#extras').value, undefined,              "Extra questions input shows empty.");
 });
 
   QUnit.test("questionMgr.decrementClock", function( assert ) {
@@ -98,34 +106,34 @@ QUnit.module( "module QuestionMgr", {
 
   QUnit.test("questionMgr.updateClock", function( assert ) {
      this.questionMgr.updateClock(2);
-     assert.equal(2, this.questionMgr.gameClock.value, "The game clock should display  2");              
+     assert.equal(  $('#falta').val(),2,               "The game clock should display  2");              
 
 });
 
   QUnit.test("questionMgr.nextQuestion", function( assert ) {
-     this.questionMgr.remainingCount=2;
+     this.questionMgr.remainingCount=3;
      // next question will be item[2];
      var nq = this.questionMgr.nextQuestion();
      assert.equal( nq,this.questionMgr.questionSet[2], "Returned item should equal questionSet[2].");              
 });
 
   QUnit.test("questionMgr.displayItem", function( assert ) {
-     var item = this.questionMgr.questionSet[2];
+     var item = this.questionMgr.questionSet.get(2);
      this.questionMgr.teams=[1,2];
-     var selected = this.questionMgr.teamSelect.value=0;
+     var selected =  $('#team').val(1);
 
      this.questionMgr.displayItem(item);
 
-     assert.equal(this.questionMgr.questionDisplay.text() ,this.questionMgr.questionSet[2].qp, "Displayed question should be in Portuguese.");              
-     assert.equal( this.questionMgr.answerDisplay.css('color'), "rgb(255, 255, 255)", "The Answer text color should be white so it is invisible");
+     assert.equal($('#question_A').text() ,this.questionMgr.questionSet.get(2).qp, "Displayed question should be in Portuguese.");              
+     assert.equal($('#answer_A').css('color'), "rgb(255, 255, 255)", "The Answer text color should be white so it is invisible");
 });
 
   QUnit.test("questionMgr.revealAnswer", function( assert ) {
-     var item = this.questionMgr.questionSet[2];
+     var item = this.questionMgr.questionSet.get(2);
      
      this.questionMgr.revealAnswer(item);
 
-     assert.equal(this.questionMgr.answerDisplay.css('color'), "rgb(0, 0, 0)" , "The Answer text color should be black, so it is visible.");
+     assert.equal( $('#answer_A').css('color'), "rgb(0, 0, 0)" , "The Answer text color should be black, so it is visible.");
 });
 
   QUnit.test("questionMgr.clearTimer30", function( assert ) {

@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<script src="/Users/garth/js/jquery.js"></script> 
+	<script src="../js/sysjs/jquery.js"></script> 
         <link rel="stylesheet" href="fbsa.css">
 </head>
 
@@ -96,29 +96,41 @@
         <tr id="rightTeamq"> </tr>
       </table>
   </div>
-
+<!-- popup panel for configuration -->
   <div id="panel" class="messagepop pop">
    <form method="post" id="new_message" action="/messages">
-     Left: <select id="teamLeft" focus>
+     Left: <select id="teamLeft" autofocus>
        <option value=0>Argentina</option>
         <option value=1>Brasil</option>
         <option value=2>Chile</option>
         <option value=3>Mexico</option>
        </select>
-       Right:<select id="teamRight">
+     Right:<select id="teamRight">
         <option value=0>Argentina</option>
         <option value=1>Brasil</option>
         <option value=2>Chile</option>
         <option value=3>Mexico</option>
        </select>
-       GameSize:<input type="text" id="gameSize" value=100 ></input>
-       <input type="file" id="files" name="file" />
-       <input type="submit" class="close" value="Accept"></input>
+     GameSize:<input type="text" id="gameSize" value=100 ></input>
+     TimerDuration:<input type="text" id="timerDur" value=30 ></input>
+     <input type="file" id="fileInput" name="file" />
+     <input type="submit" class="close" value="Accept"></input>
   </div>
  </form>
 </div>
 </div>
-<script src="../js/fbsa.js"></script>
+  <script src="../js/configMgr.js"></script>
+  <script src="../js/QTimer.js"></script>
+  <script src="../js/questionMgr.js"></script>
+  <script src="../js/ball.js"></script>
+  <script src="../js/possessionMgr.js"></script>
+  <script src="../js/trackMgr.js"></script>
+  <script >
+   $( document ).ready(function() {
+    console.log( "ready!" );
+    var cfgMgr = new ConfigMgr();
+});
+  </script>
 </body>
 
 </html>

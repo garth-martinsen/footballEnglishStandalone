@@ -10,9 +10,18 @@ QUnit.module( "module TrackMgr", {
     fixture.append('<select id="rightWrong" name="rightWrong" > <option value="-1" >?</option> <option value="0" >Right</option> <option value="1" >Wrong</option> </select>');
     fixture.append('<input type="text" id="falta" value ="100" width="50px" readonly >');
 
-    var tl            = 2;
-    var tr            = 3;
-   this.trackMgr = new TrackMgr( tl, tr );
+ var config= {
+            teams: [2,3]  //Brasil against Chile.
+          , gameSize: 3
+          , timerDuration : 30
+          , ballDirection : -1
+          , ballLocation : 2  //midfield
+          , questionSet: null //not important for these tests. 
+          , created: new Date().toString().slice(-45).substring(4,24).trim() , 
+         }
+
+
+   this.trackMgr = new TrackMgr( config );
   },
   afterEach: function() {
     this.trackMgr = null;
@@ -58,9 +67,8 @@ QUnit.module( "module TrackMgr", {
   QUnit.test("TrackMgr.saveGrade ", function( assert ) {
      this.trackMgr.teamSelect.value=2;
      this.trackMgr.rightWrongSelect.value = 0; //correct = green.
-     this.trackMgr.cnt=50;
+     this.trackMgr.clock.value = 50;
      var id ='#'+ 50; 
-     $('#falta').val(50);
 
      this.trackMgr.saveGrade();
      
@@ -72,7 +80,7 @@ QUnit.module( "module TrackMgr", {
   QUnit.test("TrackMgr.saveGrade for bad goalee kick ", function( assert ) {  //goalee kick after opposing team has scored. Team has answered incorrectly.
      this.trackMgr.teamSelect.value=2;   //Chile goalee is kicking.
      this.trackMgr.rightWrongSelect.value = 1;  //wrong
-     this.trackMgr.ballLocation=4;  // ball is being kicked by goalee at the right goal.
+     this.trackMgr.ball.ballLocation=4;  // ball is being kicked by goalee at the right goal.
      $('#falta').val(50);;  // clock shows 50 questions remaining.
      var id ='#'+ 50; 
      var xid ='#X'+ 50; 
@@ -91,7 +99,7 @@ QUnit.module( "module TrackMgr", {
 
      this.trackMgr.setBallLocation(loc) ;  // ball is being placed in front of right goal.
     
-     assert.equal(this.trackMgr.ballLocation, loc,     "Ball location is correct at: " + loc );
+     assert.equal(this.trackMgr.ball.ballLocation, loc,     "Ball location is correct at: " + loc );
   });
   QUnit.test("TrackMgr.createTd", function( assert ) {
      $('#falta').val(50);  // clock shows 50 questions remaining.
@@ -120,7 +128,7 @@ QUnit.module( "module TrackMgr", {
      
     this.trackMgr.updateClock(2);
 
-     assert.equal(this.trackMgr.clock.val(),  "2" ,                    "the Clock was updated to 2 questions left.");
+     assert.equal(this.trackMgr.clock.value,  "2" ,                    "the Clock was updated to 2 questions left.");
 });
 
 /* ------------REFERENCE: trackMgr functions and constructor  -----
@@ -150,20 +158,38 @@ X  TrackMgr.prototype.updateClock = function(num){
 
 -----  */
 /* ---- REFERENCE: QTimer functions and constructor -----
+TrackMgr.prototype.initialize  = function(){
+TrackMgr.prototype.tabToSaveGrade  = function(){
+TrackMgr.prototype.saveGrade = function(){
+TrackMgr.prototype.updateClock = function( cnt){
+TrackMgr.prototype.createTd = function( cnt, rightWrong, thisTeam, otherTeam){
+TrackMgr.prototype.fixTd = function(num, rightWrong, row){
+TrackMgr.prototype.updateTally = function(teamId, rightWrong){
+TrackMgr.prototype.decideBallAction= function(diff){
+TrackMgr.prototype.possessionMgr= function(){
 
-QTimer.prototype.startTimer =function()
-QTimer.prototype.clockTick =function(endTimeMS)
-QTimer.prototype.stopTimer()
+//----- constructor ---------------
+ var TrackMgr = function( cfg ) {
 
-//-----constructor----------------------
- var QTimer = function(bp, hmr, display, dur, stopTimer) {
-   this.secondsDisplay     =$(display);
-   this.beep               = $(bp);//
-   this.homer              = $(hmr);
-   this.stopButton         = $(stopTimer);
-   this.duration           = dur; // this may be a configuration parameter in the future.
-   this.stop               = false;
+   this.teams              = cfg.teams;
+   this.ball               = new Ball(cfg);
+   this.extras             = $('#extras')[0]; 
+   this.clock              = $('#falta')[0];
+   this.trackButton        = $('#saveGrade');
+   this.leftTrackRow       = $('#leftTeamq');
+   this.rightTrackRow      = $('#rightTeamq');
+   this.teamSelect         = $('#team');
+   this.modeSelect         = $('#mode');
+   this.rightWrongSelect   = $('#rightWrong');
+   this.ans                = ["right", "wrong"];
+   this.possessor          = 0; //set at coin flip and every time ball changes possession. value is one of: {tl,tr}
+   this.possessorTally     = 0; //difference in tallies is used to controll ball possession and movement. diff =  possessorTally - contenderTally
+   this.contendorTally     = 0;  // diff=-1 change possession; diff=0 => contestforPossession; diff=1 => nothing; diff=2 -> advanceBall
+   this.created            = 'TrackMgr' + new Date().getTime().toString().slice(-4); // last 4 chars give milliseconds, enough for id.
+   trackMgr = this;
    return this;
 }
+
+
 
 ------ */

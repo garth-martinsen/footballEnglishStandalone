@@ -1,12 +1,22 @@
 //-----constructor----------------------
- var PossessionMgr = function( al, ar, ltn, rtn, tms, teamArray) {
-    this.arrowLeft  = al;
-    this.arrowRight = ar;
-    this.leftTeamName   = $(ltn);
-    this.rightTeamName  = $(rtn);
-    this.teamSelect = $(tms);
-    this.teams = teamArray;
+ var PossessionMgr = function( config) {
+    this.teams         = config.teams;
+    this.ballDirection = config.ballDirection;
+    this.arrowLeft     = $('#leftArrow');
+    this.arrowRight    = $('#rightArrow');
+    this.leftTeamName  = $('#leftTeamName');
+    this.rightTeamName = $('#rightTeamName');
+    this.teamSelect    = $('#team');
+    this.rightWrongSelect = $('#rightWrong');
+    this.possMgr       = this;
+    this.defineHandlers();
+    this.created         = 'PossessionMgr' + new Date().toString().slice(-45).substring(3,24);
     return this;
+}
+var possMgr;
+
+PossessionMgr.prototype.defineHandlers=function(){
+    $('#dir').on('click', this.changePossession );
 }
 
 PossessionMgr.prototype.displayArrow=function(ballDirection){
@@ -33,22 +43,26 @@ PossessionMgr.prototype.highlightPossessor=function(ballDirection){
   }
 }
 
+
 PossessionMgr.prototype.selectPossessor=function(ballDirection){
    console.log('Entered selectPossessor(...)');
 // The possessing team always gets the first question, followed by the opposing team. TrackMgr needs select value to track questions.
   if(ballDirection < 0){ 
-     this.teamSelect.val(0);
+     this.teamSelect.val(this.teams[0]);
   }
   else if(ballDirection > 0){ 
-     this.teamSelect.val(1);
+     this.teamSelect.val(this.teams[1]);
   }
 }
 
-PossessionMgr.prototype.changePossession=function(ball){
- var newDirection = -1* ball.ballDirection;
- ball.setDirection(newDirection);
- this.displayArrow(newDirection);
- this.highlightPossessor(newDirection);
- this.selectPossessor(newDirection);
- return ball;
+PossessionMgr.prototype.clearRightWrongSelector = function(){
+   console.log('Entered clearRightWrongSelector(...)');
+   this.rightWrongSelect.val(-1);
+}
+PossessionMgr.prototype.changePossession = function(){
+ this.ballDirection= -1 * this.ballDirection;
+ this.displayArrow(this.ballDirection);
+ this.highlightPossessor(this.ballDirection);
+ this.selectPossessor(this.ballDirection);
+ this.clearRightWrongSelector();
 }

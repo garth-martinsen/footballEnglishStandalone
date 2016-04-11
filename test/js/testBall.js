@@ -12,7 +12,19 @@ QUnit.module( "module Ball", {
     var ancr      = $('#goal')[0];
     var lsb       = $('#leftScore')[0]; 
     var rsb       = $('#rightScore')[0]; 
-    this.ball = new Ball(loc, dir, ballImg, ancr, lsb, rsb);
+
+   var config= {
+            teams: [0,1]  //Brasil against Chile.
+          , gameSize: 3
+          , timerDuration : 30
+          , ballDirection : -1
+          , ballLocation : 2  //midfield
+          , questionSet: null // not needed for this test. 
+          , created: new Date().toString().slice(-45).substring(4,24).trim() , 
+}
+
+
+    this.ball = new Ball(config);
   },
   afterEach: function() {
     this.ball = null;
@@ -25,7 +37,7 @@ QUnit.module( "module Ball", {
      assert.ok(this.ball.announcer,     "Goal announcer exists.");
      assert.ok(this.ball.leftScoreDisplay,  "Left scoreDisplay exists.");
      assert.ok(this.ball.rightScoreDisplay, "Right scoreDisplay exists.");
-     assert.equal(-1, this.ball.ballDirection,    "Starting Ball Direction agrees with initial ballDirection: -1.");
+     assert.equal(this.ball.possessionMgr.ballDirection, -1,     "Starting Ball Direction agrees with initial ballDirection: -1.");
      assert.equal(2, this.ball.ballLocation,      "Ball is at midField.");
      assert.equal(0, this.ball.leftGoalPosition,  "Left Goal position is defined correctly.");
      assert.equal(4, this.ball.rightGoalPosition, "Right Goal position is defined correctly.");
@@ -33,9 +45,9 @@ QUnit.module( "module Ball", {
 
   QUnit.test("ball.setDirection", function( assert ) {
      this.ball.setDirection(-1);
-     assert.equal(-1, this.ball.ballDirection, "BallDirection should be -1.");
+     assert.equal( this.ball.possessionMgr.ballDirection, -1, "BallDirection should be -1.");
      this.ball.setDirection(1);
-     assert.equal(1, this.ball.ballDirection, "BallDirection should be 1.");
+     assert.equal(this.ball.possessionMgr.ballDirection, 1,  "BallDirection should be 1.");
 });
 
   QUnit.test("ball.setLocation", function( assert ) {
@@ -67,28 +79,35 @@ QUnit.module( "module Ball", {
       assert.equal(this.ball.ballLocation, 4, "BallLocation should be 4: goal.");
       assert.equal(this.ball.ballImage.css("left"), this.ball.ballPositions[4], "BallImage should be at: right goal.");
       assert.equal(this.ball.rightScore, 1 , "Right Score should have incremented by 1.");
-      assert.equal(this.ball.rightScoreDisplay.val(), 1 , "Left Score display should have incremented by 1.");
+      assert.equal(this.ball.rightScoreDisplay.val(), 1 , "Right Score display should have incremented by 1.");
   });
 
-/* ----tests by grep and object under test -----
- test ball.setDirection(...)
- test ball.setLocation(...)
- test ball.advance()
+/* ----tests by function and object under test -----
+Ball.prototype.defineHandlers = function() {
+Ball.prototype.setDirection = function(bd) {  // bd is one of: {-1,1}
+Ball.prototype.setLocation = function(loc) {  // loc is one of: {0,1,2,3,4}
+Ball.prototype.advance=function(){
+Ball.prototype.changePossession =function(){
 
-var Ball = function(loc, dir, ballImg, ancr, lsb, rsb ) {
- this.ballImage        = $('#ballImg');
- this.announcer        = $('#goal');
- this.leftScoreDisplay = $('#leftScore'); //readOnly text input to display the number of goals for this team.
- this.rightScoreDisplay= $('#rightScore'); //readOnly text input to display the number of goals for this team.
- this.ballLocation     = loc; //starting location is at midfield.
- this.ballDirection    = dir; //until coinflip, then one of: {-1,1}.
- this.leftGoalPosition = 0;
- this.rightGoalPosition= 4;
- this.leftScore        = 0;
- this.rightScore       = 0;
-//ballPositions are sensitive to layout. If it shifts, adjust the values in thes array.
- this.ballPositions = ['-30px', '200px', '515px', '830px', '1080px'];
- return this;
-}
+//-----constructor----------------------
+  2 var Ball = function(config) {
+  3  this.ballLocation     = config.ballLocation;             //starting location is at midfield.
+  4  this.ballDirection    = config.ballDirection;             //until coinflip, then one of: {-1,1}.
+  5  this.possessionMgr    = new PossessionMgr(config);          //possessionMgr can be told to change the ballDirection.
+  6  this.ballImage        = $('#ball');      // this will move up and down the field upon advance.
+  7  this.announcer        = $('#goal');      // announcer saying goooool!
+  8  this.leftScoreDisplay = $('#leftScore'); //readOnly text input to display the number of goals for this team.
+  9  this.rightScoreDisplay= $('#rightScore'); //readOnly text input to display the number of goals for this team.
+ 10  this.leftGoalPosition = 0;
+ 11  this.rightGoalPosition= 4;
+ 12  this.leftScore        = 0;                //scoreBox can be incremented when ball goes into left goal.
+ 13  this.rightScore       = 0;               //scoreBox can be incremented when ball goes into right goal.
+ 14 //ballPositions are sensitive to layout. If it shifts, adjust the values in thes array.
+ 15  this.ballPositions = ['-30px', '200px', '515px', '830px', '1080px'];
+ 16    this.created            = 'Ball' + new Date().getTime().toString().slice(-4); // last 4 chars give milliseconds, enough for id.
+ 17  ball = this;
+ 18  this.defineHandlers();
+ 19  return this;
+ 20 }
 
 ---- */

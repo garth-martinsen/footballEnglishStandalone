@@ -1,29 +1,30 @@
 //-----constructor----------------------
-var QuestionMgr = function(qset, gc , gmsz, xtras, tmr, qb, ab, cb, qd, ad, tms, lt, rt ){
- this.questionSet     = qset;    //array of questions used to play the game. Read from file during game.configuration.
- this.gameClock       = gc;      //readOnly text input, Decrementing Counter for each question tracked. Used to get next question.
- this.extras          = xtras;   //text input to revisit questions. Its value trumps gameClock for index of next question/answer.          
- this.timer           = tmr;     // 30 second countdown timer for each question.
- this.questionButton  = $(qb);   // button. when clicked, the next question & answer are displayed but answer is hidden.
- this.answerButton    = $(ab);   // button. When clicked, the hidden answer is displayed.
- this.clearButton     = $(cb);   // button. when clicked, the timer is cleared and ceases to count down.
- this.questionDisplay = $(qd);   // textArea where the question is displayed.
- this.answerDisplay   = $(ad);   // textArea where the answer is displayed.
- this.teamSelect      = $(tms);  // Select statement with the two team names displayed. Values are: 0,1 which index teams in  this.teams array..
- this.gameSize        = gmsz;    // initial value of the clock
- this.remainingCount  = gmsz;    // gets decremented for each question tracked.
- this.teams           = [lt,rt]; // integer array with left team and right team. eg: [2,3] would be Chile vs Mexico.
- this.numTimers       = 0;        // increments whenever a new question is displayed. decrements when timer is cleared or times out. 
+var QuestionMgr = function(config){
+ this.questionSet     = config.questionSet;             //array of questions for  game. Read from file during game.configuration.
+ this.timer           = new QTimer(config.timerDuration); // second countdown timer for each question.
+ this.remainingCount  = config.gameSize;                // gets decremented for each question tracked.
+ this.teams           = config.teams;                   // integer array with left team and right team. eg: [2,3] would be Chile vs Mexico.
+ this.numTimers       = 0;                              // increments for new question displayed. decrements when timer  clears/times out. 
+ this.created         = 'QuestionMgr_' + new Date().toString().slice(-45).substring(3,24);
+ questionMgr          = this; 
+
  return this;
 }
+
+var questionMgr;
+
+jQuery.fn.extend({
+    disable: function(state) {
+        return this.each(function() {
+            this.disabled = state;
+        });
+    }
+});
 
 
 QuestionMgr.prototype.initialize = function(){
   this.updateClock(this.remainingCount);
-  this.extras.value = "";
-  this.clearButton.click(this.clearTimer30());
-  this.questionButton.click(this.displayItem(this.nextQueston()));
-  this.answerButton.click(this.revealAnswer());
+  $('#extras').val("");
 }
 
 
@@ -33,44 +34,43 @@ QuestionMgr.prototype.decrementClock = function(){
 }
 
 QuestionMgr.prototype.updateClock = function(count ){
-  this.gameClock.value=count;
-}
-QuestionMgr.prototype.getLanquage = function(count ){
-  var ndx = this.teamSelect.value;
-  return this.teams[ndx]; //returns an integer one of:{0,1,2,3} 1 speaks portuguese. All the others speak spanish.
+  $('#falta').val(count);
 }
 
+// the randomized map key values start at zero and ascend. The game starts at gameSize and decrements. The nextQuestion will be at the index of remainingCount or the extras value input.
 QuestionMgr.prototype.nextQuestion = function( ){
+ questionMgr.timer.duration = configMgr.getConfig().timerDuration;
  var ndx;
- var extra = this.extras.value;
+ var extra = $('#extras').val();
  if(extra && extra.length > 0) {
    ndx = extra;
  }else{
-   ndx = this.remainingCount;
+   this.decrementClock();
+   ndx = this.remainingCount ;
  }
- return this.questionSet[ndx];
+ return this.questionSet.get(ndx)[0];
 }
 
 QuestionMgr.prototype.displayItem = function(item){
-  var tm  = this.teams[Number(this.teamSelect.val())]; 
+  var tm  = Number($('#team').val()); 
   var q = (tm === 1)? item.qp : item.qs; // if tm === 1 portuquese, else spanish.
-  this.questionDisplay.text(q);
-  this.answerDisplay.text(item.a);
+  $('#question_A').text(q);
+  $('#answer_A').text(item.a);
   //hide the answer until button is pushed.Done with css classes. 
-  this.answerDisplay.css('color', '#FFFFFF');
+  $('#answer_A').css('color', '#FFFFFF');
   this.timer.startTimer();
   this.numTimers++;
 }
 
 QuestionMgr.prototype.revealAnswer = function(item ){
- this.answerDisplay.css('color',"rgb(0, 0, 0)");  // black text will make the answer visible.
+$('#answer_A').css('color',"rgb(0, 0, 0)");  // black text will make the answer visible.
 }
 
 QuestionMgr.prototype.clearTimer30 = function( ){
-  this.timer.stop = true;
+  questionMgr.timer.stop = true;
   this.numTimers--;
-  if(numTimers < 1 ){
-     this.questionButton..disable(false);
-     this.clearTimerButton.disable(true);
+  if(this.numTimers < 1 ){
+     $('#quest').disable(false);
+     $('#stopTimer').disable(true);
   }
 }

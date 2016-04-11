@@ -4,7 +4,7 @@ QUnit.module( "module PossessionMgr", {
     fixture.append( '<div id="leftArrowDiv"><img  id="leftArrow"  src="../public/images/ArrowLeftA.png"  style="position:relative"> </div>');
     fixture.append( '<div id="rightArrowDiv"><img id="rightArrow" src="../public/images/ArrowRightB.png" style="position:relative" > </div>');
     fixture.append( '<table id="track" border="1px"> <tr id="leftTeamq"><td id="leftTeamName"  class= "trackName" >Chile</td> </tr> <tr id="rightTeamq"> <td id="rightTeamName" class= "trackName" >Mexico</td></tr> </table> ');
-    fixture.append( '<select id="team" > <option value="0" >Chile</option> <option value="1" >Mexico</option> </select>');
+    fixture.append( '<select id="team" > <option value="2" >Chile</option> <option value="3" >Brasil</option> </select>');
     fixture.append( '<img id="leftArrow" src="../public/images/ArrowLeftA.png" style="position:relative">' );
     fixture.append( '<img id="rightArrow" src="../public/images/ArrowRightB.png" style="position:relative" >');
     var al=$('#leftArrow');
@@ -13,7 +13,19 @@ QUnit.module( "module PossessionMgr", {
     var rtn = $('#rightTeamName');
     var tms = $('#team'); 
     var tmArray = [2,3];
-    this.possessionMgr = new PossessionMgr( al, ar, ltn, rtn, tms, tmArray);
+
+  var config= {
+            teams: [2,3]  //Brasil against Chile.
+          , gameSize: 3
+          , timerDuration : 30
+          , ballDirection : -1
+          , ballLocation : 2  //midfield
+          , questionSet: null //not important for these tests. 
+          , created: new Date().toString().slice(-45).substring(4,24).trim() , 
+}
+
+
+    this.possessionMgr = new PossessionMgr( config );
   },
   afterEach: function() {
     this.possessionMgr = null;
@@ -78,31 +90,31 @@ QUnit.test("possessionMgr.construct", function( assert ) {
   });
    QUnit.test("possessionMgr.selectPossessor left", function( assert ) {
       console.log("test: possessionMgr.selectPossessor left");
-      this.possessionMgr.selectPossessor(-1);            
-      assert.equal(this.possessionMgr.teamSelect.val(), 0,  "Left Team should be selected in teams dropdown." );
+     var bd = -1; //ballDirection
+      this.possessionMgr.selectPossessor(bd);            
+      assert.equal(this.possessionMgr.teamSelect.val(), 2,  "Left Team should be selected in teams dropdown." );
     });
 
    QUnit.test("possessionMgr.selectPossessor right", function( assert ) {
       console.log("test: possessionMgr.selectPossessor right");
-      this.possessionMgr.selectPossessor(1);            
-      assert.equal(this.possessionMgr.teamSelect.val(), 1,  "Right Team should be selected in teams dropdown." );
+     var bd = 1; //ballDirection
+      this.possessionMgr.selectPossessor(bd);            
+      assert.equal(this.possessionMgr.teamSelect.val(), 3,  "Right Team should be selected in teams dropdown." );
    });
      
   QUnit.test("possessionMgr.changePossession to -1", function( assert ) {
       console.log("test: possessionMgr.changePossession");
     var fixture = $("#qunit-fixture");
-    fixture.append('<img  id="ball" src="../public/images/ball.png">');
-    var ballImg = $('#ball');
-    var ball = new Ball(2,1,ballImg,null, null, null); //ballDirection is to right.(1).
-    var newDir =-1* ball.ballDirection;
+    this.possessionMgr.ballDirection = 1;
+    var newDir = -1;
     var displayArrowStub       = sinon.stub(this.possessionMgr,"displayArrow");
     var highlightPossessorStub = sinon.stub(this.possessionMgr,"highlightPossessor");
     var selectPossessorStub    = sinon.stub(this.possessionMgr,"selectPossessor");
 
-    ball = this.possessionMgr.changePossession(ball); //method under test.   
+    this.possessionMgr.changePossession(); //method under test.   
 
- //   console.log('Ball direction after changePossession: ' + ball.ballDirection);
-    assert.equal(ball.ballDirection, newDir,           "Ball direction should change to: " + newDir);          
+ //   console.log('Ball direction after changePossession: ' + this.ballDirection);
+    assert.equal(this.possessionMgr.ballDirection, newDir,           "Ball direction should change to: " + newDir);          
     assert.ok(displayArrowStub.withArgs(newDir),       "displayArrow must be called from changePossession with arg: " + newDir);
     assert.ok(highlightPossessorStub.withArgs(newDir), "highlightPossessor must be called from changePossession with arg: " + newDir);
     assert.ok(selectPossessorStub.withArgs(newDir),    "selectPossessor must be called from changePossession with arg: " + newDir);
@@ -111,19 +123,17 @@ QUnit.test("possessionMgr.construct", function( assert ) {
   QUnit.test("possessionMgr.changePossession to 1", function( assert ) {
       console.log("test: possessionMgr.changePossession");
     var fixture = $("#qunit-fixture");
-    fixture.append('<img  id="ball" src="../public/images/ball.png">');
-    var ballImg = $('#ball');
-    var ball = new Ball(2,-1,ballImg,null, null, null); //ballDirection is to right.(1).
-    var newDir =-1* ball.ballDirection;
+    this.possessionMgr.ballDirection =-1;
+    var newDir =1;
     var displayArrowStub       = sinon.stub(this.possessionMgr,"displayArrow");
     var highlightPossessorStub = sinon.stub(this.possessionMgr,"highlightPossessor");
     var selectPossessorStub    = sinon.stub(this.possessionMgr,"selectPossessor");
 
-    ball = this.possessionMgr.changePossession(ball); //method under test.   
+    ball = this.possessionMgr.changePossession(); //method under test.   
 
  //   console.log('Ball direction after changePossession: ' + ball.ballDirection);
 
-    assert.equal(ball.ballDirection, newDir,           "Ball direction should change to: " + newDir);
+    assert.equal(this.possessionMgr.ballDirection, newDir,           "Ball direction should change to: " + newDir);
     assert.ok(displayArrowStub.withArgs(newDir),       "displayArrow must be called from changePossession with arg: " + newDir);
     assert.ok(highlightPossessorStub.withArgs(newDir), "highlightPossessor must be called from changePossession with arg: " + newDir);
     assert.ok(selectPossessorStub.withArgs(newDir),    "selectPossessor must be called from changePossession with arg: " + newDir);
