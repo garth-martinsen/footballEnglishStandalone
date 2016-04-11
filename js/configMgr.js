@@ -32,7 +32,7 @@ This class is responsible for:
    // two event handlers so that config dialog can be opened and shut.
    $('#doConfig').on(    'click',    this.openDialog);
    $('.close').on(       'click',    this.closeDialog);
-   configMgr=this;  //set the object in global scope so I can assess it inside of event handlers where "this" points to a different object.
+   configMgr = this;  //set the object in global scope so I can assess it inside of event handlers where "this" points to a different object.
    return this;
 }
 
@@ -46,9 +46,10 @@ $(function() {
      e.removeClass('selected');
    });
  }
+});
+
  var dialog =""; //global var to see if the dialog is open or closed.
  var configMgr; //creates a global variable for the configMgr to be used inside of handler functions where this means something else.
-});
 
 //Handlers to open and close  popup dialog to get configuration: leftTeam, rightTeam, gameSize, question set. 
 ConfigMgr.prototype.defineHandlers = function(){

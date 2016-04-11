@@ -1,7 +1,6 @@
 //-----constructor----------------------
 var Ball = function(config) {
  this.ballLocation     = config.ballLocation;                //game begins with location at midfield, ball advances after that to change location..
-// this.ballDirection    = config.ballDirection;             // held and modified by possessionMgr.
  this.possessionMgr    = new PossessionMgr(config);          //possessionMgr changes ballDirection and displays ballDirection indicators.
  this.ballImage        = $('#ball');       // this will move up and down the field upon advances.
  this.announcer        = $('#goal');       // announcer saying goooool!
@@ -26,7 +25,6 @@ Ball.prototype.defineHandlers = function() {
 }
 
 Ball.prototype.setDirection = function(bd) {  // bd is one of: {-1,1}
-//  this.ballDirection = bd; 
   this.possessionMgr.ballDirection =bd;
 }
 
@@ -36,17 +34,14 @@ Ball.prototype.setLocation = function(loc) {  // loc is one of: {0,1,2,3,4}
 }
 
 Ball.prototype.advance=function(){
-// this.ballLocation += this.ballDirection;
  this.ballLocation += this.possessionMgr.ballDirection;
  $('#ball').css("left", ball.ballPositions[ball.ballLocation]); 
-// if(ball.ballLocation === ball.leftGoalPosition && ball.ballDirection === -1){
  if(ball.ballLocation === ball.leftGoalPosition && ball.possessionMgr.ballDirection === -1){
       console.log('Gooool' );
       this.announcer[0].play();
       this.leftScore +=1;
       this.leftScoreDisplay.val(this.leftScore);  
  }
-// if(this.ballLocation === this.rightGoalPosition && this.ballDirection === 1){
  if(this.ballLocation === this.rightGoalPosition && this.possessionMgr.ballDirection === 1){
       console.log('Gooool' );
       this.announcer[0].play();

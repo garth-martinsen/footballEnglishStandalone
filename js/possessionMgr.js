@@ -1,16 +1,16 @@
 //-----constructor----------------------
  var PossessionMgr = function( config) {
-    this.teams         = config.teams;
-    this.ballDirection = config.ballDirection;
-    this.arrowLeft     = $('#leftArrow');
-    this.arrowRight    = $('#rightArrow');
-    this.leftTeamName  = $('#leftTeamName');
-    this.rightTeamName = $('#rightTeamName');
-    this.teamSelect    = $('#team');
+    this.teams            = config.teams;
+    this.ballDirection    = config.ballDirection;
+    this.arrowLeft        = $('#leftArrow');
+    this.arrowRight       = $('#rightArrow');
+    this.leftTeamName     = $('#leftTeamName');
+    this.rightTeamName    = $('#rightTeamName');
+    this.teamSelect       = $('#team');
     this.rightWrongSelect = $('#rightWrong');
-    this.possMgr       = this;
+    this.created          = 'PossessionMgr' + new Date().toString().slice(-45).substring(3,24);
     this.defineHandlers();
-    this.created         = 'PossessionMgr' + new Date().toString().slice(-45).substring(3,24);
+    possMgr               = this;
     return this;
 }
 var possMgr;

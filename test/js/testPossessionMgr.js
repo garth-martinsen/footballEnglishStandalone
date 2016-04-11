@@ -138,20 +138,27 @@ QUnit.test("possessionMgr.construct", function( assert ) {
     assert.ok(highlightPossessorStub.withArgs(newDir), "highlightPossessor must be called from changePossession with arg: " + newDir);
     assert.ok(selectPossessorStub.withArgs(newDir),    "selectPossessor must be called from changePossession with arg: " + newDir);
  });
-/* ----tests by grep -----
-test PossessionMgr.displayArrow(ballDirection){
-test PossessionMgr.highlightPossessor(ballDirection){
-test PossessionMgr.selectPossessor(ballDirection){
-test PossessionMgr.changePossession(ballDirection){
+/* ----For Test reference.  Info may be stale, check the object to ensure . grep for prototype in possessionMgr.js -----
+PossessionMgr.prototype.defineHandlers=function(){
+PossessionMgr.prototype.displayArrow=function(ballDirection){
+PossessionMgr.prototype.highlightPossessor=function(ballDirection){
+PossessionMgr.prototype.selectPossessor=function(ballDirection){
+PossessionMgr.prototype.clearRightWrongSelector = function(){
+PossessionMgr.prototype.changePossession = function(){
 
-//-----constructor----------------------
- var PossessionMgr = function( al, ar, ltn, rtn, tms, teamArray) {
-    this.arrowLeft  = al;
-    this.arrowRight = ar;
-    this.leftTeamName   = $(ltn);
-    this.rightTeamName  = $(rtn);
-    this.teamSelect = $(tms);
-    this.teams = teamArray;
+//-----constructor---------- may be stale. copied from possessionMgr.js------------
+ var PossessionMgr = function( config) {
+    this.teams            = config.teams;
+    this.ballDirection    = config.ballDirection;
+    this.arrowLeft        = $('#leftArrow');
+    this.arrowRight       = $('#rightArrow');
+    this.leftTeamName     = $('#leftTeamName');
+    this.rightTeamName    = $('#rightTeamName');
+    this.teamSelect       = $('#team');
+    this.rightWrongSelect = $('#rightWrong');
+    this.created          = 'PossessionMgr' + new Date().toString().slice(-45).substring(3,24);
+    this.defineHandlers();
+    possMgr               = this;
     return this;
 }
 

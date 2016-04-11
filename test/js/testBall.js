@@ -14,7 +14,7 @@ QUnit.module( "module Ball", {
     var rsb       = $('#rightScore')[0]; 
 
    var config= {
-            teams: [0,1]  //Brasil against Chile.
+            teams: [0,1]  //Argentina against Brasil.
           , gameSize: 3
           , timerDuration : 30
           , ballDirection : -1
@@ -82,7 +82,7 @@ QUnit.module( "module Ball", {
       assert.equal(this.ball.rightScoreDisplay.val(), 1 , "Right Score display should have incremented by 1.");
   });
 
-/* ----tests by function and object under test -----
+/* ----tests by function and object under test ---- This info could be stale, replace it with current or ignore-
 Ball.prototype.defineHandlers = function() {
 Ball.prototype.setDirection = function(bd) {  // bd is one of: {-1,1}
 Ball.prototype.setLocation = function(loc) {  // loc is one of: {0,1,2,3,4}
@@ -90,24 +90,23 @@ Ball.prototype.advance=function(){
 Ball.prototype.changePossession =function(){
 
 //-----constructor----------------------
-  2 var Ball = function(config) {
-  3  this.ballLocation     = config.ballLocation;             //starting location is at midfield.
-  4  this.ballDirection    = config.ballDirection;             //until coinflip, then one of: {-1,1}.
-  5  this.possessionMgr    = new PossessionMgr(config);          //possessionMgr can be told to change the ballDirection.
-  6  this.ballImage        = $('#ball');      // this will move up and down the field upon advance.
-  7  this.announcer        = $('#goal');      // announcer saying goooool!
-  8  this.leftScoreDisplay = $('#leftScore'); //readOnly text input to display the number of goals for this team.
-  9  this.rightScoreDisplay= $('#rightScore'); //readOnly text input to display the number of goals for this team.
- 10  this.leftGoalPosition = 0;
- 11  this.rightGoalPosition= 4;
- 12  this.leftScore        = 0;                //scoreBox can be incremented when ball goes into left goal.
- 13  this.rightScore       = 0;               //scoreBox can be incremented when ball goes into right goal.
- 14 //ballPositions are sensitive to layout. If it shifts, adjust the values in thes array.
- 15  this.ballPositions = ['-30px', '200px', '515px', '830px', '1080px'];
- 16    this.created            = 'Ball' + new Date().getTime().toString().slice(-4); // last 4 chars give milliseconds, enough for id.
- 17  ball = this;
- 18  this.defineHandlers();
- 19  return this;
- 20 }
+var Ball = function(config) {
+ this.ballLocation     = config.ballLocation;                //game begins with location at midfield, ball advances after that to change location..
+ this.possessionMgr    = new PossessionMgr(config);          //possessionMgr changes ballDirection and displays ballDirection indicators.
+ this.ballImage        = $('#ball');       // this will move up and down the field upon advances.
+ this.announcer        = $('#goal');       // announcer saying goooool!
+ this.leftScoreDisplay = $('#leftScore');  //readOnly text input to display the number of goals for left team.
+ this.rightScoreDisplay= $('#rightScore'); //readOnly text input to display the number of goals for right team.
+ this.leftGoalPosition = 0;
+ this.rightGoalPosition= 4;
+ this.leftScore        = 0;                //Integer, scoreBox can be incremented when ball goes into left goal.
+ this.rightScore       = 0;                //Integer, scoreBox can be incremented when ball goes into right goal.
+//ballPositions are sensitive to field layout. If it shifts, adjust the values in this array.
+ this.ballPositions = ['-30px', '200px', '515px', '830px', '1080px']; 
+   this.created            = 'Ball' + new Date().getTime().toString().slice(-4); // last 4 chars give milliseconds, enough for id.
+ ball = this;
+ this.defineHandlers();
+ return this;
+}
 
----- */
+   ---- */
