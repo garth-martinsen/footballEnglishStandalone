@@ -64,13 +64,13 @@ QUnit.test("possessionMgr.construct", function( assert ) {
   QUnit.test("possessionMgr.displayArrow right", function( assert ) {
     console.log("test: possessionMgr.displayArrow right");
     var z1=z2   = 0; 
-
-    this.possessionMgr.displayArrow(1);              
+    this.possessionMgr.ballDirection = 1;
+    this.possessionMgr.displayArrow();              
 
     z1 = this.possessionMgr.arrowLeft.css('z-index');
     z2 = this.possessionMgr.arrowRight.css('z-index');
     //console.log('z1 : ' + z1 + ' z2 : ' + z2);
-    assert.ok( z2 > z1 , 'z-index of right arrow should be larger than that of the left arrow');
+    assert.ok( Number(z2) > Number(z1) , 'z-index of right arrow should be larger than that of the left arrow');
   });
 
   QUnit.test("possessionMgr.highLightPossessor left", function( assert ) {
@@ -83,22 +83,28 @@ QUnit.test("possessionMgr.construct", function( assert ) {
 
   QUnit.test("possessionMgr.highLightPossessor right", function( assert ) {
     console.log("test: possessionMgr.highLightPossessor right");
-    this.possessionMgr.highlightPossessor(1);              
+    this.possessionMgr.ballDirection=1;
+
+    this.possessionMgr.highlightPossessor();              
 
     assert.ok(! this.possessionMgr.leftTeamName.hasClass('possessing'), "Left Team Name TD should NOT have class possessing." ); 
     assert.ok(  this.possessionMgr.rightTeamName.hasClass('possessing'), "Right Team Name TD should have class possessing." ); 
   });
    QUnit.test("possessionMgr.selectPossessor left", function( assert ) {
       console.log("test: possessionMgr.selectPossessor left");
-     var bd = -1; //ballDirection
-      this.possessionMgr.selectPossessor(bd);            
+      this.possessionMgr.ballDirection = -1;
+
+      this.possessionMgr.selectPossessor();            
+
       assert.equal(this.possessionMgr.teamSelect.val(), 2,  "Left Team should be selected in teams dropdown." );
     });
 
    QUnit.test("possessionMgr.selectPossessor right", function( assert ) {
       console.log("test: possessionMgr.selectPossessor right");
-     var bd = 1; //ballDirection
-      this.possessionMgr.selectPossessor(bd);            
+      this.possessionMgr.ballDirection = 1; 
+
+      this.possessionMgr.selectPossessor();            
+
       assert.equal(this.possessionMgr.teamSelect.val(), 3,  "Right Team should be selected in teams dropdown." );
    });
      

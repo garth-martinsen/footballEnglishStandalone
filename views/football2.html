@@ -3,21 +3,17 @@
 <!DOCTYPE html>
 
 <html lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<script src="../js/sysjs/jquery.js"></script> 
         <link rel="stylesheet" href="fbsa.css">
+        <script src="../js/sysjs/jquery.js"></script>
 </head>
 
 <body>
-<input type="hidden" id="leftTeam" name="leftTeam" value="-1"></input>
-<input type="hidden" id="rightTeam" name="rightTeam" value="-2"></input>
 <div id="game">
   <div id="leftSideBar">
     <div id="clock">
-       Clock:<input type="text" id="falta" name="remaining"  value ='900' width= 50px readonly >  </div>
+       Clock:<input type="text" id="falta" name="remaining" tabindex= "-1" value ='900' width= 50px readonly >  </div>
     <div id="config">
-       <a href='/doConfig' id="doConfig">Configure</a>
+       <a href='/doConfig' id="doConfig" tabindex="9" >Configure</a>
     </div>
     <div id="scores">
       <div id="scoreBarLeftDiv"> </div>
@@ -27,50 +23,50 @@
        </audio>
     </div>
     <div id="question">
-      <input  type='submit' class = "button" id="quest" value="Question" formaction='/question' formmethod="post" formenctype="application/x-www-form-urlencoded" />
+      <input  type='submit' class = "button" id="quest" tabindex= "10" value="Question" formaction='/question' formmethod="post" formenctype="application/x-www-form-urlencoded" />
       </br>
-       <textArea id="question_A" name="questionA" class= "q_a" font-size="x-large" rows="15" cols="15" readonly ><%=questionA %> </textArea>
+       <textArea id="question_A" tabindex= "-1" class= "q_a" font-size="x-large" rows="15" cols="15" readonly ><%=questionA %> </textArea>
     </div>
     <div id="timer30">
-       Timer: <input type="text" id="seconds" value=''+30 readonly>
+       Timer: <input type="text" id="seconds" tabindex= "-1" value=''+30 readonly>
        <audio id= "beep" >
            <source src="../public/sounds/beep-07.wav" type="audio/wav">
        </audio>
        <audio id= "homer" >
            <source id="homer" src="../public/sounds/homer.wav" type="audio/wav">
        </audio>
-       <input type="button" id="stopTimer" value="Clear"></input> 
+       <input type="button" id="stopTimer" tabindex= "11"  value="Clear"></input> 
     </div>
     <div id="answer">
-      <textArea id="answer_A" name="answerA" class= "q_a" rows="5" cols="15" readonly><%=answerA %> </textArea>
+      <textArea id="answer_A" class= "q_a" rows="5" cols="15" tabindex= "-1" readonly><%=answerA %> </textArea>
     </div>
     <div id="showAnswer">
-       <button id="showResponse" class="button" >Show Answer</button>
+       <button id="showResponse" class="button" tabindex="12" >Show Answer</button>
     </div>
     <div id="grade">
 
-       <select id="team" name="team" autofocus>
+       <select id="team" name="team" tabindex= "-1"  autofocus>
        </select>
 
-       <select id="mode" name="mode" >
+       <select id="mode" name="mode"  tabindex= "-1" >
            <option value="0" >Advance</option>
            <option value="1" >Possess</option>
        </select>
 
-       <select id="rightWrong" name="rightWrong" >
+       <select id="rightWrong" name="rightWrong" tabindex="13" >
            <option value="-1" >?</option>
-           <option value="0" >Right</option>
-           <option value="1" >Wrong</option>
+           <option value="0" >Wrong</option>
+           <option value="1" >Right</option>
        </select>
-       <input type='submit' id="saveGrade" class="button" value="track" formaction='/updateTrack' formmethod="post" formenctype="application/x-www-form-urlencoded" />
+       <input type='submit' id="saveGrade" class="button" tabindex="14" value="track" formaction='/updateTrack' formmethod="post" formenctype="application/x-www-form-urlencoded" />
    </div>
 </div>
   <div id="rightSide">
     <div id="title">Americas Cup of English</div>
     <div id='buttons'>
-     <input type="submit" class="button" id="dir" value="Possession" formaction='/possession' formmethod="post" formenctype="application/x-www-form-urlencoded"/>
-     <input type="submit" class = "button" id="adv" value="Advance" formaction='/advance' formmethod="post" formenctype="application/x-www-form-url    encoded" />
-     Extras: <input type ="text" id="extras"; background-color:pink; >
+     <input type="submit" class="button" id="dir" tabindex = "15" value="Possession" formaction='/possession' formmethod="post" formenctype="application/x-www-form-urlencoded"/>
+     <input type="submit" class = "button" id="adv" tabindex = "16" value="Advance" formaction='/advance' formmethod="post" formenctype="application/x-www-form-url    encoded" />
+     Extras: <input type ="text" id="extras"; background-color:pink; tabindex= "17"  >
     </div>
 
     <div id="field">
@@ -92,29 +88,29 @@
 
   <div id="trackDiv">
       <table id="track" border="1px">
-        <tr id="leftTeamq"> </tr>
-        <tr id="rightTeamq"> </tr>
+        <tr id="leftTeamq" tabindex="-1" > </tr>
+        <tr id="rightTeamq" tabindex="-1"> </tr>
       </table>
   </div>
 <!-- popup panel for configuration -->
-  <div id="panel" class="messagepop pop">
+  <div id="panel" class="messagepop pop"i tabindex="102" >
    <form method="post" id="new_message" action="/messages">
-     Left: <select id="teamLeft" autofocus>
+     Left: <select id="teamLeft" tabindex="103" autofocus >
        <option value=0>Argentina</option>
         <option value=1>Brasil</option>
         <option value=2>Chile</option>
         <option value=3>Mexico</option>
        </select>
-     Right:<select id="teamRight">
+     Right:<select id="teamRight" tabindex="104">
         <option value=0>Argentina</option>
         <option value=1>Brasil</option>
         <option value=2>Chile</option>
         <option value=3>Mexico</option>
        </select>
-     GameSize:<input type="text" id="gameSize" value=100 ></input>
-     TimerDuration:<input type="text" id="timerDur" value=30 ></input>
-     <input type="file" id="fileInput" name="file" />
-     <input type="submit" class="close" value="Accept"></input>
+     GameSize:<input type="text" id="gameSize" tabindex = "105" value=100 ></input>
+     TimerDuration:<input type="text" id="timerDur" tabindex = "106" value=30 ></input>
+     <input type="file" id="fileInput" tabindex ="107" />
+     <input type="submit" id="closeDialog" class="close" tabindex = "108"  value="Accept"></input>
   </div>
  </form>
 </div>
@@ -129,6 +125,53 @@
    $( document ).ready(function() {
     console.log( "ready!" );
     var cfgMgr = new ConfigMgr();
+    var tbi, id;
+    var tabs= new Map();
+    var ti = function(el){
+     return Number(el.attributes['tabindex'].value)
+}
+    var inputs = $('input, a, select, button'); //places only within the app to which I want to tab.
+    for(i=0; i< inputs.length; i++){
+      id = inputs[i].attributes['id'].value;     
+      console.log('checking id: ' + id );
+      tbi = ti(inputs[i]);
+/* ------
+      if (tbi < 0) {
+         inputs.splice(i, 1)  //remove element, its tabindex is less than 0
+         console.log('Removed id: ' + id + ' tabindex: ' + tbi);
+      }
+      else{
+---- */
+        tabs.set(tbi, inputs[i]); 
+//     }
+    }
+
+     //bind on keydown
+    inputs.on('keydown', function(e) {
+
+        //if we pressed the tab
+        if (e.keyCode == 9 || e.which == 9) {
+
+            //prevent default tab action
+            e.preventDefault();
+
+            //get next tab based on the current input we left off
+                ndx = ti(this);
+                if( ndx > 100 && ndx < 108) { ndx +=1;}
+                if( ndx > 8 && ndx <  18) { ndx += 1;}
+                if( ndx == 0 || ndx == 18) {ndx=10;}
+                 
+            var nextInput = tabs.get(ndx);
+
+            //if we have a next input, go to it. or go back
+            if (nextInput) {
+                nextInput.focus();
+            }
+            else{
+                inputs[0].focus();
+            }
+        }
+    });
 });
   </script>
 </body>

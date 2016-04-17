@@ -11,7 +11,7 @@ QUnit.module( "module TrackMgr", {
     fixture.append('<input type="text" id="falta" value ="100" width="50px" readonly >');
 
  var config= {
-            teams: [2,3]  //Brasil against Chile.
+            teams: [2,3]  //Chile against Mexico.
           , gameSize: 3
           , timerDuration : 30
           , ballDirection : -1
@@ -65,21 +65,21 @@ QUnit.module( "module TrackMgr", {
   });
 
   QUnit.test("TrackMgr.saveGrade ", function( assert ) {
-     this.trackMgr.teamSelect.value=2;
-     this.trackMgr.rightWrongSelect.value = 0; //correct = green.
+     this.trackMgr.teamSelect.val(2);
+     this.trackMgr.rightWrongSelect.val(1); //correct = green.
      this.trackMgr.clock.value = 50;
      var id ='#'+ 50; 
 
      this.trackMgr.saveGrade();
      
      assert.ok($(id) ,                                     "The new Td exists: " + id);
-     assert.ok(this.trackMgr.teamSelect.value == 3,        "The team dropdown has selected the other team: 3.");
+     assert.ok(this.trackMgr.teamSelect.val(3),        "The team dropdown has selected the other team: 3.");
      assert.ok($('#50').hasClass("right"),                 "The Td shows that the answer was correct");
 });
 
   QUnit.test("TrackMgr.saveGrade for bad goalee kick ", function( assert ) {  //goalee kick after opposing team has scored. Team has answered incorrectly.
-     this.trackMgr.teamSelect.value=2;   //Chile goalee is kicking.
-     this.trackMgr.rightWrongSelect.value = 1;  //wrong
+     this.trackMgr.teamSelect.val(2);   //Chile goalee is kicking.
+     this.trackMgr.rightWrongSelect.val(0);  //wrong=pink
      this.trackMgr.ball.ballLocation=4;  // ball is being kicked by goalee at the right goal.
      $('#falta').val(50);;  // clock shows 50 questions remaining.
      var id ='#'+ 50; 
@@ -89,7 +89,7 @@ QUnit.module( "module TrackMgr", {
      
      assert.ok($(id) ,                                     "The new Td exists: " + id );
      assert.ok($(xid) ,                                    "The new X Td exists for goalee kick: " + xid);
-     assert.ok(this.trackMgr.teamSelect.value == 2,        "The team dropdown should have kept selection as 2.");
+     assert.ok(this.trackMgr.teamSelect.val() == 2,        "The team dropdown should have kept selection as 2.");
      assert.ok($(id).hasClass('wrong') ,                   "The new Td shows that answer was wrong.");
 
 });
@@ -104,7 +104,7 @@ QUnit.module( "module TrackMgr", {
   QUnit.test("TrackMgr.createTd", function( assert ) {
      $('#falta').val(50);  // clock shows 50 questions remaining.
      var cnt = 50;
-     var rightWrong = 0;  // right
+     var rightWrong = 1;  // right
      var thisTeam = this.trackMgr.leftTrackRow;
      var otherTeam= this.trackMgr.rightTrackRow;
      var id = '#50';
@@ -117,9 +117,10 @@ QUnit.module( "module TrackMgr", {
 
   QUnit.test("TrackMgr.fixTd ", function( assert ) {
     $('#leftTeamq').append('<td id="55" class= "wrong" >55</td>'); // question was answered incorrectly in the past.
+    var right =1;
     assert.ok( $('#55').hasClass('wrong'),                    "Initialized correctly for test with class= wrong ");
 
-    this.trackMgr.fixTd(55, 0, $('#leftTeamq'));
+    this.trackMgr.fixTd(55, right, $('#leftTeamq'));
 
      assert.ok($('#55').hasClass('right'),                    "Replaced class=wrong with the class=right ");
 });

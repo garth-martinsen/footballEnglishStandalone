@@ -64,12 +64,13 @@ ConfigMgr.prototype.defineHandlers = function(){
 //function to select or deselect the link. When it is selected, the popup dialog is raised to visibility.
 ConfigMgr.prototype.openDialog = function(){
    console.log('Config Link was clicked, opening popup dialog.');
-   $('#teamLeft').focus();
+   $('#panel').focus();
     if($(this).hasClass('selected')) {
       deselect($(this));
     } else {
       $(this).addClass('selected');
       $('.pop').slideFadeToggle();
+      $('.pop').focus();
       dialog='open';
     }
     return false;
@@ -126,8 +127,8 @@ ConfigMgr.prototype.insertGoalBars = function(lt,rt){
 }
 
 ConfigMgr.prototype.insertScoreBars = function(lt,rt){
- var leftHtml  = scoreBars[lt] + '<input type="text" id="leftScore"   class="scoreInput" readonly="true" value="0">';
- var rightHtml = scoreBars[rt] + '<input type="text" id="rightScore"  class="scoreInput" readonly="true" value="0">';
+ var leftHtml  = scoreBars[lt] + '<input type="text" id="leftScore" tabindex= "-1"  class="scoreInput" readonly="true" value="0">';
+ var rightHtml = scoreBars[rt] + '<input type="text" id="rightScore"  tabindex= "-1"  class="scoreInput" readonly="true" value="0">';
  $('#scoreBarLeftDiv').html(leftHtml);
  $('#scoreBarRightDiv').html(rightHtml);
 }
@@ -163,7 +164,6 @@ ConfigMgr.prototype.readFile  = function(file){
 // The function randomizeQuestions will reorder the questions and load them into the questionSet map, key=item.count, value= item (JSON object containing fields).       
 
 ConfigMgr.prototype.randomizeQuestions = function(){
-console.log('Entered randomizeQuestions ');
 console.log('Entered randomizeQuestions with rawQuestionSet of size: ' + configMgr.rawQuestions.length);
 var counter = 0;
 while(configMgr.rawQuestions.length > 0){  
