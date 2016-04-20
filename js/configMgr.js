@@ -1,4 +1,5 @@
 /* ---Requirements---------------
+
 This class is responsible for: 
 1. Defining all handlers for the app:
 	 Handling the click of the Config Link to open the config dialog
@@ -14,7 +15,7 @@ This class is responsible for:
 
 //----- constructor ---------------
  var ConfigMgr = function() {
-
+   configMgr = this;  //set the object in global scope so I can assess it inside of event handlers where "this" points to a different object.
    this.configLink         = $('#doConfig');      // raises the popup which has ways to select teams and questionSet, enter gameSize.
    this.dialog             = '';                  //set to open when open and closed when closed.
 // elements which will be modified when config data is known.
@@ -29,16 +30,7 @@ This class is responsible for:
    this.trackMgr           = null;                //instantiated in the configure method .
    // Object name plus last 4 chars give milliseconds, enough for id.This helps if threads are confusing which objects are acting and in which order.
    this.created            = 'ConfigMgr' + new Date().getTime().toString().slice(-4); 
-   // event handlers so that config dialog can be opened and shut.
-   this.teamsReady         = false;
-   this.fileReady          = false;
-   $('.close').disable (true);  // diabled until the file and the teams are ready.One cannot close the popup dialog without putting in the values needed. 
-   $('#teamLeft').on( 'change', this.checkTeams);
-   $('#teamRight').on('change', this.checkTeams);
-   $('#fileInput').on('change', this.checkFile);
-   $('#doConfig').on( 'click',    this.openDialog);
-   $('.close').on(    'click',    this.closeDialog);
-   configMgr = this;  //set the object in global scope so I can assess it inside of event handlers where "this" points to a different object.
+   this.initialize();
    return this;
 }
 
@@ -57,6 +49,17 @@ $(function() {
  var dialog =""; //global var to see if the dialog is open or closed.
  var configMgr; //creates a global variable for the configMgr to be used inside of handler functions where this means something else.
 
+ConfigMgr.prototype.initialize = function(){
+   // event handlers so that config dialog can be opened and shut.
+   this.teamsReady         = false;
+   this.fileReady          = false;
+   $('.close').disable (true);  // diabled until the file and the teams are ready.One cannot close the popup dialog without putting in the values needed. 
+   $('#teamLeft').on( 'change', this.checkTeams);
+   $('#teamRight').on('change', this.checkTeams);
+   $('#fileInput').on('change', this.checkFile);
+   $('#doConfig').on( 'click',    this.openDialog);
+   $('.close').on(    'click',    this.closeDialog);
+}
 //Handlers to open and close  popup dialog to get configuration: leftTeam, rightTeam, gameSize, question set. 
 ConfigMgr.prototype.defineHandlers = function(){
 //  console.log('Entered function defineHandlers...');
