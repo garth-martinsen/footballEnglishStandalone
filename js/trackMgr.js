@@ -12,7 +12,7 @@
    this.modeSelect         = $('#mode');
    this.rightWrongSelect   = $('#rightWrong');
    this.ans                = ["wrong", "right"];
-   this.possessor          = this.teams[(cfg.ballDirection == 1)? 1 : 0 ]; //set at coin flip and when  ball changes possession.  one of: {0,1,2,3}
+   this.possessor          = this.teams[(this.ball.possessionMgr.ballDirection == 1)? 1 : 0 ]; //set at coin flip and when  ball changes possession.  one of: {0,1,2,3}
    this.tallyPossessor     = 1; //difference in tallies is used to controll ball possession and movement. diff =  tallyPossessor - contenderTally
    this.tallyContender     = 0;  // diff=-1 change possession; diff=0 => contestforPossession; diff=1 => nothing; diff=2 -> advanceBall
    this.created            = 'TrackMgr' + new Date().getTime().toString().slice(-4); // last 4 chars give milliseconds, enough for id.

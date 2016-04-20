@@ -9,6 +9,10 @@ QUnit.module( "module TrackMgr", {
     fixture.append('<select id="mode" name="mode" > <option value="0" >Advance</option> <option value="1" >Possess</option> </select>');
     fixture.append('<select id="rightWrong" name="rightWrong" > <option value="-1" >?</option> <option value="0" >Right</option> <option value="1" >Wrong</option> </select>');
     fixture.append('<input type="text" id="falta" value ="100" width="50px" readonly >');
+    fixture.append(' <input type="submit" class = "button" id="adv" tabindex = "16" value="Advance" formaction="/advance" formmethod="post" formenctype="application/x-www-form-url    encoded" />');
+    fixture.append(' <input type="submit" class="button" id="dir" tabindex = "15" value="Possession" formaction="/possession" formmethod="post" formenctype="application/x-www-form-urlencoded"/>');
+
+
 
  var config= {
             teams: [2,3]  //Chile against Mexico.
@@ -131,6 +135,50 @@ QUnit.module( "module TrackMgr", {
 
      assert.equal(this.trackMgr.clock.value,  "2" ,                    "the Clock was updated to 2 questions left.");
 });
+
+  QUnit.test("TrackMgr.updateTally possessingTeamScoresRight ", function( assert ) {
+     this.trackMgr.ball.possessionMgr.ballDirection = 1; //right goal
+     trackMgr.possessor = trackMgr.teams[(trackMgr.ball.possessionMgr.ballDirection == 1)? 1 : 0 ];
+     var right =1;
+     var wrong = 0;
+     var possessor = this.trackMgr.possessor;
+     var contendor =this.trackMgr.teams[0];
+
+     this.trackMgr.updateTally(possessor, right );
+     this.trackMgr.updateTally(contendor, wrong );
+     this.trackMgr.updateTally(possessor, right );
+     this.trackMgr.updateTally(contendor, wrong );
+ 
+     assert.equal(this.trackMgr.ball.ballLocation, 4, "On score right, the ballLocation should be 4, goal.");
+     assert.equal(this.trackMgr.ball.rightScore, 1, "On score right, the right score should be 1.");
+     assert.equal(this.trackMgr.ball.rightScoreDisplay.value, 1, "On score right, the right scoreboard should have been updated to 1. ");  
+     assert.equal(this.trackMgr.ball.possessionMgr.ballDirection, -1, "On score right, after a goal, the other team gets possession of the ball.");
+
+});
+
+ QUnit.test("TrackMgr.updateTally possessingTeamScoresLeft ", function( assert ) {
+     this.trackMgr.ball.possessionMgr.ballDirection = -1; //left goal
+     trackMgr.possessor = trackMgr.teams[(trackMgr.ball.possessionMgr.ballDirection == 1)? 1 : 0 ];
+     var right =1;
+     var wrong = 0;
+     var possessor = this.trackMgr.possessor;
+     var contendor =this.trackMgr.teams[1];
+
+     this.trackMgr.updateTally(possessor, right );
+     this.trackMgr.updateTally(contendor, wrong );
+     this.trackMgr.updateTally(possessor, right );
+     this.trackMgr.updateTally(contendor, wrong );
+
+     console.log('ballLocation should be 1 : ' + this.trackMgr.ball.ballLocation);
+     console.log('leftScore should be 1 : ' + this.trackMgr.ball.leftScore);
+     assert.equal(this.trackMgr.ball.ballLocation, 0, "On score left, the ballLocation should be 0, goal.");
+     assert.equal(this.trackMgr.ball.leftScore, 1, "On scoreLeft, the left score should be 1.");
+     assert.equal(this.trackMgr.ball.leftScoreDisplay.value, 1, "On scoreLeft, the left scoreboard should have been updated to 1. ");
+     assert.equal(this.trackMgr.ball.possessionMgr.ballDirection, 1, "On scoreLeft, after a goal, the other team gets possession of the ball.");
+
+});
+
+
 
 /* ------------REFERENCE: trackMgr functions and constructor  -----
 TrackMgr.prototype.initialize  = function(){

@@ -43,10 +43,10 @@ QuestionMgr.prototype.nextQuestion = function( ){
  var ndx;
  var extra = $('#extras').val();
  if(extra && extra.length > 0) {
-   ndx = extra;
+   ndx = Number(extra);
  }else{
    this.decrementClock();
-   ndx = this.remainingCount ;
+   ndx = Number(this.remainingCount) ;
  }
  return this.questionSet.get(ndx)[0];
 }

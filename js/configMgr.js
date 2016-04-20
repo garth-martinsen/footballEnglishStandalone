@@ -29,9 +29,15 @@ This class is responsible for:
    this.trackMgr           = null;                //instantiated in the configure method .
    // Object name plus last 4 chars give milliseconds, enough for id.This helps if threads are confusing which objects are acting and in which order.
    this.created            = 'ConfigMgr' + new Date().getTime().toString().slice(-4); 
-   // two event handlers so that config dialog can be opened and shut.
-   $('#doConfig').on(    'click',    this.openDialog);
-   $('.close').on(       'click',    this.closeDialog);
+   // event handlers so that config dialog can be opened and shut.
+   this.teamsReady         = false;
+   this.fileReady          = false;
+   $('.close').disable (true);  // diabled until the file and the teams are ready.One cannot close the popup dialog without putting in the values needed. 
+   $('#teamLeft').on( 'change', this.checkTeams);
+   $('#teamRight').on('change', this.checkTeams);
+   $('#fileInput').on('change', this.checkFile);
+   $('#doConfig').on( 'click',    this.openDialog);
+   $('.close').on(    'click',    this.closeDialog);
    configMgr = this;  //set the object in global scope so I can assess it inside of event handlers where "this" points to a different object.
    return this;
 }
@@ -61,6 +67,29 @@ ConfigMgr.prototype.defineHandlers = function(){
 
 }
 
+ConfigMgr.prototype.checkTeams = function(){
+   var leftTeam = Number( $('#teamLeft').val());
+   var rightTeam= Number( $('#teamRight').val());
+   if( leftTeam != rightTeam) {
+      configMgr.teamsReady = true;
+   } else {
+        configMgr.teamsReady= false; 
+   }
+   if(configMgr.fileReady && configMgr.teamsReady) {
+      $('.close').disable(false); // enable the Accept button on the popup dialog. 
+   }
+}
+
+ConfigMgr.prototype.checkFile = function(){
+   var aFile = $('#fileInput').first()[0].files[0];
+   if( aFile) {
+      configMgr.fileReady = true;
+      configMgr.checkTeams();
+   }  
+   if(configMgr.fileReady && configMgr.teamsReady) {
+    $('.close').disable(false); // enable the Accept button on the popup dialog. 
+   } 
+}
 //function to select or deselect the link. When it is selected, the popup dialog is raised to visibility.
 ConfigMgr.prototype.openDialog = function(){
    console.log('Config Link was clicked, opening popup dialog.');
@@ -77,16 +106,16 @@ ConfigMgr.prototype.openDialog = function(){
   }
 ConfigMgr.prototype.closeDialog = function(){
    console.log('Accept button pressed. Closing the popup dialog.');
-   deselect($('#doConfig'));
-   dialog='closed';
-   configMgr.configure( 
-                   Number( $('#teamLeft').val()  )
-                 , Number( $('#teamRight').val() )
+       dialog='closed';
+       deselect($('#doConfig'));
+       configMgr.configure( 
+                    Number( $('#teamLeft').val())  
+                 ,  Number( $('#teamRight').val()) 
                  , Number( $('#gameSize').val()  ) 
                  , Number( $('#timerDur').val()  ) 
                  , $('#fileInput').first()[0].files[0]
                  );
-    return false;
+        return false;
   }
 
 //Function configure uses values from config popup to select images, create dropdowns, initialize clock, label Track Rows. prepare & randomize questions.

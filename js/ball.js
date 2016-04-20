@@ -34,7 +34,7 @@ Ball.prototype.setLocation = function(loc) {  // loc is one of: {0,1,2,3,4}
 }
 
 Ball.prototype.advance=function(evt){
-if(evt && evt/timeStamp){
+if(evt && evt.timeStamp){
   if(evt.timeStamp == ball.formerTimeStamp) {return}
     ball.formerTimeStamp = evt.timeStamp;
 }
@@ -42,15 +42,17 @@ if(evt && evt/timeStamp){
  $('#ball').css("left", ball.ballPositions[ball.ballLocation]); 
  if(ball.ballLocation === ball.leftGoalPosition && ball.possessionMgr.ballDirection === -1){
       console.log('Gooool' );
-      ball.announcer[0].play();
+//      ball.announcer[0].play();
       ball.leftScore +=1;
-      ball.leftScoreDisplay.val(this.leftScore);  
+      ball.leftScoreDisplay.value = ball.leftScore;  
+      ball.possessionMgr.changePossession();
  }
  if(ball.ballLocation === ball.rightGoalPosition && ball.possessionMgr.ballDirection === 1){
       console.log('Gooool' );
-      ball.announcer[0].play();
+ //     ball.announcer.play();
       ball.rightScore +=1;
-      ball.rightScoreDisplay.val(this.rightScore);  
+      ball.rightScoreDisplay.value = ball.rightScore;  
+      ball.possessionMgr.changePossession();
  }
 }
 
