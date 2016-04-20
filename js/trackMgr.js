@@ -58,6 +58,7 @@ TrackMgr.prototype.saveGrade = function(){
       trackMgr.teamSelect.val(trackMgr.teams[ndx]);
     }
     $('#rightWrong').val(-1);
+    trackMgr.trackButton.disable(true);
 }
 
 TrackMgr.prototype.updateClock = function( cnt){
