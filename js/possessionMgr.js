@@ -19,9 +19,16 @@ var possMgr;
 var cpCount=0;
 
 PossessionMgr.prototype.defineHandlers=function(){
-    $('#dir').on('click', this.changePossession );
+    $('#dir').on(  'click',   possMgr.changePossession );
+    $('#rightWrong').on(  'change',   possMgr.ensureSelected );
 }
 
+PossessionMgr.prototype.ensureSelected=function(){
+   var rw =  $('#rightWrong').val();
+   if( rw == 0 || rw == 1){
+     
+   }
+}
 PossessionMgr.prototype.displayArrow=function(){
    //console.log('Entered displayArrow(...)');
    if(this.ballDirection < 0){ 

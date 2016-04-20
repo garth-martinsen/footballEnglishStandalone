@@ -23,7 +23,7 @@
        </audio>
     </div>
     <div id="question">
-      <input  type='submit' class = "button" id="quest" tabindex= "10" value="Question" formaction='/question' formmethod="post" formenctype="application/x-www-form-urlencoded" />
+      <input  type='button' class = "button" id="quest" tabindex= "10" value="Question" />
       </br>
        <textArea id="question_A" tabindex= "-1" class= "q_a" font-size="x-large" rows="15" cols="15" readonly ><%=questionA %> </textArea>
     </div>
@@ -58,15 +58,15 @@
            <option value="0" >Wrong</option>
            <option value="1" >Right</option>
        </select>
-       <input type='submit' id="saveGrade" class="button" tabindex="14" value="track" formaction='/updateTrack' formmethod="post" formenctype="application/x-www-form-urlencoded" />
+       <input type='button' id="saveGrade" class="button" tabindex="14" value="track" />
    </div>
 </div>
   <div id="rightSide">
     <div id="title">Americas Cup of English</div>
     <div id='buttons'>
-     <input type="submit" class="button" id="dir" tabindex = "15" value="Possession" formaction='/possession' formmethod="post" formenctype="application/x-www-form-urlencoded"/>
-     <input type="submit" class = "button" id="adv" tabindex = "16" value="Advance" formaction='/advance' formmethod="post" formenctype="application/x-www-form-url    encoded" />
-     Extras: <input type ="text" id="extras"; background-color:pink; tabindex= "17"  >
+    <input type="button" class="button" id="dir" tabindex = "-1" value="Possession" />
+    <input type="button" class = "button" id="adv" tabindex = "-1" value="Advance" />
+     Extras: <input type ="text" id="extras"; background-color:pink; tabindex= "15"  >
     </div>
 
     <div id="field">
@@ -110,7 +110,7 @@
      GameSize:<input type="text" id="gameSize" tabindex = "105" value=100 ></input>
      TimerDuration:<input type="text" id="timerDur" tabindex = "106" value=30 ></input>
      <input type="file" id="fileInput" tabindex ="107" />
-     <input type="submit" id="closeDialog" class="close" tabindex = "108"  value="Accept"></input>
+     <input type="button" id="closeDialog" class="close" tabindex = "108"  value="Accept"></input>
   </div>
  </form>
 </div>
@@ -135,15 +135,7 @@
       id = inputs[i].attributes['id'].value;     
       console.log('checking id: ' + id );
       tbi = ti(inputs[i]);
-/* ------
-      if (tbi < 0) {
-         inputs.splice(i, 1)  //remove element, its tabindex is less than 0
-         console.log('Removed id: ' + id + ' tabindex: ' + tbi);
-      }
-      else{
----- */
         tabs.set(tbi, inputs[i]); 
-//     }
     }
 
      //bind on keydown
@@ -158,8 +150,8 @@
             //get next tab based on the current input we left off
                 ndx = ti(this);
                 if( ndx > 100 && ndx < 108) { ndx +=1;}
-                if( ndx > 8 && ndx <  18) { ndx += 1;}
-                if( ndx == 0 || ndx == 18) {ndx=10;}
+                if( ndx > 8 && ndx <  15) { ndx += 1;}
+                if( ndx == 0 || ndx == 15) {ndx=10;}
                  
             var nextInput = tabs.get(ndx);
 

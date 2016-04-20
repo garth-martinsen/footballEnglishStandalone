@@ -179,6 +179,23 @@ QUnit.module( "module TrackMgr", {
 });
 
 
+ QUnit.test("TrackMgr.updateTally changePossessionFromLefttoRight ", function( assert ) {
+     this.trackMgr.ball.possessionMgr.ballDirection = -1; //toward left goal
+     trackMgr.possessor = trackMgr.teams[(trackMgr.ball.possessionMgr.ballDirection == 1)? 1 : 0 ];
+     var right =1;
+     var wrong = 0;
+     var possessor = this.trackMgr.possessor;
+     var contendor =this.trackMgr.teams[1];
+
+     this.trackMgr.updateTally(possessor, wrong );
+     this.trackMgr.updateTally(contendor, right );
+     this.trackMgr.updateTally(possessor, wrong );
+     this.trackMgr.updateTally(contendor, right );
+
+     console.log('ballLocation should be 2 : ' + this.trackMgr.ball.ballLocation);
+     assert.equal(this.trackMgr.ball.ballLocation, 2, "On change of possession, the ballLocation should not change.");
+     assert.equal(this.trackMgr.ball.possessionMgr.ballDirection, 1, "On change of possession, the other team gets possession of the ball.");
+});
 
 /* ------------REFERENCE: trackMgr functions and constructor  -----
 TrackMgr.prototype.initialize  = function(){

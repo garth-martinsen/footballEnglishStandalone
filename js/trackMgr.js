@@ -17,18 +17,26 @@
    this.tallyContender     = 0;  // diff=-1 change possession; diff=0 => contestforPossession; diff=1 => nothing; diff=2 -> advanceBall
    this.created            = 'TrackMgr' + new Date().getTime().toString().slice(-4); // last 4 chars give milliseconds, enough for id.
    trackMgr = this;
+   this.defineHandlers();
    return this;
 }
 var trackMgr;  //global variable so can be accessed as top level class.
-/*  ------------------------------ Cant seem to get initialize to work to set up handlers. ----------
-TrackMgr.prototype.initialize  = function(){
-  this.trackButton.click(saveGrade);
-}
---------------------------  */
+
 TrackMgr.prototype.tabToSaveGrade  = function(){
   this.trackButton.focus();
 }
 
+TrackMgr.prototype.defineHandlers  = function(){
+     this.trackButton.disable(true);
+    $('#rightWrong').on('change',   trackMgr.ensureSelected );
+}
+
+TrackMgr.prototype.ensureSelected=function(){
+   var rw =  $('#rightWrong').val();
+   if( rw == 0 || rw == 1){
+    trackMgr.trackButton.disable(false); 
+   }
+}
 
 TrackMgr.prototype.saveGrade = function(){
    trackMgr.possessor = trackMgr.teams[(trackMgr.ball.possessionMgr.ballDirection == 1)? 1 : 0 ];
@@ -40,7 +48,7 @@ TrackMgr.prototype.saveGrade = function(){
    var num  = Number(trackMgr.extras.value); 
    if(num > 0 ){
        trackMgr.fixTd(num, rw ,row); //color existing number green if answer is correct, else leave it pink.
-   }else{
+   } else {
        trackMgr.createTd(trackMgr.clock.value, rw, row, ot);
    }  
    //if this is not a goaleekick, set the dropdown to the other team for the next question
@@ -49,6 +57,7 @@ TrackMgr.prototype.saveGrade = function(){
       ndx=(ndx +1)%2;
       trackMgr.teamSelect.val(trackMgr.teams[ndx]);
     }
+    $('#rightWrong').val(-1);
 }
 
 TrackMgr.prototype.updateClock = function( cnt){

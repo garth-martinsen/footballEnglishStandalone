@@ -17,11 +17,13 @@
    #showAnswer { position: relative; left: 3px; top: 36px; height: 50px; background-color: lightgreen; padding-top: 10px;}
    #showResponse { position: relative; top: -15px;height: 30px; }
    #grade { position: absolute; left: 0px; top: 700px; width: 300px; height: 48px; background-color: lightgreen; padding-top: 10px; }
-   #extras { position: relative; left: 210px; top: -30px;width: 30px; background-color:pink; }
+   #extras { position: relative; left: 4px; top: 0px;width: 30px; background-color:pink; }
  #rightSide { position: relative; left: 300px; top: -699px;width: 1297px; height: 757px; background-color: lightgreen;}
    #title {position:relative; left: 100px; height: 60px; width: 1200px; background-color: lightgreen;font-size: xx-large;text-align: center;}
    #buttons { position: relative; left: -4px; top: 649px; width: 214px; height: 34px; z-index: 2; background-color: lightgreen; }
      .button {margin:2px;background-color:lightgrey}
+   #dir {display: none}
+   #adv {display: none}
    #field {position: absolute; left: 100px; top: 83px; width: 1175px; height: 600px; background-color: #90EE90; }
     .fld { position: relative; top: -18px; height: 640px; margin-left: -5px; }
     #leftArrow { position: absolute; left: 473px; z-index: 0; }
