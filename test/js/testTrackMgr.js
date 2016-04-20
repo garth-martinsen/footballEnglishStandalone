@@ -192,7 +192,6 @@ QUnit.module( "module TrackMgr", {
      this.trackMgr.updateTally(possessor, wrong );
      this.trackMgr.updateTally(contendor, right );
 
-     console.log('ballLocation should be 2 : ' + this.trackMgr.ball.ballLocation);
      assert.equal(this.trackMgr.ball.ballLocation, 2, "On change of possession, the ballLocation should not change.");
      assert.equal(this.trackMgr.ball.possessionMgr.ballDirection, 1, "On change of possession, the other team gets possession of the ball.");
 });
