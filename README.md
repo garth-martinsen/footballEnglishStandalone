@@ -26,7 +26,7 @@ The important part of this game is not to win but to have fun learning english.
 
 INSTRUCTIONS FOR THE ADMINISTRATOR:
 ---------------------------------------------
-1. Display the Game by putting the following in the URL box at the top of the browser:  file:///.../footballEnglishStandalone/views/football.html (ellipses depends on your file system)
+1. Display the Game by putting the following in the Navigation Bar at the top of the browser:  file:///.../footballEnglishStandalone/views/football.html (ellipses depends on your file system)
 2. Press the Configure Link which pops up a configuration panel. Select the left team from the dropdown, select the right team from the 2nd dropdown, enter the game size (number of questions), click "Choose File" and navigate to 
 .../questions/set1 (or other set, setX,  when more exist).
 3. Click the Accept button. This places the icons in to represent the teams, reads in the questions, does a coin flip to decide which team gets the ball, etc. Clock should reflect the game size you put in.
