@@ -109,8 +109,9 @@
        </select>
      GameSize:<input type="text" id="gameSize" tabindex = "105" value=100 ></input>
      TimerDuration:<input type="text" id="timerDur" tabindex = "106" value=30 ></input>
-     <input type="file" id="fileInput" tabindex ="107" />
-     <input type="button" id="closeDialog" class="close" tabindex = "108"  value="Accept"></input>
+    Set: <input type="file" id="fileInput" tabindex ="107" />
+    SetSizes: <input type="file" id="fileSizeInput" tabindex ="108" />
+     <input type="button" id="closeDialog" class="close" tabindex = "109"  value="Accept"></input>
   </div>
  </form>
 </div>
@@ -149,7 +150,7 @@
 
             //get next tab based on the current input we left off
                 ndx = ti(this);
-                if( ndx > 100 && ndx < 108) { ndx +=1;}
+                if( ndx > 100 && ndx < 109) { ndx +=1;}
                 if( ndx > 8 && ndx <  15) { ndx += 1;}
                 if( ndx == 0 || ndx == 15) {ndx=10;}
                  

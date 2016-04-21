@@ -21,6 +21,7 @@ This class is responsible for:
 // elements which will be modified when config data is known.
    this.rawQuestions       = null;                // Raw questions, read from file. Goes to empty when loading randomized questionSet map. 
    this.questionSet        = new Map;             // Randomized questions stored in map( key=count, value= item.)
+   this.setSizes           = new Map;             // map of sets and their sizes, key=fileName, value= count of items.)
    // following values are set with the popup results. 
    this.count              = -1;                  // integer 1 < count < 100   determined from popup.gameSizeInput     results;
    this.clock              = $('#falta');         // readOnly text input to show how many questions are left,  integer 0 < falta  < gameSize 
@@ -49,14 +50,41 @@ $(function() {
  var dialog =""; //global var to see if the dialog is open or closed.
  var configMgr; //creates a global variable for the configMgr to be used inside of handler functions where this means something else.
 
+ConfigMgr.prototype.readSizes = function(){
+  var fileName = $('#fileInput')[0].files[0].name;
+  var fileSizes =$('#fileSizeInput').first()[0].files[0];
+  var gameSize = Number( $('#gameSize').val() );
+  var reader = new FileReader();
+  var kva;
+  reader.onloadend = function(evt) {
+         if(evt.target.readyState == FileReader.DONE) {
+              var strArray = event.target.result.split(" ");
+              for(var i =0; i< strArray.length;i++){
+		 kva = strArray[i].split(":");
+                 configMgr.setSizes.set(kva[0],Number(kva[1])); 
+              }
+         }
+   var count = configMgr.setSizes.get(fileName); 
+   if( gameSize > count ){
+       alert('the gameSize of: ' + gameSize + '  will not be supported by file: ' + fileName + ' which holds only : ' + count + ' items.'  );
+   } else {
+      configMgr.gameSizeReady = true;
+   }
+   configMgr.checkFile();
+  }
+   reader.readAsText(fileSizes, 'UTF-8');
+}
+
 ConfigMgr.prototype.initialize = function(){
    // event handlers so that config dialog can be opened and shut.
    this.teamsReady         = false;
    this.fileReady          = false;
+   this.gameSizeReady      = false;
    $('.close').disable (true);  // diabled until the file and the teams are ready.One cannot close the popup dialog without putting in the values needed. 
    $('#teamLeft').on( 'change', this.checkTeams);
    $('#teamRight').on('change', this.checkTeams);
    $('#fileInput').on('change', this.checkFile);
+   $('#fileSizeInput').on('change', this.readSizes);
    $('#doConfig').on( 'click',    this.openDialog);
    $('.close').on(    'click',    this.closeDialog);
 }
@@ -78,7 +106,7 @@ ConfigMgr.prototype.checkTeams = function(){
    } else {
         configMgr.teamsReady= false; 
    }
-   if(configMgr.fileReady && configMgr.teamsReady) {
+   if(configMgr.fileReady && configMgr.teamsReady && configMgr.gameSizeReady) {
       $('.close').disable(false); // enable the Accept button on the popup dialog. 
    }
 }
@@ -89,7 +117,7 @@ ConfigMgr.prototype.checkFile = function(){
       configMgr.fileReady = true;
       configMgr.checkTeams();
    }  
-   if(configMgr.fileReady && configMgr.teamsReady) {
+   if(configMgr.fileReady && configMgr.teamsReady && configMgr.gameSizeReady ) {
     $('.close').disable(false); // enable the Accept button on the popup dialog. 
    } 
 }

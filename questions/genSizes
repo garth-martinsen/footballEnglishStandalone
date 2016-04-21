@@ -1,0 +1,2 @@
+# this file creates the setSizes file which must then be edited to put all on the same line.
+grep -c count set* >setSizes
