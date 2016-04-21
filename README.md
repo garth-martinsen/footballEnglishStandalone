@@ -24,7 +24,7 @@ This version of the game is standalone and does not require a server. It is writ
 The important part of this game is not to win but to have fun learning english.
 
 
-INSTRUCTIONS FOR THE ADMINISTRATER:
+INSTRUCTIONS FOR THE ADMINISTRATOR:
 ---------------------------------------------
 1. Display the Game by putting the following in the URL box at the top of the browser:  file:///.../footballEnglishStandalone/views/football.html (ellipses depends on your file system)
 2. Press the Configure Link which pops up a configuration panel. Select the left team from the dropdown, select the right team from the 2nd dropdown, enter the game size (number of questions), click "Choose File" and navigate to 
