@@ -93,44 +93,100 @@
       </table>
   </div>
 <!-- popup panel for configuration -->
-  <div id="panel" class="messagepop pop"i tabindex="102" >
-   <form method="post" id="new_message" action="/messages">
-     Left: <select id="teamLeft" tabindex="103" autofocus >
-       <option value=0>Argentina</option>
-        <option value=1>Brasil</option>
-        <option value=2>Chile</option>
-        <option value=3>Mexico</option>
-       </select>
-     Right:<select id="teamRight" tabindex="104">
-        <option value=0>Argentina</option>
-        <option value=1>Brasil</option>
-        <option value=2>Chile</option>
-        <option value=3>Mexico</option>
-       </select>
-     GameSize:<input type="text" id="gameSize" tabindex = "105" value=100 ></input>
-     TimerDuration:<input type="text" id="timerDur" tabindex = "106" value=30 ></input>
-    Set: <input type="file" id="fileInput" tabindex ="107" />
-    SetSizes: <input type="file" id="fileSizeInput" tabindex ="108" />
-     <input type="button" id="closeDialog" class="close" tabindex = "109"  value="Accept"></input>
-  </div>
- </form>
-</div>
+  <div id="panel" class="messagepop pop" tabindex="102" >
+     <table id= "popupTable">
+      <tr>
+       <td>
+         <label>Left Team:</label>
+       </td>
+       <td>
+         <label> Right Team:</label>
+       </td>
+     <tr>
+       <td> <select id="teamLeft" tabindex="103" autofocus >
+                 <option value=0>Argentina</option>
+                  <option value=1>Brasil</option>
+                  <option value=2>Chile</option>
+                  <option value=3>Mexico</option>
+              </select>
+       </td>
+       <td>
+           <select id="teamRight" tabindex="104">
+                     <option value=0>Argentina</option>
+                     <option value=1>Brasil</option>
+                     <option value=2>Chile</option>
+                     <option value=3>Mexico</option>
+                 </select>
+       </td>
+      </tr>
+      <tr>
+         <td>
+           <label>Game Size:</label>
+         </td>
+         <td>
+           <label>Timer Duration:</label>
+         </td>
+      <tr>
+         <td>
+            <input type="text" id="gameSize" tabindex = "105" value=100 ></input>
+         </td>
+         <td>
+           <input type="text" id="timerDur" tabindex = "106" value=30 ></input>
+         <td>
+     </tr>
+     <tr>
+        <td>
+          <label>Set Sizes:</label>
+       </td>  
+        <td>
+         <label> Question Set:</label>
+        </td> 
+     <tr>
+       <td> 
+          <input type="file" id="fileSizeInput" tabindex ="107" />
+       </td>
+        <td>
+          <input type="file" id="fileInput" tabindex ="108" />
+        </td>
+     </tr> 
+     <tr>
+        <td> Errors:</td>
+     </tr>
+     <tr>
+       <td colspan="4">
+        <input type="text" id="errors" tabindex = "-1" readonly ></input>
+       </td>
+     </tr>
+     <tr>   
+     <td colspan="4"> 
+        <input type="button" id="closeDialog" class="close" tabindex = "109"  value="Accept"></input>
+     </td>
+  </tr>
+ </div>
+<table>
 </div>
   <script src="../js/configMgr.js"></script>
+  <script src="../js/popupMgr.js"></script>
   <script src="../js/QTimer.js"></script>
   <script src="../js/questionMgr.js"></script>
   <script src="../js/ball.js"></script>
   <script src="../js/possessionMgr.js"></script>
   <script src="../js/trackMgr.js"></script>
   <script >
+
+    var ti = function(el){
+     return Number(el.attributes['tabindex'].value)
+     }
+
    $( document ).ready(function() {
     console.log( "ready!" );
     var cfgMgr = new ConfigMgr();
+    $('#game').on("game:configured", function(){
+      cfgMgr.configure(popupMgr.getConfig());
+    });  
     var tbi, id;
     var tabs= new Map();
-    var ti = function(el){
-     return Number(el.attributes['tabindex'].value)
-}
+
     var inputs = $('input, a, select, button'); //places only within the app to which I want to tab.
     for(i=0; i< inputs.length; i++){
       id = inputs[i].attributes['id'].value;     

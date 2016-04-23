@@ -6,18 +6,8 @@ QUnit.module( "module QuestionMgr", {
     fixture.append('<audio id= "beep" > <source src="../public/sounds/beep-07.wav" type="audio/wav"> </audio>');
     fixture.append('<audio id= "homer" > <source id="homer" src="../public/sounds/homer.wav" type="audio/wav"> </audio>');
       
- var config= {
-            teams: null // not needed for tests
-          , gameSize: 3// not needed for tests.
-          , timerDuration : 30
-          , ballDirection : -1// not needed for tests.
-          , ballLocation : 2  // not needed for tests.
-          , questionSet: null // not needed for tests. 
-          , created: new Date().toString().slice(-45).substring(4,24).trim() , 
-}
-
-  
-   this.qTimer = new QTimer(config );
+  var timerDuration = 30; 
+   this.qTimer = new QTimer(timerDuration );
   },
   afterEach: function() {
     this.qTimer = null;
@@ -82,7 +72,7 @@ QTimer.prototype.stopTimer()
    this.beep               = $(bp);//
    this.homer              = $(hmr);
    this.stopButton         = $(stopTimer);
-   this.duration           = dur; // this may be a configuration parameter in the future.
+   this.duration           = dur; // this is a configuration parameter.
    this.stop               = false;
    return this;
 }

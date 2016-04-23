@@ -70,6 +70,15 @@ label {
   padding-bottom: 8px;
 }
   #config { position: absolute; left: 399px; z-index: 5; top: 32px; }
-  #panel {position: absolute; top: -3px; left: 300px; width: 300px; height:110px; border-size:2px; }
-  #gameSize {width:20px;}
-  #timerDur {width:15px;}
+  #panel {  width: 470px; left:333px; top:39px; background-color:lightgrey; margin:5px; padding-right:39px }
+  #gameSize {width: 25px; margin-left:34px;}
+  #timerDur {width: 20px; margin-left:33px;}
+  #body { width: 495px; height:270px;}
+  #popupTable {table-layout: fixed; line-height: 2em; border-color:black; border-style: double;padding:20px; }
+  #errors { width: 100%; color:red; }
+  #closeDialog {margin-left: 180px; margin-top:20px;}
+  #new_message {width: 483px;}
+  tr [line-heigh: 2em;]
+  td {width:50%}
+
+

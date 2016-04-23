@@ -38,8 +38,8 @@ QuestionMgr.prototype.updateClock = function(count ){
 }
 
 // the randomized map key values start at zero and ascend. The game starts at gameSize and decrements. The nextQuestion will be at the index of remainingCount or the extras value input.
+
 QuestionMgr.prototype.nextQuestion = function( ){
- questionMgr.timer.duration = configMgr.getConfig().timerDuration;
  var ndx;
  var extra = $('#extras').val();
  if(extra && extra.length > 0) {

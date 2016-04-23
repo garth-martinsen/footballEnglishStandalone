@@ -109,9 +109,12 @@ TrackMgr.prototype.decideBallAction= function(diff){
       $('#dir').click();
       trackMgr.possessor = trackMgr.teams[(trackMgr.ball.possessionMgr.ballDirection == 1)? 1 : 0 ];
       trackMgr.resetTallies();
+      $('#mode').val(0).css('background-color', "white");
    } else if(diff === 0){
       console.log('Tally difference says that possession of ball is in contentention.');
        //possession of ball is in contention -- show a notice "POSSESSION IN CONTENTION" -- Future implementation..
+      $('#mode').val(1).css('background-color', "yellow");
+
    } else if (diff === 1){
       console.log('Tally difference says that nothing changes.');
 

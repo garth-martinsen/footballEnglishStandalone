@@ -1,11 +1,11 @@
 //-----constructor----------------------
- var QTimer = function( config ) {
-   this.duration           = config.timerDuration; // this may be a configuration parameter in the future.
+ var QTimer = function( duration ) {
+   this.duration           = duration;             // this is a configuration parameter.
    this.beep               = $('#beep')[0];
    this.homer              = $('#homer')[0];
    this.secondsDisplay     = $('#seconds')[0];
    this.stopButton         = $('#stopTimer')[0];
-   this.stop               = false;  //this gets set to true when stopTimer button is clicked.
+   this.stop               = false;                //this gets set to true when stopTimer button is clicked.
    this.created            = new Date().getTime().toString().slice(-4) ,       
 
    qTimer = this;

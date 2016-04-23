@@ -15,10 +15,11 @@ QUnit.module( "module ConfigMgr", {
     fixture.append('Left: <select id="teamLeft" focus> <option value=0>Argentina</option> <option value=1>Brasil</option> <option value=2>Chile</option> <option value=3>Mexico</option> </select>');
     fixture.append('Right:<select id="teamRight"> <option value=0>Argentina</option> <option value=1>Brasil</option> <option value=2>Chile</option> <option value=3>Mexico</option> </select>');
     fixture.append('GameSize:<input type="text" id="gameSize" value=100 ></input>');
+    fixture.append('<input type="text" id="errors" tabindex = "-1" readonly ></input>');
+
 //  elements that have handlers attached: 
     fixture.append('<a href="/doConfig" id="doConfig">Configure</a>');
     fixture.append('<input type="submit" id="closeDialog" class="close" value="Accept"></input>');
-//    var handlerStub = sinon.stub(this.configMgr,"defineHandlers");
    this.configMgr = new ConfigMgr( );
   },
   afterEach: function() {
@@ -32,7 +33,6 @@ QUnit.module( "module ConfigMgr", {
      assert.ok($('#rightTeamq'),                           "Right Track table row exists and is accessible.");
      assert.ok($('#team'),                                 "Dropdown team select exists and is accessible.");
      assert.ok(this.configMgr.clock,                       "The clock display exists and is accessible.");
-     assert.ok(this.configMgr.configLink,                  "The configuration link exists and is accessible"); 
      assert.ok($('#teamLeft'),                             "The popup.leftTeamDropDown, exists and can be accessed.");
      assert.ok($('#teamRight'),                            "The  popup.rightTeamDropDown, exists and can be accessed.");
      assert.ok($('#gameSize'),                             "The popup.gameSize input exists and can be accessed.");
@@ -42,13 +42,12 @@ QUnit.module( "module ConfigMgr", {
     var determineArrowsStub       = sinon.stub(this.configMgr,   "determineArrows"   );
     var addTrackLabelsStub        = sinon.stub(this.configMgr,   "addTrackLabels"    );
     var insertGoalBarsStub        = sinon.stub(this.configMgr,   "insertGoalBars"    );
-    var insertScoreBarsStub        = sinon.stub(this.configMgr,  "insertScoreBars"   );
+    var insertScoreBarsStub       = sinon.stub(this.configMgr,   "insertScoreBars"   );
     var buildTeamDropdownStub     = sinon.stub(this.configMgr,   "buildTeamDropdown" );
     var updateClockStub           = sinon.stub(this.configMgr,   "updateClock"       );
-//    var buildObjectsStub          = sinon.stub(this.configMgr,   "buildObjects"      );
-    var readFileStub              = sinon.stub(this.configMgr,   "readFile"          );
+    var config = {teams: [2,3], gameSize: 98 }
 
-     this.configMgr.configure(2,3,98);    //should call the configure function and all of its sub calls as Stubs. 
+     this.configMgr.configure(config);    //should call the configure function and all of its sub calls as Stubs. 
 
 
      assert.ok(determineArrowsStub.withArgs(2,3).calledOnce,      "Calling configure(...) should call function determineArrows."  );
@@ -57,45 +56,21 @@ QUnit.module( "module ConfigMgr", {
      assert.ok(insertScoreBarsStub.withArgs(2,3).calledOnce,      "Calling configure(...) should call function insertScoreBars."  );
      assert.ok(buildTeamDropdownStub.withArgs(2,3).calledOnce,    "Calling configure(...) should call function buildTeamDropdown.");
      assert.ok(updateClockStub.withArgs(98).calledOnce,           "Calling configure(...) should call function updateClock."      );
- //    assert.ok(buildObjectsStub.calledOnce,                       "Calling configure(...) should call function buildObjects."     );
-     assert.ok(readFileStub.calledOnce,                           "Calling configure(...) should call function readFile."         );
-
 });
 
-  QUnit.test("ConfigMgr.openConfigDialog() ", function( assert )   {  
- 
-    $('#doConfig').trigger("click");
-    
-     assert.equal( dialog, 'open',                  "The openDialog function was called. Dialog is open ");
 
-});
-
-  QUnit.test("ConfigMgr.closeConfigDialog() ", function( assert ) {
-    var configureStub             = sinon.stub(this.configMgr,"configure");  // does not work. see above.
-    $('#teamLeft').val(2);
-    $('#teamright').val(3);
-    $('#gameSize').val(95);
-//    $('#fileInput').files.val('../questions/set1');    //cannot be programically set to anything except an empty string.
-
-    $('#closeDialog').trigger("click");
-
-   assert.equal(dialog, 'closed',                 "The closeDialog function was called the dialog is closed.");
-   assert.ok(configureStub.withArgs(2,3,95),      "The configure function was called with the correct arguments.");
-  // need to test the value of the files element but do not know how in a test harness. maybe a console log is the best I can do in the real time execution.
-});
 
   QUnit.test("ConfigMgr.buildObjects() ", function( assert ) {
 
-    var coinflipStub              = sinon.stub(this.configMgr,"coinflip");
+    var config = {teams:[2,3], gameSize: 98};   
 
-    this.configMgr.buildObjects(2,3, 98);
+    this.configMgr.buildObjects(config);
     
-    assert.ok(this.configMgr.ball,                            "Ball object exists and is accessible.");
-    assert.ok(this.configMgr.ball.possessionMgr,              "PossessionMgr exists and is accessible by ball");
-    assert.ok(this.configMgr.trackMgr,                        "TrackMgr exists and is accessible.");
-    assert.ok(this.configMgr.trackMgr.ball,                   "TrackMgr has access to ball.");
-    assert.ok(this.configMgr.questionMgr,                     "QuestionMgr exists and is accessible.");
-    assert.ok(this.configMgr.questionMgr.timer,               "QuestionTimer exists within QuestionMgr and is accessible by QuestionMgr.");
+    assert.ok(this.configMgr.trackMgr,                             "TrackMgr exists and is accessible by configMgr.");
+    assert.ok(this.configMgr.questionMgr,                          "QuestionMgr exists and is accessible by configMgr.");
+    assert.ok(this.configMgr.trackMgr.ball,                        "Ball object exists and is accessible by trackMgr.");
+    assert.ok(this.configMgr.trackMgr.ball.possessionMgr,          "PossessionMgr exists and is accessible by ball");
+    assert.ok(this.configMgr.questionMgr.timer,                    "QuestionTimer exists within QuestionMgr and is accessible by QuestionMgr.");
   });
 
   QUnit.test("ConfigMgr.determineArrows ", function( assert ) {
@@ -155,39 +130,15 @@ return a1[3] == a2[3]
 });
 
 
-  QUnit.test("ConfigMgr.coinflip ", function( assert ) {
-  
-  var dir = this.configMgr.coinflip();
-
-  assert.ok( (dir == -1 || dir == 1),           "The ballDirection The ballDirection must be one of {-1,1}");
-});
-
   QUnit.test("ConfigMgr.updateClock ", function( assert ) {
      
     this.configMgr.updateClock(2);
 
      assert.equal(this.configMgr.clock.val(),  "2" ,                    "the Clock was updated to 2 questions left.");
 });
-/* --------------- Not working... Cannot instantiate a file or blob, so cannot load file contents, and therefore cannot randomize...
-  QUnit.test("ConfigMgr.readFile ", function( assert ) {
-    var randomizeStub             = sinon.stub(this.configMgr,"randomizeQuestions");  
-    var tf = '../../questions/set1';
-    var buffer = new ArrayBuffer(31121)
-    var textToRead = $('#fileInput').files;
-//    var file = new File([buffer], "set1" );
-    var file = new Blob(['../../questions/' ], "set1" , options: {type: "text/plain;charset=UTF-8"} );
-//    var file = new File( {name: "set1", lastModified: 1456531245000, lastModifiedDate: 'Fri Feb 26 2016 21:00:45 GMT-0300 (ART)', webkitRelativePath: "", size: 31121 });
-
-//     file = new Blob([tl], {type: "text/plain;charset=utf8"});
-    this.configMgr.readFile(file);
-     assert.ok(randomizeStub.withArgs().calledOnce,                     "the randomize function must be called from readFile");
-});
----------------------- end of not working...
 
 /* ------------REFERENCE: configMgr functions and constructor  -----
 X ConfigMgr.prototype.defineHandlers = function(){
-X ConfigMgr.prototype.openDialog = function(){
-X ConfigMgr.prototype.closeDialog = function(){
 X ConfigMgr.prototype.configure = function(lt,rt,gs){
 X ConfigMgr.prototype.buildObjects = function(){
 X ConfigMgr.prototype.addTrackLabels = function(lt,rt)
@@ -196,9 +147,6 @@ X ConfigMgr.prototype.insertGoalBars = function(lt,rt)
 X ConfigMgr.prototype.insertScoreBars = function(lt,rt)
 X ConfigMgr.prototype.buildTeamDropdown = function(lt,rt)
 X ConfigMgr.prototype.updateClock = function( cnt)
-X ConfigMgr.prototype.coinflip = function () {
-  ConfigMgr.prototype.readFile  = function(){
-  ConfigMgr.prototype.randomizeQuestions= function(rawQuestionSet){
 
 
  //----- constructor ---------------
