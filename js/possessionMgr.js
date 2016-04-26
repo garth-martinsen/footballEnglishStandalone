@@ -1,5 +1,6 @@
 //-----constructor----------------------
  var PossessionMgr = function( config) {
+    possessionMgr         = this;
     this.teams            = config.teams;
     this.ballDirection    = config.ballDirection;
     this.arrowLeft        = $('#leftArrow');
@@ -8,19 +9,18 @@
     this.rightTeamName    = $('#rightTeamName');
     this.teamSelect       = $('#team');
     this.rightWrongSelect = $('#rightWrong');
+    this.formerTimeStamp  = 0;
     this.created          = 'PossessionMgr' + new Date().toString().slice(-45).substring(3,24);
-    possMgr               = this;
     this.defineHandlers();
     this.showPossession();
-    this.formerTimeStamp  = 0;
     return this;
 }
-var possMgr;
+var possessionMgr;
 var cpCount=0;
 
 PossessionMgr.prototype.defineHandlers=function(){
-    $('#dir').on(  'click',   possMgr.changePossession );
-    $('#rightWrong').on(  'change',   possMgr.ensureSelected );
+    $('#dir').on(  'click',   possessionMgr.changePossession );
+    $('#rightWrong').on(  'change',   possessionMgr.ensureSelected );
 }
 
 PossessionMgr.prototype.ensureSelected=function(){
@@ -78,10 +78,16 @@ PossessionMgr.prototype.showPossession = function(){
 }
 PossessionMgr.prototype.changePossession = function(evt){
 if (evt && evt.timeStamp){
-    if(evt.timeStamp == possMgr.formerTimeStamp){ return }
-    possMgr.formerTimeStamp = evt.timeStamp;
+    if(evt.timeStamp == possessionMgr.formerTimeStamp){ return }
+    possessionMgr.formerTimeStamp = evt.timeStamp;
     console.log('event timestamp: ' + evt.timeStamp);
 }
- possMgr.ballDirection= -1 * possMgr.ballDirection;
- possMgr.showPossession();
+ possessionMgr.ballDirection= -1 * possessionMgr.ballDirection;
+ possessionMgr.showPossession();
+}
+
+// returns the team id number of the team possessing the ball
+
+PossessionMgr.prototype.getPossessor = function(evt){
+   return ( possessionMgr.ballDirection <0 )? possessionMgr.teams[0] : possessionMgr.teams[1];
 }

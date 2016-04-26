@@ -1,5 +1,6 @@
 //-----constructor----------------------
  var QTimer = function( duration ) {
+   qTimer = this;
    this.duration           = duration;             // this is a configuration parameter.
    this.beep               = $('#beep')[0];
    this.homer              = $('#homer')[0];
@@ -8,7 +9,6 @@
    this.stop               = false;                //this gets set to true when stopTimer button is clicked.
    this.created            = new Date().getTime().toString().slice(-4) ,       
 
-   qTimer = this;
    qTimer.defineHandlers();
    return this;
 }

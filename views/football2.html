@@ -190,7 +190,6 @@
     var inputs = $('input, a, select, button'); //places only within the app to which I want to tab.
     for(i=0; i< inputs.length; i++){
       id = inputs[i].attributes['id'].value;     
-      console.log('checking id: ' + id );
       tbi = ti(inputs[i]);
         tabs.set(tbi, inputs[i]); 
     }

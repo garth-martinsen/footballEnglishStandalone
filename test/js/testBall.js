@@ -60,13 +60,12 @@ QUnit.module( "module Ball", {
   QUnit.test("ball.advance left", function( assert ) {
       this.ball.setLocation(1);
       this.ball.setDirection(-1);
-
       this.ball.advance();
 
       assert.equal(this.ball.ballLocation, 0, "BallLocation should be 0: goal.");
       assert.equal(this.ball.ballImage.css("left"), this.ball.ballPositions[0], "BallImage should be at: left goal.");
       assert.equal(this.ball.leftScore, 1 , "Left Score should have incremented by 1.");
-      assert.equal(this.ball.leftScoreDisplay.value, 1 , "Left Score display should have incremented by 1.");
+      assert.equal(this.ball.leftScoreDisplay.val(), 1 , "Left Score display should have incremented by 1.");
   });
 
 
@@ -79,7 +78,7 @@ QUnit.module( "module Ball", {
       assert.equal(this.ball.ballLocation, 4, "BallLocation should be 4: goal.");
       assert.equal(this.ball.ballImage.css("left"), this.ball.ballPositions[4], "BallImage should be at: right goal.");
       assert.equal(this.ball.rightScore, 1 , "Right Score should have incremented by 1.");
-      assert.equal(this.ball.rightScoreDisplay.value, 1 , "Right Score display should have incremented by 1.");
+      assert.equal(this.ball.rightScoreDisplay.val(), 1 , "Right Score display should have incremented by 1.");
   });
 
 /* ----tests by function and object under test ---- This info could be stale, replace it with current or ignore-

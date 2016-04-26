@@ -33,29 +33,51 @@ Ball.prototype.setLocation = function(loc) {  // loc is one of: {0,1,2,3,4}
   $('#ball').css("left",loc); 
 }
 
-Ball.prototype.advance=function(evt){
-if(evt && evt.timeStamp){
-  if(evt.timeStamp == ball.formerTimeStamp) {return}
-    ball.formerTimeStamp = evt.timeStamp;
+Ball.prototype.displayBallLocation =function(){
+   $('#ball').css("left", ball.ballPositions[ball.ballLocation]);
 }
- ball.ballLocation += ball.possessionMgr.ballDirection;
- $('#ball').css("left", ball.ballPositions[ball.ballLocation]); 
- if(ball.ballLocation === ball.leftGoalPosition && ball.possessionMgr.ballDirection === -1){
-      console.log('Gooool' );
-//      ball.announcer[0].play();
-      ball.leftScore +=1;
-      ball.leftScoreDisplay.value = ball.leftScore;  
-      ball.possessionMgr.changePossession();
- }
- if(ball.ballLocation === ball.rightGoalPosition && ball.possessionMgr.ballDirection === 1){
-      console.log('Gooool' );
- //     ball.announcer.play();
-      ball.rightScore +=1;
-      ball.rightScoreDisplay.value = ball.rightScore;  
-      ball.possessionMgr.changePossession();
- }
+
+Ball.prototype.advance=function(evt){
+   if(evt && evt.timeStamp){
+       if(evt.timeStamp == ball.formerTimeStamp) {return;}
+       ball.formerTimeStamp = evt.timeStamp;
+   }
+   ball.ballLocation += ball.possessionMgr.ballDirection;
+   ball.displayBallLocation();
+   if(ball.ballLocation === ball.leftGoalPosition && ball.possessionMgr.ballDirection === -1){ ball.goalScoredLeft();  }
+   if(ball.ballLocation === ball.rightGoalPosition && ball.possessionMgr.ballDirection === 1){ ball.goalScoredRight(); }
 }
 
 Ball.prototype.changePossession =function(){
-   ball.possessionMgr.changePossession(ball);
+   ball.possessionMgr.changePossession();
+}
+
+Ball.prototype.goalScoredLeft =function(){
+      console.log('Gooool' );
+ //     ball.announcer[0].play();
+      ball.leftScore +=1;
+      ball.leftScoreDisplay.val( ball.leftScore);  
+      if(!questionMgr.isEndGame()){
+          ball.possessionMgr.changePossession();
+      } else if(questionMgr.gameState == ENDGAME){
+          ball.nextGoalKick();
+      }
+}
+
+Ball.prototype.goalScoredRight =function(){
+      console.log('Gooool' );
+//      ball.announcer.play();
+      ball.rightScore +=1;
+      ball.rightScoreDisplay.val( ball.rightScore);  
+      if(questionMgr.gameState == CLOCK){
+         ball.possessionMgr.changePossession();
+      } else if(questionMgr.gameState == ENDGAME){
+         ball.nextGoalKick();
+      }
+}
+Ball.prototype.setKickLocation =function(){
+  possessionMgr.ballDirection= popupMgr.coinflip();
+  possessionMgr.showPossession();
+  ball.ballLocation = (possessionMgr.ballDirection < 0 ) ? 1 : 3;
+  ball.displayBallLocation();
 }

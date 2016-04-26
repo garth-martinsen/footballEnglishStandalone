@@ -11,8 +11,8 @@ QUnit.module( "module TrackMgr", {
     fixture.append('<input type="text" id="falta" value ="100" width="50px" readonly >');
     fixture.append(' <input type="submit" class = "button" id="adv" tabindex = "16" value="Advance" formaction="/advance" formmethod="post" formenctype="application/x-www-form-url    encoded" />');
     fixture.append(' <input type="submit" class="button" id="dir" tabindex = "15" value="Possession" formaction="/possession" formmethod="post" formenctype="application/x-www-form-urlencoded"/>');
-
-
+    fixture.append('<input type="text" id="leftScore" tabindex= "-1"  class="scoreInput" readonly="true" value="0">');
+    fixture.append('<input type="text" id="rightScore" tabindex= "-1"  class="scoreInput" readonly="true" value="0">');
 
  var config= {
             teams: [2,3]  //Chile against Mexico.
@@ -26,6 +26,7 @@ QUnit.module( "module TrackMgr", {
 
 
    this.trackMgr = new TrackMgr( config );
+   this.questionMgr = new QuestionMgr(config);
   },
   afterEach: function() {
     this.trackMgr = null;
@@ -47,31 +48,11 @@ QUnit.module( "module TrackMgr", {
 });
 
 // This test is not working. I am having trouble triggering a click on the saveGrade Button.
-/*  --------------------------------------------------------
-  QUnit.test("TrackMgr.initialize() ", function( assert ) {
-    var saveGradeStub       = sinon.stub(this.trackMgr,"saveGrade");
-
-     this.trackMgr.initialize();     //should bind the handler to the click event on the trackButton.
-
-     this.trackMgr.trackButton.trigger($.Event("click"));   // trigger the event to see if the handler is called. Need to know how to click a button..
-
-     assert.ok(saveGradeStub.calledOnce,       "Clicking the saveGrade button should call function saveGrade.");
-
-});
----------------------------------------------  */
-  QUnit.test("TrackMgr.tabToSaveGrade ", function( assert ) {
-    this.trackMgr.rightWrongSelect.focus();
-    assert.ok(this.trackMgr.rightWrongSelect.focus, "The focus is set up to be on the rightWrongSelect control.");
-
-    this.trackMgr.tabToSaveGrade();
-
-    assert.ok(this.trackMgr.trackButton.focus,      "The focus has correctly changed to the trackButton.");
-  });
 
   QUnit.test("TrackMgr.saveGrade ", function( assert ) {
      this.trackMgr.teamSelect.val(2);
      this.trackMgr.rightWrongSelect.val(1); //correct = green.
-     this.trackMgr.clock.value = 50;
+     $('#falta').val(50);  // clock shows 50 questions remaining.
      var id ='#'+ 50; 
 
      this.trackMgr.saveGrade();
@@ -85,7 +66,7 @@ QUnit.module( "module TrackMgr", {
      this.trackMgr.teamSelect.val(2);   //Chile goalee is kicking.
      this.trackMgr.rightWrongSelect.val(0);  //wrong=pink
      this.trackMgr.ball.ballLocation=4;  // ball is being kicked by goalee at the right goal.
-     $('#falta').val(50);;  // clock shows 50 questions remaining.
+     $('#falta').val(50);  // clock shows 50 questions remaining.
      var id ='#'+ 50; 
      var xid ='#X'+ 50; 
 
@@ -133,7 +114,7 @@ QUnit.module( "module TrackMgr", {
      
     this.trackMgr.updateClock(2);
 
-     assert.equal(this.trackMgr.clock.value,  "2" ,                    "the Clock was updated to 2 questions left.");
+     assert.equal($('#falta').val(),  "2" ,                    "the Clock was updated to 2 questions left.");
 });
 
   QUnit.test("TrackMgr.updateTally possessingTeamScoresRight ", function( assert ) {
@@ -151,7 +132,7 @@ QUnit.module( "module TrackMgr", {
  
      assert.equal(this.trackMgr.ball.ballLocation, 4, "On score right, the ballLocation should be 4, goal.");
      assert.equal(this.trackMgr.ball.rightScore, 1, "On score right, the right score should be 1.");
-     assert.equal(this.trackMgr.ball.rightScoreDisplay.value, 1, "On score right, the right scoreboard should have been updated to 1. ");  
+     assert.equal(this.trackMgr.ball.rightScoreDisplay.val(), 1, "On score right, the right scoreboard should have been updated to 1. ");  
      assert.equal(this.trackMgr.ball.possessionMgr.ballDirection, -1, "On score right, after a goal, the other team gets possession of the ball.");
 
 });
@@ -173,7 +154,7 @@ QUnit.module( "module TrackMgr", {
      console.log('leftScore should be 1 : ' + this.trackMgr.ball.leftScore);
      assert.equal(this.trackMgr.ball.ballLocation, 0, "On score left, the ballLocation should be 0, goal.");
      assert.equal(this.trackMgr.ball.leftScore, 1, "On scoreLeft, the left score should be 1.");
-     assert.equal(this.trackMgr.ball.leftScoreDisplay.value, 1, "On scoreLeft, the left scoreboard should have been updated to 1. ");
+     assert.equal(this.trackMgr.ball.leftScoreDisplay.val(), 1, "On scoreLeft, the left scoreboard should have been updated to 1. ");
      assert.equal(this.trackMgr.ball.possessionMgr.ballDirection, 1, "On scoreLeft, after a goal, the other team gets possession of the ball.");
 
 });

@@ -20,6 +20,7 @@ This class is responsible for:
    popupMgr                = this;  //set the object in global scope 
    this.configLink         = $('#doConfig');      // raises the popup which has ways to select teams and questionSet, enter gameSize.
    this.dialog             = '';                  // Indicator for tests, it is set to "open" when open and "closed" when closed.
+
    this.errors             = $('#errors');        // readonly textinput for popup dialog errors.(teams must differ; set file doesn't support gameSize; Needs file, etc....)
    this.fileName           = null;                // A string, set after selection a file in the popup dialog.
    this.fileSizes          = new Map;             // map of set names and their sizes, key=fileName, value= count of items). Used to validate that questionSet supports gamesize.
@@ -77,6 +78,7 @@ PopupMgr.prototype.openDialog = function(){
       $('.pop').focus();
       popupMgr.dialog='open';
       $('#closeDialog').disable (true);  // diabled until the file and the teams are ready.One cannot close the popup dialog without putting in the values needed.
+      popupMgr.readyToClose();
     }
     return false;
   }
@@ -189,6 +191,7 @@ PopupMgr.prototype.readFile  = function(file){
          if(evt.target.readyState == FileReader.DONE) {
               popupMgr.rawQuestions = JSON.parse(event.target.result);
               popupMgr.randomizeQuestions();
+              console.log('Questions are all randomized');
               $('#game').trigger("game:configured");          // triggers the event that will signal the game that it may request questions and start play.
       }
  }
