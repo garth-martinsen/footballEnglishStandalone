@@ -22,10 +22,20 @@
 }
 var trackMgr;  //global variable so can be accessed as top level class.
 
-
 TrackMgr.prototype.defineHandlers  = function(){
      this.trackButton.disable(true);
     $('#rightWrong').on('change',   trackMgr.ensureSelected );
+    $('#saveGrade').on('click', trackMgr.saveGrade );
+    $('#game').on('clock:expired', trackMgr.switchToEndGame );
+}
+
+TrackMgr.prototype.switchToEndGame=function(){
+   // remove bindings to call trackMgr functions, instantiate endGameMgr and define its handlers to handle the events instead.
+ $('#rightWrong').off('change',   trackMgr.ensureSelected )
+    $('#saveGrade').off('click', trackMgr.saveGrade );
+    $('#game').off('clock:expired', trackMgr.switchToEndGame );
+   endGameMgr = new EndGameMgr(popupMgr.getConfig());
+
 }
 
 TrackMgr.prototype.ensureSelected=function(){
@@ -56,13 +66,13 @@ TrackMgr.prototype.saveGrade = function(){
           trackMgr.createTd(num, rw, answeringTeam, otherTeam);
        }
    }  
-   //if this is not a goaleekick, set the dropdown to the other team for the next question
-   if(trackMgr.ball.ballLocation !== 0 && trackMgr.ball.ballLocation !== 4){
-     trackMgr.updateTally(trackMgr.teamSelect.val(), rw); 
-     trackMgr.selectOtherTeam();
-    }
+   trackMgr.updateTally(trackMgr.teamSelect.val(), rw); 
+   //if the ball is not in a Goal, set the team dropdown to the other team for the next question
+   if( !ball.inGoal() ){
+        trackMgr.selectOtherTeam(); 
+   }
     $('#rightWrong').val(-1);
-    trackMgr.trackButton.disable(true);
+    trackMgr.trackButton.disable(true); //may be redundant. handler disables.
 }
 
 TrackMgr.prototype.selectOtherTeam = function(){
@@ -102,7 +112,7 @@ TrackMgr.prototype.fixTd = function(num, rightWrong, row){
 TrackMgr.prototype.updateTally = function(teamId, rightWrong){
    if(rightWrong == 0 && questionMgr.isEndGame()){ // kick went wide, register bad kick and resetTallies
        ct = pt= false; 
-       trackMgr.registerKick('missed');
+       trackMgr.
        trackMgr.resetTallies();
    }
    if(teamId == possessionMgr.getPossessor()) {   //possessor is set to the teamId of the possessing team during game init, or at change of possession.
@@ -119,23 +129,8 @@ TrackMgr.prototype.updateTally = function(teamId, rightWrong){
    }
 }
 
-TrackMgr.prototype.registerKick = function(result){
-    var possessor = possessionMgr.getPossessor();
-    var array = goalKickResults.get(possessor);
-    array.push({team:possessor, result: result});
-    if(array.length >2){      //set up for opposite team to do their penalty kicks. 
-       possessionMgr.changePossession().showPossession();
-       // alert other team they are doing their penalty kicks, display new direction arrow, and new ball location.
-       alert('Three Penalty kicks for: ' + countries[possessionMgr.getPossessor()]);
-       ball.ballLocation = (possessionMgr.ballDirection < 0 ) ? 1 : 3;
-       ball.displayBallLocation();
-    } else {  // set ball up for another kick by same team.
-       ball.ballLocation = (possessionMgr.ballDirection < 0 ) ? 1 : 3;
-       ball.displayBallLocation();
-    }
-}
 // decideBallAction  function manages movement and possession of the ball. The  difference, diff,  is used to determine action.
-// in the ENDGAME, this function can only get a block (diff=1) or a goal (diff=2).
+// in the ENDGAME, this function can only get a diff=1 (block) or a diff=2 (goal).
 
 TrackMgr.prototype.decideBallAction= function(diff){
    if(diff === -1) {
@@ -149,7 +144,8 @@ TrackMgr.prototype.decideBallAction= function(diff){
       $('#mode').val(1).css('background-color', "yellow");
 
    } else if (diff === 1){
-      console.log('Tally difference says that nothing changes.');
+       console.log('Tally difference says that possession is retained.');
+       $('#mode').val(0).css('background-color', "white");
        if(questionMgr.isEndGame()){ trackMgr.registerKick('blocked');}
 
    } else if(diff === 2){
@@ -159,6 +155,46 @@ TrackMgr.prototype.decideBallAction= function(diff){
        if(questionMgr.isEndGame()){ trackMgr.registerKick('goal');}
    }
 }
+
+TrackMgr.prototype.isGameOver = function(){
+  var results  =  trackMgr.goalKickResults;
+  var attempts = results.get(trackMgr.teams[0]).length + results.get(trackMgr.teams[1]).length;
+  console.log('Goal kick attempts: ' + attempts );
+  return attempts > 5;
+}
+
+TrackMgr.prototype.registerKick = function(result){
+    var possessor = possessionMgr.getPossessor();
+    var array = trackMgr.goalKickResults.get(possessor);
+    array.push({team:possessor, result: result});
+    // Check if teams have had 6 goal kicks.
+    if(trackMgr.isGameOver()) {
+         alert('Both teams have had 3 goal kicks. Game is over! Well done!');
+         return;    
+    }
+    // check to see if the other team should get their goal kicks.
+    if(array.length >2){      //set up for opposite team to do their penalty kicks. 
+       possessionMgr.changePossession();
+       possessionMgr.showPossession();
+       // alert other team they are doing their penalty kicks, display new direction arrow, and new ball location.
+       alert('Three Penalty kicks for: ' + countries[possessionMgr.getPossessor()]);
+       ball.ballLocation = (possessionMgr.ballDirection < 0 ) ? 1 : 3;
+       ball.displayBallLocation();
+       $('#team').val(possessionMgr.getPossessor());
+    } else {  // set ball up for another kick by same team.
+       ball.ballLocation = (possessionMgr.ballDirection < 0 ) ? 1 : 3;
+       ball.displayBallLocation();
+    }
+}
+
+ TrackMgr.prototype.nextGoalKick =function(){
+   var attempts =trackMgr.goalKickResults.get(possessionMgr.getPossessor()).length;
+   if(attempts >2) {                                      //after three attempts, switch to the other side of the field.
+      possessionMgr.changePossession().showPossession();
+   }
+   ball.ballLocation = (possessionMgr.ballDirection < 0 ) ? 1 : 3;     //place the ball in storing position depending on which team is kicking.
+   ball.displayBallLocation();
+ }
 
 TrackMgr.prototype.resetTallies= function(){
       trackMgr.tallyPossessor =1;

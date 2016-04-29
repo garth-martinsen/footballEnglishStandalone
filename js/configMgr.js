@@ -28,11 +28,7 @@ This class is responsible for:
 
 
 ConfigMgr.prototype.defineHandlers = function(){
-//  console.log('Entered function defineHandlers...');
-    $('#quest').on(       'click',    this.displayNextItem );
-    $('#stopTimer').on(   'click',    this.clearQuestionTimer);
-    $('#showResponse').on('click',    this.questionMgr.revealAnswer);
-    $('#saveGrade').on(   'click',    this.trackMgr.saveGrade);
+  // no handlers in ConfigMgr. All foreign handlers were moved to the class where the handler lives.
 }
 
 //Function configure uses values from config popup to select images ( arrows,scorebars,goalbars), create dropdowns, initialize clock, label Track Rows. 
@@ -96,13 +92,6 @@ ConfigMgr.prototype.nextQuestion = function () {
    return this.questionMgr.nextQuestion();
 }
 
-ConfigMgr.prototype.displayNextItem = function () {
-   configMgr.questionMgr.displayItem(questionMgr.nextQuestion());
-}
-
-ConfigMgr.prototype.clearQuestionTimer = function () {
-   configMgr.questionMgr.timer.stop = true;
-}
 
 // various global data arrays to be used in configuration
   var leftArrows= [

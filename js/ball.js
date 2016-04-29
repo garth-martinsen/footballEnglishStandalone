@@ -28,6 +28,16 @@ Ball.prototype.setDirection = function(bd) {  // bd is one of: {-1,1}
   this.possessionMgr.ballDirection =bd;
 }
 
+Ball.prototype.inGoal = function() {  
+  return (ball.ballLocation == 0 || ball.ballLocation == 4 ); 
+}
+Ball.prototype.scoredLeftGoal = function() {  
+  return (ball.ballLocation == 0 && possessionMgr.ballDirection == -1); 
+}
+
+Ball.prototype.scoredRightGoal = function() {
+  return (ball.ballLocation == 4 && possessionMgr.ballDirection == 1); 
+}
 Ball.prototype.setLocation = function(loc) {  // loc is one of: {0,1,2,3,4}
   this.ballLocation=loc;
   $('#ball').css("left",loc); 
@@ -39,13 +49,16 @@ Ball.prototype.displayBallLocation =function(){
 
 Ball.prototype.advance=function(evt){
    if(evt && evt.timeStamp){
+       console.log('advance evt.timeStamp: ' + evt.timeStamp );
        if(evt.timeStamp == ball.formerTimeStamp) {return;}
        ball.formerTimeStamp = evt.timeStamp;
    }
    ball.ballLocation += ball.possessionMgr.ballDirection;
    ball.displayBallLocation();
-   if(ball.ballLocation === ball.leftGoalPosition && ball.possessionMgr.ballDirection === -1){ ball.goalScoredLeft();  }
-   if(ball.ballLocation === ball.rightGoalPosition && ball.possessionMgr.ballDirection === 1){ ball.goalScoredRight(); }
+   if(ball.scoredLeftGoal()){ 
+      ball.goalScoredLeft();  }
+   if(ball.scoredRightGoal()){
+      ball.goalScoredRight(); }
 }
 
 Ball.prototype.changePossession =function(){
@@ -59,10 +72,9 @@ Ball.prototype.goalScoredLeft =function(){
       ball.leftScoreDisplay.val( ball.leftScore);  
       if(!questionMgr.isEndGame()){
           ball.possessionMgr.changePossession();
-      } else if(questionMgr.gameState == ENDGAME){
-          ball.nextGoalKick();
-      }
+      } 
 }
+
 
 Ball.prototype.goalScoredRight =function(){
       console.log('Gooool' );
@@ -71,10 +83,9 @@ Ball.prototype.goalScoredRight =function(){
       ball.rightScoreDisplay.val( ball.rightScore);  
       if(questionMgr.gameState == CLOCK){
          ball.possessionMgr.changePossession();
-      } else if(questionMgr.gameState == ENDGAME){
-         ball.nextGoalKick();
-      }
+      } 
 }
+
 Ball.prototype.setKickLocation =function(){
   possessionMgr.ballDirection= popupMgr.coinflip();
   possessionMgr.showPossession();

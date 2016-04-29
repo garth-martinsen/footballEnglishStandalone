@@ -7,16 +7,12 @@
    this.secondsDisplay     = $('#seconds')[0];
    this.stopButton         = $('#stopTimer')[0];
    this.stop               = false;                //this gets set to true when stopTimer button is clicked.
-   this.created            = new Date().getTime().toString().slice(-4) ,       
+   this.created            = new Date().getTime().toString().slice(-4);       
 
-   qTimer.defineHandlers();
    return this;
 }
 var qTimer;
 
-QTimer.prototype.defineHandlers = function(){
-   $('#stopTimer').on('click', qTimer.stopTimer());
-}
 
 QTimer.prototype.startTimer = function(){
    $('#seconds')[0].value = qTimer.duration;
@@ -48,4 +44,4 @@ QTimer.prototype.clockTick =function(endTimeMS){
 
 QTimer.prototype.stopTimer = function(){
       qTimer.stop=true;
-     }
+}

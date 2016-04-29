@@ -20,15 +20,8 @@ var cpCount=0;
 
 PossessionMgr.prototype.defineHandlers=function(){
     $('#dir').on(  'click',   possessionMgr.changePossession );
-    $('#rightWrong').on(  'change',   possessionMgr.ensureSelected );
 }
 
-PossessionMgr.prototype.ensureSelected=function(){
-   var rw =  $('#rightWrong').val();
-   if( rw == 0 || rw == 1){
-     
-   }
-}
 PossessionMgr.prototype.displayArrow=function(){
    //console.log('Entered displayArrow(...)');
    if(this.ballDirection < 0){ 

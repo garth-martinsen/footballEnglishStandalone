@@ -9,7 +9,7 @@ var QuestionMgr = function(config){
  this.numTimers       = 0;                              // increments for new question displayed. decrements when timer  clears/times out. 
  this.gameState       = 0;                              // integer, one of two values {0,1}. Normal play is 0. Endgame kicks is 1. Set to endgame when remainingCount=0
  this.created         = 'QuestionMgr_' + new Date().toString().slice(-45).substring(3,24);
-
+ this.defineHandlers();
  return this;
 }
 
@@ -24,6 +24,11 @@ jQuery.fn.extend({
     }
 });
 
+QuestionMgr.prototype.defineHandlers = function(){
+    $('#quest').on(       'click',    questionMgr.displayNextItem );
+    $('#showResponse').on('click',    questionMgr.revealAnswer );
+    $('#stopTimer').on(   'click',    this.timer.stopTimer );
+}
 
 QuestionMgr.prototype.initialize = function(){
   this.updateClock(this.remainingCount);
@@ -34,16 +39,25 @@ QuestionMgr.prototype.initialize = function(){
 
 QuestionMgr.prototype.changeToGoalKicks = function(){
    questionMgr.gameState=ENDGAME; //Sets the type of play to endgame (1).
+   $('#game').trigger('clock:expired');
    questionMgr.gatherKickQuestions();
+   var num = questionMgr.goalKicks.splice(0,1)[0];
+   $('#extras').val(num);
    ball.setKickLocation();
-   alert('Game clock is expired. 3 Goal kicks for each team. First: ' + countries[possessionMgr.possessor]);
+   alert('Game clock is expired. 3 Goal kicks for each team. First: ' + countries[possessionMgr.getPossessor()]);
+   return num;
 }
 
 QuestionMgr.prototype.decrementClock = function(){
+ var num;
  this.remainingCount--;
- if(this.remainingCount < 0){ questionMgr.changeToGoalKicks(); } 
- this.updateClock(this.remainingCount);
-
+ if(this.remainingCount < 0){ 
+     num= questionMgr.changeToGoalKicks(); 
+ } else { 
+     num = this.remainingCount;
+     this.updateClock(num);
+ }
+ return num;
 }
 
 QuestionMgr.prototype.updateClock = function(count ){
@@ -58,11 +72,9 @@ QuestionMgr.prototype.nextQuestion = function( ){
  var ndx;
  if(questionMgr.isEndGame()){
   ndx = this.goalKicks.splice(0,1)[0];      //splice removes the first element of goalKicks and returns an array of length 1, get the element at 0
-  if(this.goalKicks.length == 0){alert('This is the last goal kick question.');}
   $('#extras').val(ndx);
  }else{
-   this.decrementClock();
-   ndx = Number(this.remainingCount) ;
+   ndx = this.decrementClock();
  }
  return questionMgr.questionSet.get(ndx)[0];    //map returns array of length 1, get the first element, [0]
 }
@@ -106,6 +118,7 @@ QuestionMgr.prototype.gatherKickQuestions = function(){
    for(i=1; i < more; i++){
      this.goalKicks.push(gameSize + i );
   }
+ $('#extras').val(questionMgr.goalKicks[0]);
 }
 
 QuestionMgr.prototype.isRevisited = function(num){
@@ -125,4 +138,8 @@ QuestionMgr.prototype.getClock = function(num){
 
 QuestionMgr.prototype.isEndGame = function(num){
   return questionMgr.gameState === ENDGAME;
+}
+
+QuestionMgr.prototype.displayNextItem = function () {
+   questionMgr.displayItem(questionMgr.nextQuestion());
 }
