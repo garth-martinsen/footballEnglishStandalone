@@ -51,6 +51,7 @@
        <select id="mode" name="mode"  tabindex= "-1" >
            <option value="0" >Advance</option>
            <option value="1" >Possess</option>
+           <option value="2" >GoaleeKick</option>
        </select>
 
        <select id="rightWrong" name="rightWrong" tabindex="13" >
@@ -162,9 +163,25 @@
         <input type="button" id="closeDialog" class="close" tabindex = "109"  value="Accept"></input>
      </td>
   </tr>
+ </table>
  </div>
-<table>
 </div>
+<div id="endGamePopup">
+      <table id="goalKicks" border="1px">
+        <th id="team" >Team</th>
+        <th id="attempt">Kick</th>
+        <th id="result">Result</th>
+        <th id="point">Points</th>
+        <tr id="k1" ><td>Brazil</td><td>1</td><td>missed</td><td>0</td> </tr>
+        <tr id="k2" > </tr>
+        <tr id="k3" > </tr>
+        <tr id="k4" > </tr>
+        <tr id="k5" > </tr>
+        <tr id="k6" > </tr>
+      </table>
+</div>
+
+  <script src="../js/extra.js"></script>
   <script src="../js/configMgr.js"></script>
   <script src="../js/popupMgr.js"></script>
   <script src="../js/QTimer.js"></script>

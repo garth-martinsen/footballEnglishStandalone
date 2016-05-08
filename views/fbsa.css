@@ -81,4 +81,5 @@ label {
   tr [line-heigh: 2em;]
   td {width:50%}
 
-
+  #endGamePopup {position:absolute;left: 822px; top:170px; text-align:center;background-color: lightgrey; display: none; }
+  #goalKicks { position: relative; left: 0px; top: 0px; }

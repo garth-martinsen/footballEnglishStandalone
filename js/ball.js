@@ -15,18 +15,9 @@ var Ball = function(config) {
  this.ballPositions = ['-30px', '200px', '515px', '830px', '1080px']; 
    this.created            = 'Ball' + new Date().getTime().toString().slice(-4); // last 4 chars give milliseconds, enough for id.
  ball = this;
- this.defineHandlers();
  return this;
 }
 var ball;
-
-Ball.prototype.defineHandlers = function() {
-   $('#adv').on('click', ball.advance);
-}
-
-Ball.prototype.setDirection = function(bd) {  // bd is one of: {-1,1}
-  this.possessionMgr.ballDirection =bd;
-}
 
 Ball.prototype.inGoal = function() {  
   return (ball.ballLocation == 0 || ball.ballLocation == 4 ); 
@@ -40,11 +31,11 @@ Ball.prototype.scoredRightGoal = function() {
 }
 Ball.prototype.setLocation = function(loc) {  // loc is one of: {0,1,2,3,4}
   this.ballLocation=loc;
-  $('#ball').css("left",loc); 
+  this.displayBallLocation();
 }
 
 Ball.prototype.displayBallLocation =function(){
-   $('#ball').css("left", ball.ballPositions[ball.ballLocation]);
+   $('#ball').css("left", this.ballPositions[this.ballLocation]);
 }
 
 Ball.prototype.advance=function(evt){
@@ -56,34 +47,27 @@ Ball.prototype.advance=function(evt){
    ball.ballLocation += ball.possessionMgr.ballDirection;
    ball.displayBallLocation();
    if(ball.scoredLeftGoal()){ 
-      ball.goalScoredLeft();  }
-   if(ball.scoredRightGoal()){
-      ball.goalScoredRight(); }
-}
-
-Ball.prototype.changePossession =function(){
-   ball.possessionMgr.changePossession();
+      ball.goalScoredLeft();  
+   } else if(ball.scoredRightGoal()){
+      ball.goalScoredRight(); 
+   } 
 }
 
 Ball.prototype.goalScoredLeft =function(){
-      console.log('Gooool' );
+      console.log('Gooool on Left' );
  //     ball.announcer[0].play();
       ball.leftScore +=1;
       ball.leftScoreDisplay.val( ball.leftScore);  
-      if(!questionMgr.isEndGame()){
-          ball.possessionMgr.changePossession();
-      } 
+      $('#game').trigger("goal:scored");
 }
 
 
 Ball.prototype.goalScoredRight =function(){
-      console.log('Gooool' );
+      console.log('Gooool on Right' );
 //      ball.announcer.play();
       ball.rightScore +=1;
       ball.rightScoreDisplay.val( ball.rightScore);  
-      if(questionMgr.gameState == CLOCK){
-         ball.possessionMgr.changePossession();
-      } 
+      $('#game').trigger("goal:scored");
 }
 
 Ball.prototype.setKickLocation =function(){

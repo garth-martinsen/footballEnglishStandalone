@@ -13,6 +13,7 @@ QUnit.module( "module TrackMgr", {
     fixture.append(' <input type="submit" class="button" id="dir" tabindex = "15" value="Possession" formaction="/possession" formmethod="post" formenctype="application/x-www-form-urlencoded"/>');
     fixture.append('<input type="text" id="leftScore" tabindex= "-1"  class="scoreInput" readonly="true" value="0">');
     fixture.append('<input type="text" id="rightScore" tabindex= "-1"  class="scoreInput" readonly="true" value="0">');
+    fixture.append('<div id="game"> ');
 
  var config= {
             teams: [2,3]  //Chile against Mexico.
@@ -52,7 +53,8 @@ QUnit.module( "module TrackMgr", {
   QUnit.test("TrackMgr.saveGrade ", function( assert ) {
      this.trackMgr.teamSelect.val(2);
      this.trackMgr.rightWrongSelect.val(1); //correct = green.
-     $('#falta').val(50);  // clock shows 50 questions remaining.
+     this.questionMgr.remainingCount=50;
+//     $('#falta').val(50);  // clock shows 50 questions remaining.
      var id ='#'+ 50; 
 
      this.trackMgr.saveGrade();
@@ -66,7 +68,8 @@ QUnit.module( "module TrackMgr", {
      this.trackMgr.teamSelect.val(2);   //Chile goalee is kicking.
      this.trackMgr.rightWrongSelect.val(0);  //wrong=pink
      this.trackMgr.ball.ballLocation=4;  // ball is being kicked by goalee at the right goal.
-     $('#falta').val(50);  // clock shows 50 questions remaining.
+//     $('#falta').val(50);  // clock shows 50 questions remaining.
+     this.questionMgr.remainingCount=50;
      var id ='#'+ 50; 
      var xid ='#X'+ 50; 
 
@@ -100,15 +103,6 @@ QUnit.module( "module TrackMgr", {
      assert.ok($(id).hasClass('right'),   "The new Td has class: right. ");
 });
 
-  QUnit.test("TrackMgr.fixTd ", function( assert ) {
-    $('#leftTeamq').append('<td id="55" class= "wrong" >55</td>'); // question was answered incorrectly in the past.
-    var right =1;
-    assert.ok( $('#55').hasClass('wrong'),                    "Initialized correctly for test with class= wrong ");
-
-    this.trackMgr.fixTd(55, right, $('#leftTeamq'));
-
-     assert.ok($('#55').hasClass('right'),                    "Replaced class=wrong with the class=right ");
-});
 
   QUnit.test("TrackMgr.updateClock ", function( assert ) {
      
@@ -119,6 +113,7 @@ QUnit.module( "module TrackMgr", {
 
   QUnit.test("TrackMgr.updateTally possessingTeamScoresRight ", function( assert ) {
      this.trackMgr.ball.possessionMgr.ballDirection = 1; //right goal
+     this.trackMgr.setBallLocation(3);
      trackMgr.possessor = trackMgr.teams[(trackMgr.ball.possessionMgr.ballDirection == 1)? 1 : 0 ];
      var right =1;
      var wrong = 0;
@@ -127,13 +122,15 @@ QUnit.module( "module TrackMgr", {
 
      this.trackMgr.updateTally(possessor, right );
      this.trackMgr.updateTally(contendor, wrong );
+/* ------------------------ ball is at 3, only need one advance to score.
      this.trackMgr.updateTally(possessor, right );
      this.trackMgr.updateTally(contendor, wrong );
+---------------------------------------------------- */
  
      assert.equal(this.trackMgr.ball.ballLocation, 4, "On score right, the ballLocation should be 4, goal.");
      assert.equal(this.trackMgr.ball.rightScore, 1, "On score right, the right score should be 1.");
      assert.equal(this.trackMgr.ball.rightScoreDisplay.val(), 1, "On score right, the right scoreboard should have been updated to 1. ");  
-     assert.equal(this.trackMgr.ball.possessionMgr.ballDirection, -1, "On score right, after a goal, the other team gets possession of the ball.");
+     assert.equal(this.trackMgr.ball.possessionMgr.ballDirection, -1, "In regulation play, on score right, after a goal, the other team gets possession of the ball.");
 
 });
 

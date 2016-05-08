@@ -43,13 +43,6 @@ QUnit.module( "module Ball", {
      assert.equal(4, this.ball.rightGoalPosition, "Right Goal position is defined correctly.");
 });
 
-  QUnit.test("ball.setDirection", function( assert ) {
-     this.ball.setDirection(-1);
-     assert.equal( this.ball.possessionMgr.ballDirection, -1, "BallDirection should be -1.");
-     this.ball.setDirection(1);
-     assert.equal(this.ball.possessionMgr.ballDirection, 1,  "BallDirection should be 1.");
-});
-
   QUnit.test("ball.setLocation", function( assert ) {
       this.ball.setLocation(1);
       assert.equal(1, this.ball.ballLocation, "BallLocation should be 1.");
@@ -59,7 +52,7 @@ QUnit.module( "module Ball", {
 
   QUnit.test("ball.advance left", function( assert ) {
       this.ball.setLocation(1);
-      this.ball.setDirection(-1);
+      this.ball.possessionMgr.ballDirection = -1;
       this.ball.advance();
 
       assert.equal(this.ball.ballLocation, 0, "BallLocation should be 0: goal.");
@@ -71,7 +64,7 @@ QUnit.module( "module Ball", {
 
   QUnit.test("ball.advance right", function( assert ) {
       this.ball.setLocation(3);
-      this.ball.setDirection(1);
+      this.ball.possessionMgr.ballDirection = 1;
 
       this.ball.advance();
 

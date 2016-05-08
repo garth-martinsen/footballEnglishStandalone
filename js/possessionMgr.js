@@ -11,16 +11,12 @@
     this.rightWrongSelect = $('#rightWrong');
     this.formerTimeStamp  = 0;
     this.created          = 'PossessionMgr' + new Date().toString().slice(-45).substring(3,24);
-    this.defineHandlers();
     this.showPossession();
     return this;
 }
 var possessionMgr;
 var cpCount=0;
 
-PossessionMgr.prototype.defineHandlers=function(){
-    $('#dir').on(  'click',   possessionMgr.changePossession );
-}
 
 PossessionMgr.prototype.displayArrow=function(){
    //console.log('Entered displayArrow(...)');
@@ -63,6 +59,11 @@ PossessionMgr.prototype.clearRightWrongSelector = function(){
    //console.log('Entered clearRightWrongSelector(...)');
    this.rightWrongSelect.val(-1);
 }
+
+PossessionMgr.prototype.setBallDirection = function(dir){
+  this.ballDirection = dir;
+  this.showPossession(); 
+}
 PossessionMgr.prototype.showPossession = function(){
  this.displayArrow();
  this.highlightPossessor();
@@ -81,6 +82,9 @@ if (evt && evt.timeStamp){
 
 // returns the team id number of the team possessing the ball
 
-PossessionMgr.prototype.getPossessor = function(evt){
+PossessionMgr.prototype.getPossessor = function(){
    return ( possessionMgr.ballDirection <0 )? possessionMgr.teams[0] : possessionMgr.teams[1];
+}
+PossessionMgr.prototype.getContendor = function(){
+   return ( possessionMgr.ballDirection <0 )? possessionMgr.teams[1] : possessionMgr.teams[0];
 }

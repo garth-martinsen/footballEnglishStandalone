@@ -43,8 +43,7 @@ QuestionMgr.prototype.changeToGoalKicks = function(){
    questionMgr.gatherKickQuestions();
    var num = questionMgr.goalKicks.splice(0,1)[0];
    $('#extras').val(num);
-   ball.setKickLocation();
-   alert('Game clock is expired. 3 Goal kicks for each team. First: ' + countries[possessionMgr.getPossessor()]);
+   alert('Game clock is expired. 3 Goal kicks for each team. First: ' + countries[possessionMgr.getPossessor()] + ' then alternate.');
    return num;
 }
 

@@ -15,7 +15,6 @@
    this.ans                = ["wrong", "right"];
    this.tallyPossessor     = 1;                        //difference in tallies is used to controll ball possession and movement. diff =  tallyPossessor - contenderTally
    this.tallyContender     = 0;                        // diff=-1 change possession; diff=0 => contestForPossession; diff=1 => nothing; diff=2 -> advanceBall
-   this.goalKickResults    = new Map().set(this.teams[0], []).set(this.teams[1], []);  //key=teamId, val:array of JSON objects.
    this.created            = 'TrackMgr' + new Date().getTime().toString().slice(-4); // last 4 chars give milliseconds, enough for id.
    this.defineHandlers();
    return this;
@@ -27,6 +26,7 @@ TrackMgr.prototype.defineHandlers  = function(){
     $('#rightWrong').on('change',   trackMgr.ensureSelected );
     $('#saveGrade').on('click', trackMgr.saveGrade );
     $('#game').on('clock:expired', trackMgr.switchToEndGame );
+    $('#game').on("goal:scored", trackMgr.goalScored );
 }
 
 TrackMgr.prototype.switchToEndGame=function(){
@@ -35,6 +35,7 @@ TrackMgr.prototype.switchToEndGame=function(){
     $('#saveGrade').off('click', trackMgr.saveGrade );
     $('#game').off('clock:expired', trackMgr.switchToEndGame );
    endGameMgr = new EndGameMgr(popupMgr.getConfig());
+    $('#endGamePopup').css('display', 'block');
 
 }
 
@@ -56,16 +57,7 @@ TrackMgr.prototype.saveGrade = function(){
    var rw   = Number(trackMgr.rightWrongSelect.val()); 
    var answeringTeam  = trackMgr.getRow(); 
    var otherTeam   = (answeringTeam === trackMgr.leftTrackRow)? trackMgr.rightTrackRow : trackMgr.leftTrackRow; //the table row for the otherTeam .
-   if(!questionMgr.isEndGame() ){
-      trackMgr.createTd(questionMgr.getClock(), rw, answeringTeam, otherTeam);
-   } else {
-       var num  = Number(trackMgr.extras.value);    //whether the question is revisited or not, it will always come from the extras text input field. (Future: hidden)
-       if( questionMgr.isRevisited(num)) {
-          trackMgr.fixTd(num, rw ,answeringTeam); //color existing number green if answer is correct, else leave it pink.
-       } else {
-          trackMgr.createTd(num, rw, answeringTeam, otherTeam);
-       }
-   }  
+   trackMgr.createTd(questionMgr.remainingCount, rw, answeringTeam, otherTeam);
    trackMgr.updateTally(trackMgr.teamSelect.val(), rw); 
    //if the ball is not in a Goal, set the team dropdown to the other team for the next question
    if( !ball.inGoal() ){
@@ -97,27 +89,18 @@ TrackMgr.prototype.createTd = function( cnt, rightWrong, thisTeam, otherTeam){
    }
 }
 
-TrackMgr.prototype.fixTd = function(num, rightWrong, row){
-   this.updateClock(num);
-   var id='#' +num;
-   $(id).removeClass(trackMgr.ans[rightWrong^1]).addClass(trackMgr.ans[rightWrong])
-   this.extras.value="";
-}
-
    var pt,ct = false;  //when both of these are true, decideBallAction(...) is called
 
 // updateTally adds value of rightWrong (could be zero) to the Tally of the answering team. If both teams have answered, it calls decideBallAction with the diff in tallies. 
 // updateTally args: teamId, one of:{0,1,2,3} which answered the question, rightWrong, one of: [0,1], 
 
 TrackMgr.prototype.updateTally = function(teamId, rightWrong){
-   if(rightWrong == 0 && questionMgr.isEndGame()){ // kick went wide, register bad kick and resetTallies
-       ct = pt= false; 
-       trackMgr.
-       trackMgr.resetTallies();
-   }
    if(teamId == possessionMgr.getPossessor()) {   //possessor is set to the teamId of the possessing team during game init, or at change of possession.
       pt = true;
       this.tallyPossessor += rightWrong;
+      if(ball.inGoal()){
+         ct=true;
+      }
    } else {
       ct = true;
       this.tallyContender += rightWrong;
@@ -135,7 +118,7 @@ TrackMgr.prototype.updateTally = function(teamId, rightWrong){
 TrackMgr.prototype.decideBallAction= function(diff){
    if(diff === -1) {
       console.log('Tally difference says to change possession of the ball');
-      $('#dir').click();
+      possessionMgr.changePossession();
       trackMgr.resetTallies();
       $('#mode').val(0).css('background-color', "white");
 
@@ -146,55 +129,14 @@ TrackMgr.prototype.decideBallAction= function(diff){
    } else if (diff === 1){
        console.log('Tally difference says that possession is retained.');
        $('#mode').val(0).css('background-color', "white");
-       if(questionMgr.isEndGame()){ trackMgr.registerKick('blocked');}
 
    } else if(diff === 2){
       console.log('Tally difference says the ball must advance.');
-      $('#adv').click(); 
+      ball.advance();
       trackMgr.resetTallies();
-       if(questionMgr.isEndGame()){ trackMgr.registerKick('goal');}
+      $('#team').val(possessionMgr.getPossessor());    // after every advance except a goal, the possessing team gets the first question.
    }
 }
-
-TrackMgr.prototype.isGameOver = function(){
-  var results  =  trackMgr.goalKickResults;
-  var attempts = results.get(trackMgr.teams[0]).length + results.get(trackMgr.teams[1]).length;
-  console.log('Goal kick attempts: ' + attempts );
-  return attempts > 5;
-}
-
-TrackMgr.prototype.registerKick = function(result){
-    var possessor = possessionMgr.getPossessor();
-    var array = trackMgr.goalKickResults.get(possessor);
-    array.push({team:possessor, result: result});
-    // Check if teams have had 6 goal kicks.
-    if(trackMgr.isGameOver()) {
-         alert('Both teams have had 3 goal kicks. Game is over! Well done!');
-         return;    
-    }
-    // check to see if the other team should get their goal kicks.
-    if(array.length >2){      //set up for opposite team to do their penalty kicks. 
-       possessionMgr.changePossession();
-       possessionMgr.showPossession();
-       // alert other team they are doing their penalty kicks, display new direction arrow, and new ball location.
-       alert('Three Penalty kicks for: ' + countries[possessionMgr.getPossessor()]);
-       ball.ballLocation = (possessionMgr.ballDirection < 0 ) ? 1 : 3;
-       ball.displayBallLocation();
-       $('#team').val(possessionMgr.getPossessor());
-    } else {  // set ball up for another kick by same team.
-       ball.ballLocation = (possessionMgr.ballDirection < 0 ) ? 1 : 3;
-       ball.displayBallLocation();
-    }
-}
-
- TrackMgr.prototype.nextGoalKick =function(){
-   var attempts =trackMgr.goalKickResults.get(possessionMgr.getPossessor()).length;
-   if(attempts >2) {                                      //after three attempts, switch to the other side of the field.
-      possessionMgr.changePossession().showPossession();
-   }
-   ball.ballLocation = (possessionMgr.ballDirection < 0 ) ? 1 : 3;     //place the ball in storing position depending on which team is kicking.
-   ball.displayBallLocation();
- }
 
 TrackMgr.prototype.resetTallies= function(){
       trackMgr.tallyPossessor =1;
@@ -205,3 +147,8 @@ TrackMgr.prototype.setBallLocation = function(loc){
   trackMgr.ball.ballLocation=loc;
 }
 
+TrackMgr.prototype.goalScored = function(){
+  console.log('TrackMgr responding to goal:scored event.  Changing possession.');
+  possessionMgr.changePossession();
+  $('#mode').val(2); 	//goaleeKick.
+}
